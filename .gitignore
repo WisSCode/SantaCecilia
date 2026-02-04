@@ -1,7 +1,10 @@
 .vs/
+.vscode/
 bin/
 obj/
-*.user
-*.suo
 **/bin/
 **/obj/
+.platform/
+platforms/*/bin/
+platforms/*/obj/
+backend/firebase-keyjson.json

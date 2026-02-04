@@ -1,23 +1,36 @@
+using backend.Models;
+using backend.Services;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Google.Cloud.Firestore;
+
 var builder = WebApplication.CreateBuilder(args);
+var firebaseconfig = builder.Configuration.GetSection("Firebase");
 
-// Add services to the container.
+//FirebaseAdmin
+FirebaseApp.Create(new AppOptions
+{
+    Credential = GoogleCredential.FromFile(firebaseconfig["credentialsPath"])
+});
 
+//FirestoreAccess
+builder.Services.AddSingleton(Provider =>
+{
+    return FirestoreDb.Create(firebaseconfig["ProjectId"]);
+});
+
+//Controllers
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+
+//Services
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<WorkerService>();
+builder.Services.AddScoped<WorkTypeService>();
+builder.Services.AddScoped<BatchService>();
+builder.Services.AddScoped<WorkedTimeService>();
+builder.Services.AddScoped<PayrollService>();
+
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

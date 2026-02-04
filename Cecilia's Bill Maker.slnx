@@ -1,9 +1,7 @@
 <Solution>
-  <Configurations>
-    <Platform Name="Any CPU" />
-    <Platform Name="x64" />
-    <Platform Name="x86" />
-  </Configurations>
-  <Project Path="../../../../../../OneDrive/Escritorio/Cecilia's Bill Maker/Backend/Backend.csproj" Id="be843034-146c-4b46-89ea-df323c122c5b" />
-  <Project Path="../../../../../../OneDrive/Escritorio/Cecilia's Bill Maker/Cecilia's Bill Maker/Cecilia's Bill Maker.vcxproj" Id="d1b4b199-36e9-42c5-9b9c-70f1b6ff4504" />
+  <Folder Name="/Elementos de la solución/">
+    <File Path=".gitignore" />
+  </Folder>
+  <Project Path="backend/backend.csproj" Id="62d14bc2-46cc-4cf3-a88d-21326ab19eb8" />
+  <Project Path="frontend/frontend.csproj" Id="a523aa4a-1f55-467d-b079-aa128791ed9d" />
 </Solution>
