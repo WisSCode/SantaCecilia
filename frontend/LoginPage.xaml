@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="frontend.LoginPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="#F7F7F3">
+
+    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+        <Border
+            WidthRequest="360"
+            Stroke="#D6DAD7"
+            StrokeThickness="1"
+            BackgroundColor="White">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0" />
+            </Border.StrokeShape>
+
+            <VerticalStackLayout Spacing="0">
+                <!-- ENCABEZADO -->
+                <Grid BackgroundColor="#9EC9B4" Padding="24">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+
+                        <!-- LOGO EXISTENTE -->
+                        <Image
+                            Source="logo_santa_cecilia.png"
+                            HeightRequest="64"
+                            WidthRequest="64"
+                            Aspect="AspectFit" />
+
+                        <Label
+                            Text="FINCA BANANERA SANTA CECILIA"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            HorizontalTextAlignment="Center" />
+
+                        <Label
+                            Text="Sistema de Gestión de Nómina"
+                            FontSize="11"
+                            TextColor="#F2F7F4"
+                            HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <!-- FORMULARIO -->
+                <VerticalStackLayout Padding="24" Spacing="16">
+                    <Label
+                        Text="Iniciar Sesión"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        TextColor="#2E3A34" />
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label
+                            Text="Usuario"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="#2E3A34" />
+                        <Entry
+                            x:Name="UsernameEntry"
+                            Placeholder="Ingrese su usuario"
+                            FontSize="13"
+                            TextColor="#2E3A34"
+                            BackgroundColor="White" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label
+                            Text="Contraseña"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="#2E3A34" />
+                        <Entry
+                            x:Name="PasswordEntry"
+                            Placeholder="Ingrese su contraseña"
+                            IsPassword="True"
+                            FontSize="13"
+                            TextColor="#2E3A34"
+                            BackgroundColor="White" />
+                    </VerticalStackLayout>
+
+                    <!-- BOTÓN INGRESAR -->
+                    <Button
+                        Text="Ingresar"
+                        HeightRequest="44"
+                        BackgroundColor="#9EC9B4"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        Clicked="OnLoginClicked" />
+
+                    <!-- BOTÓN REGISTRARSE -->
+                    <Button
+                        Text="Registrarse"
+                        HeightRequest="44"
+                        BackgroundColor="Transparent"
+                        TextColor="#2E3A34"
+                        FontAttributes="Bold"
+                        BorderColor="#9EC9B4"
+                        BorderWidth="1"
+                        Clicked="OnRegisterClicked" />
+
+                    <!-- INFO DE USUARIOS -->
+                    <VerticalStackLayout Margin="0,12,0,0" Padding="0,12,0,0" Spacing="4">
+                        <BoxView HeightRequest="1" BackgroundColor="#D6DAD7" />
+                        <Label FontSize="11" TextColor="#7C8B84" HorizontalTextAlignment="Center">
+                       
+                        </Label>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

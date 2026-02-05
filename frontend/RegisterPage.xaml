@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="frontend.RegisterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="#F7F7F3">
+
+    <ScrollView>
+        <Grid VerticalOptions="Center" HorizontalOptions="Center">
+
+            <Border
+                WidthRequest="360"
+                Stroke="#D6DAD7"
+                StrokeThickness="1"
+                BackgroundColor="White">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="0" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="0">
+
+                    <!-- BANNER VERDE (IGUAL AL LOGIN, SIN LOGO) -->
+                    <Grid BackgroundColor="#9EC9B4" Padding="24">
+                        <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                            <Label
+                                Text="CREAR CUENTA"
+                                FontSize="14"
+                                FontAttributes="Bold"
+                                TextColor="White"
+                                HorizontalTextAlignment="Center" />
+
+                           
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- FORMULARIO -->
+                    <VerticalStackLayout Padding="24" Spacing="16">
+
+                        <!-- NOMBRE -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label
+                                Text="Nombre"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                TextColor="#2E3A34" />
+                            <Entry
+                                Placeholder="Ingrese su nombre"
+                                FontSize="13"
+                                TextColor="#2E3A34"
+                                BackgroundColor="White" />
+                        </VerticalStackLayout>
+
+
+                        <!-- APELLIDO -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label
+                                Text="Apellido"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                TextColor="#2E3A34" />
+                            <Entry
+                                Placeholder="Ingrese su apellido"
+                                FontSize="13"
+                                TextColor="#2E3A34"
+                                BackgroundColor="White" />      
+                        </VerticalStackLayout>
+
+                        <!-- CORREO -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label
+                                Text="Correo"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                TextColor="#2E3A34" />
+                            <Entry
+                                Placeholder="Ingrese su correo"
+                                FontSize="13"
+                                TextColor="#2E3A34"
+                                BackgroundColor="White" />
+                        </VerticalStackLayout>
+
+                        <!-- CONTRASEÑA -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label
+                                Text="Contraseña"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                TextColor="#2E3A34" />
+                            <Entry
+                                Placeholder="Ingrese su contraseña"
+                                IsPassword="True"
+                                FontSize="13"
+                                TextColor="#2E3A34"
+                                BackgroundColor="White" />
+                        </VerticalStackLayout>
+
+                        <!-- CONFIRMAR CONTRASEÑA -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label
+                                Text="Confirmar contraseña"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                TextColor="#2E3A34" />
+                            <Entry
+                                Placeholder="Repita la contraseña"
+                                IsPassword="True"
+                                FontSize="13"
+                                TextColor="#2E3A34"
+                                BackgroundColor="White" />
+                        </VerticalStackLayout>
+
+                        <!-- BOTÓN CREAR CUENTA -->
+                        <Button
+                            Text="Crear cuenta"
+                            HeightRequest="44"
+                            BackgroundColor="#9EC9B4"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            Clicked="OnRegisterCompleted" />
+
+                        <!-- BOTÓN VOLVER (MISMO ESTILO QUE REGISTRARSE EN LOGIN) -->
+                        <Button
+                            Text="Volver al login"
+                            HeightRequest="44"
+                            BackgroundColor="Transparent"
+                            TextColor="#2E3A34"
+                            FontAttributes="Bold"
+                            BorderColor="#9EC9B4"
+                            BorderWidth="1"
+                            Clicked="OnBackToLoginClicked" />
+
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </ScrollView>
+</ContentPage>

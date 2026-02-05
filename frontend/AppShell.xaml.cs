@@ -1,10 +1,12 @@
-﻿namespace frontend
+﻿namespace frontend;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+
+        Routing.RegisterRoute("register", typeof(RegisterPage));
+        Routing.RegisterRoute("main", typeof(MainPage));
     }
 }
