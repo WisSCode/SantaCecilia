@@ -42,6 +42,19 @@ public class WorkTypesController : ControllerBase
         return Ok(dto);
     }
 
+    // GET api/workTypes
+    [HttpGet]
+    public async Task<ActionResult<List<WorkTypeDto>>> GetAll()
+    {
+        var workTypes = await _service.GetAllAsync();
+        var list = workTypes.Select(wt => new WorkTypeDto
+        {
+            Name = wt.Name,
+            DefaultRate = wt.DefaultRate
+        }).ToList();
+        return Ok(list);
+    }
+
     //PUT api/WorkTypes/{id}
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(String id, [FromBody] WorkTypeDto dto) 

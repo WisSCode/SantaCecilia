@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="frontend.NewEntryPage"
+             Title="Nuevo Registro"
+             Padding="0">
+
+    <Grid RowDefinitions="*" ColumnDefinitions="*" Background="{StaticResource AppBackgroundBrush}">
+        <ScrollView>
+            <VerticalStackLayout Padding="20" Spacing="16">
+                <Label Text="Nuevo Registro" Style="{StaticResource Heading2}" />
+
+                <Border Style="{StaticResource CardFrame}" Padding="16">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Trabajador" Style="{StaticResource Caption}" />
+                        <Border Style="{StaticResource CardFrame}" Padding="10,0">
+                            <Picker x:Name="WorkerPicker" 
+                                    Title="Selecciona un trabajador"
+                                    SelectedIndexChanged="OnFieldChanged" />
+                        </Border>
+
+                        <Label Text="Actividad" Style="{StaticResource Caption}" />
+                        <Border Style="{StaticResource CardFrame}" Padding="10,0">
+                            <Picker x:Name="ActivityPicker" 
+                                    Title="Selecciona una actividad"
+                                    SelectedIndexChanged="OnActivityChanged" />
+                        </Border>
+
+                        <Label Text="Lote" Style="{StaticResource Caption}" />
+                        <Border Style="{StaticResource CardFrame}" Padding="10,0">
+                            <Entry x:Name="LoteEntry" 
+                                   Placeholder="Ej: Lote A-12" />
+                        </Border>
+
+                        <Label Text="Fecha" Style="{StaticResource Caption}" />
+                        <Border Style="{StaticResource CardFrame}" Padding="10,0">
+                            <DatePicker x:Name="DatePicker" />
+                        </Border>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                <Label Text="Horas" Style="{StaticResource Caption}" />
+                                <Border Style="{StaticResource CardFrame}" Padding="10,0">
+                                    <Entry x:Name="HoursEntry" 
+                                           Keyboard="Numeric" 
+                                           Text="8"
+                                           TextChanged="OnFieldChanged" />
+                                </Border>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="6">
+                                <Label Text="Minutos" Style="{StaticResource Caption}" />
+                                <Border Style="{StaticResource CardFrame}" Padding="10,0">
+                                    <Picker x:Name="MinutesPicker" SelectedIndexChanged="OnFieldChanged" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Label Text="Tarifa (B/.)" Style="{StaticResource Caption}" />
+                        <Border Style="{StaticResource CardFrame}" Padding="10,0">
+                            <Entry x:Name="RateEntry" 
+                                   Keyboard="Numeric" 
+                                   IsReadOnly="True" />
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
+
+                <HorizontalStackLayout Spacing="10">
+                    <Button Text="Cancelar" 
+                            Style="{StaticResource OutlineButton}" 
+                            Clicked="OnCancelClicked" />
+                    <Button x:Name="SaveButton" 
+                            Text="Guardar Registro" 
+                            Style="{StaticResource PrimaryButton}" 
+                            Clicked="OnSaveClicked" 
+                            IsEnabled="False" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

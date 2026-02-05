@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="frontend.WorkersPage"
+             Title=""
+             Padding="0">
+
+    <Grid RowDefinitions="*" ColumnDefinitions="*" Background="{StaticResource AppBackgroundBrush}">
+        <ScrollView Grid.Row="0" Grid.Column="0">
+            <VerticalStackLayout Padding="20" Spacing="16">
+                
+                <!-- Header -->
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Trabajadores" Style="{StaticResource Heading2}" />
+                    <Label x:Name="WorkersCountLabel" Style="{StaticResource BodySecondary}" />
+                </VerticalStackLayout>
+
+                <!-- Stats -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <Border Grid.Column="0" Style="{StaticResource CardFrame}">
+                        <VerticalStackLayout Spacing="6">
+                            <Border BackgroundColor="{StaticResource SurfaceSecondary}" Padding="6" StrokeShape="RoundRectangle 0,0,0,0">
+                                <Label Text="✅" FontSize="16" />
+                            </Border>
+                            <Label x:Name="ActiveCount" Text="42" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Activos" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
+                        </VerticalStackLayout>
+                </Border>
+                    <Border Grid.Column="1" Style="{StaticResource CardFrame}">
+                        <VerticalStackLayout Spacing="6">
+                            <Border BackgroundColor="{StaticResource SurfaceSecondary}" Padding="6" StrokeShape="RoundRectangle 0,0,0,0">
+                                <Label Text="⏸️" FontSize="16" />
+                            </Border>
+                            <Label x:Name="InactiveCount" Text="3" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Inactivos" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Search & Add -->
+                <HorizontalStackLayout Spacing="8">
+                    <Border Style="{StaticResource CardFrame}" Padding="10,0" HorizontalOptions="FillAndExpand">
+                        <Entry x:Name="SearchEntry" 
+                               Placeholder="Buscar trabajador..." 
+                               HorizontalOptions="FillAndExpand"
+                               TextChanged="OnSearchChanged" />
+                    </Border>
+                    <Button Text="+" 
+                            Clicked="OnAddWorkerClicked"
+                            Style="{StaticResource PrimaryButton}"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            Padding="0" />
+                </HorizontalStackLayout>
+
+                <!-- Workers List -->
+                <Border Style="{StaticResource CardFrame}" Padding="0">
+                    <VerticalStackLayout Spacing="0">
+                        <Grid Padding="14" ColumnDefinitions="*,Auto">
+                            <Label Text="Listado de Personal" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Grid.Column="1" Text="Ver todo" FontSize="11" TextColor="{StaticResource BrandSkyBlue}" VerticalOptions="Center" />
+                        </Grid>
+
+                        <Grid Padding="10" ColumnDefinitions="2.5*,2*,1.5*,1*,Auto" BackgroundColor="{StaticResource SurfaceSecondary}">
+                            <Label Text="NOMBRE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="1" Text="IDENTIFICACIÓN" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="2" Text="ROL" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="3" Text="ESTADO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="4" Text="ACCIONES" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                        </Grid>
+
+                        <CollectionView x:Name="WorkersList" SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10,8">
+                                        <Grid ColumnDefinitions="2.5*,2*,1.5*,1*,Auto" ColumnSpacing="8" RowSpacing="4">
+                                            <VerticalStackLayout Spacing="2">
+                                                <Label Text="{Binding FullName}" FontAttributes="Bold" FontSize="11" TextColor="{StaticResource TextPrimary}" />
+                                                <Label Text="{Binding UserId}" FontSize="9" TextColor="{StaticResource TextTertiary}" />
+                                            </VerticalStackLayout>
+                                            <Label Grid.Column="1" Text="{Binding Identification}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
+                                            <Label Grid.Column="2" Text="{Binding WorkerType}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
+                                            <Border Grid.Column="3" 
+                                                    BackgroundColor="{Binding StatusColor}" 
+                                                    Padding="6,3" 
+                                                    HorizontalOptions="Start"
+                                                    VerticalOptions="Center">
+                                                <Label Text="{Binding StatusText}" FontSize="9" TextColor="White" FontAttributes="Bold" />
+                                            </Border>
+                                            <HorizontalStackLayout Grid.Column="4" Spacing="6">
+                                                <Button Text="{Binding ToggleText}" 
+                                                        Clicked="OnToggleActiveClicked"
+                                                        CommandParameter="{Binding .}"
+                                                        Style="{StaticResource OutlineButton}"
+                                                        FontSize="10"
+                                                        Padding="8,4"
+                                                        MinimumHeightRequest="28" />
+                                                <Button Text="Editar" 
+                                                        Clicked="OnEditWorkerClicked"
+                                                        CommandParameter="{Binding .}"
+                                                        Style="{StaticResource PrimaryButton}"
+                                                        FontSize="10"
+                                                        Padding="8,4"
+                                                        MinimumHeightRequest="28" />
+                                            </HorizontalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="frontend.WorkTypesPage"
+             Title=""
+             Padding="0">
+
+    <Grid RowDefinitions="*" ColumnDefinitions="*" Background="{StaticResource AppBackgroundBrush}">
+        <ScrollView Grid.Row="0" Grid.Column="0">
+            <VerticalStackLayout Padding="20" Spacing="16">
+                
+                <!-- Header -->
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Tipos de Trabajo" Style="{StaticResource Heading2}" />
+                    <Label Text="Catálogo de actividades y tarifas" Style="{StaticResource BodySecondary}" />
+                </VerticalStackLayout>
+
+                <!-- Summary Stats -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Border Grid.Column="0" Style="{StaticResource CardFrame}">
+                        <VerticalStackLayout Spacing="6">
+                            <Border BackgroundColor="{StaticResource SurfaceSecondary}" Padding="6" StrokeShape="RoundRectangle 0,0,0,0">
+                                <Label Text="📋" FontSize="16" />
+                            </Border>
+                            <Label x:Name="TotalTypesLabel" Text="0" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Tipos Activos" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource CardFrame}">
+                        <VerticalStackLayout Spacing="6">
+                            <Border BackgroundColor="{StaticResource SurfaceSecondary}" Padding="6" StrokeShape="RoundRectangle 0,0,0,0">
+                                <Label Text="💵" FontSize="16" />
+                            </Border>
+                            <Label x:Name="AvgRateLabel" Text="B/.0.00" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Tarifa Promedio" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Actions -->
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                    <Border Grid.Column="0" Style="{StaticResource CardFrame}" Padding="10">
+                        <Entry x:Name="SearchEntry" Placeholder="Buscar actividad..." />
+                    </Border>
+                    <Button Grid.Column="1" Text="+ Agregar" Style="{StaticResource PrimaryButton}" Clicked="OnAddClicked" />
+                </Grid>
+
+                <!-- Work Types List -->
+                <Border Style="{StaticResource CardFrame}" Padding="0">
+                    <VerticalStackLayout Spacing="0">
+                        <Grid Padding="14" ColumnDefinitions="*,Auto">
+                            <Label Text="Catálogo de Actividades" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                        </Grid>
+
+                        <Grid Padding="10" ColumnDefinitions="3*,2*,Auto" BackgroundColor="{StaticResource SurfaceSecondary}">
+                            <Label Text="NOMBRE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="1" Text="TARIFA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="2" Text="ACCIONES" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                        </Grid>
+
+                        <CollectionView x:Name="WorkTypesList" SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10">
+                                        <Grid ColumnDefinitions="3*,2*,Auto" ColumnSpacing="8">
+                                            <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="12" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
+                                            <Label Grid.Column="1" Text="{Binding DefaultRate, StringFormat='B/.{0:F2}/hr'}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
+                                            <Button Grid.Column="2" Text="Editar" 
+                                                    Clicked="OnEditClicked"
+                                                    CommandParameter="{Binding .}"
+                                                    Style="{StaticResource OutlineButton}"
+                                                    FontSize="11"
+                                                    Padding="10,6"
+                                                    MinimumHeightRequest="32" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

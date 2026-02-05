@@ -23,6 +23,21 @@ public class BatchService
         return snapshot.Exists ? snapshot.ConvertTo<Batches>() : null;
     }
 
+    // SELECT ALL
+    public async Task<List<Batches>> GetAllAsync()
+    {
+        var list = new List<Batches>();
+        var snap = await _batches.GetSnapshotAsync();
+        foreach (var doc in snap.Documents)
+        {
+            if (doc.Exists)
+            {
+                list.Add(doc.ConvertTo<Batches>());
+            }
+        }
+        return list;
+    }
+
     // UPDATE
     public async Task UpdateAsync(string batchId, Batches batch)
     {

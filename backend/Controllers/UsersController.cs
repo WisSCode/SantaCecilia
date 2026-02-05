@@ -47,6 +47,21 @@ public class UsersController : ControllerBase
         return Ok(dto);
     }
 
+    // GET api/users
+    [HttpGet]
+    public async Task<ActionResult<List<UserDto>>> GetAll()
+    {
+        var users = await _service.GetAllAsync();
+        var list = users.Select(u => new UserDto
+        {
+            Mail = u.Email,
+            Role = u.Role,
+            Validated = u.Validated,
+            CreatedAt = u.CreatedAt.ToDateTime()
+        }).ToList();
+        return Ok(list);
+    }
+
     //PUT api/users/{id}
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(String id, [FromBody] UserDto dto) 

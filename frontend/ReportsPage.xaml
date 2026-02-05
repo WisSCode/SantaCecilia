@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="frontend.ReportsPage"
+             Title=""
+             Padding="0">
+
+    <Grid RowDefinitions="*" ColumnDefinitions="*" Background="{StaticResource AppBackgroundBrush}">
+        <ScrollView>
+            <VerticalStackLayout Padding="20" Spacing="16">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Reportes" Style="{StaticResource Heading2}" />
+                    <Label x:Name="ReportWeekLabel" Style="{StaticResource BodySecondary}" />
+                </VerticalStackLayout>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Border Grid.Column="0" Style="{StaticResource CardFrame}">
+                        <VerticalStackLayout Spacing="6">
+                            <Border BackgroundColor="{StaticResource SurfaceSecondary}" Padding="6" StrokeShape="RoundRectangle 0,0,0,0">
+                                <Label Text="⏱️" FontSize="16" />
+                            </Border>
+                            <Label x:Name="TotalHoursLabel" Text="0.0h" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Horas Totales" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource CardFrame}">
+                        <VerticalStackLayout Spacing="6">
+                            <Border BackgroundColor="{StaticResource SurfaceSecondary}" Padding="6" StrokeShape="RoundRectangle 0,0,0,0">
+                                <Label Text="💰" FontSize="16" />
+                            </Border>
+                            <Label x:Name="TotalAmountLabel" Text="B/.0.00" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Monto Total" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <Border Style="{StaticResource CardFrame}" Padding="0">
+                    <VerticalStackLayout Spacing="0">
+                        <Grid Padding="14" ColumnDefinitions="*,Auto">
+                            <Label Text="Actividades de la semana" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Grid.Column="1" Text="Ver todo" FontSize="11" TextColor="{StaticResource BrandSkyBlue}" VerticalOptions="Center" />
+                        </Grid>
+
+                        <Grid Padding="10" ColumnDefinitions="3*,2*,2*" BackgroundColor="{StaticResource SurfaceSecondary}">
+                            <Label Text="ACTIVIDAD" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="1" Text="CATEGORIA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="2" Text="TOTAL" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                        </Grid>
+
+                        <CollectionView x:Name="ReportList" SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10,8">
+                                        <Grid ColumnDefinitions="3*,2*,2*" ColumnSpacing="8">
+                                            <Label Text="{Binding ActivityName}" FontAttributes="Bold" FontSize="11" TextColor="{StaticResource TextPrimary}" />
+                                            <Label Grid.Column="1" Text="{Binding Category}" FontSize="11" TextColor="{StaticResource TextSecondary}" />
+                                            <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                <Label Text="{Binding Hours, StringFormat='{0:F1}h'}" FontAttributes="Bold" FontSize="11" TextColor="{StaticResource TextPrimary}" />
+                                                <Label Text="{Binding Amount, StringFormat='B/.{0:F2}'}" FontSize="10" TextColor="{StaticResource TextTertiary}" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

@@ -49,6 +49,22 @@ public class WorkTimesController : ControllerBase
         return Ok(dto);
     }
 
+    // GET api/workTimes
+    [HttpGet]
+    public async Task<ActionResult<List<WorkedTimeDto>>> GetAll()
+    {
+        var items = await _service.GetAllAsync();
+        var list = items.Select(wt => new WorkedTimeDto
+        {
+            WorkerId = wt.WorkerId,
+            WorkTypeId = wt.WorkTypeId,
+            BatchId = wt.BatchId,
+            MinutesWorked = wt.MinutesWorked,
+            date = wt.date.ToDateTime()
+        }).ToList();
+        return Ok(list);
+    }
+
     //PUT api/workedTimes/{id}
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(String id, [FromBody] WorkedTimeDto dto) 

@@ -15,6 +15,10 @@ namespace frontend
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            // register services
+            builder.Services.AddSingleton<System.Net.Http.HttpClient>();
+            builder.Services.AddSingleton<frontend.Services.ApiService>();
+
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif

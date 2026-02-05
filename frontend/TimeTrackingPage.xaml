@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="frontend.TimeTrackingPage"
+             Title=""
+             Padding="0">
+
+    <Grid RowDefinitions="*" ColumnDefinitions="*" Background="{StaticResource AppBackgroundBrush}">
+        <ScrollView Grid.Row="0" Grid.Column="0">
+            <VerticalStackLayout Padding="20" Spacing="16">
+                
+                <!-- Header -->
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Registro Diario" Style="{StaticResource Heading2}" />
+                    <Label x:Name="TodayLabel" Style="{StaticResource BodySecondary}" />
+                </VerticalStackLayout>
+
+                <!-- Summary -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Border Grid.Column="0" Style="{StaticResource CardFrame}">
+                        <VerticalStackLayout Spacing="6">
+                            <Border BackgroundColor="{StaticResource SurfaceSecondary}" Padding="6" StrokeShape="RoundRectangle 0,0,0,0">
+                                <Label Text="📝" FontSize="16" />
+                            </Border>
+                            <Label x:Name="TodayCount" Text="12" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Registros Hoy" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource CardFrame}">
+                        <VerticalStackLayout Spacing="6">
+                            <Border BackgroundColor="{StaticResource SurfaceSecondary}" Padding="6" StrokeShape="RoundRectangle 0,0,0,0">
+                                <Label Text="⏱️" FontSize="16" />
+                            </Border>
+                            <Label x:Name="TotalHours" Text="89.5h" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Horas Totales" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Filter/Add Section -->
+                <HorizontalStackLayout Spacing="8">
+                    <Border Style="{StaticResource CardFrame}" Padding="10,0" HorizontalOptions="FillAndExpand">
+                        <Entry x:Name="SearchEntry" 
+                               Placeholder="Buscar trabajador o actividad..." 
+                               HorizontalOptions="FillAndExpand"
+                               TextChanged="OnSearchChanged" />
+                    </Border>
+                    <Button Text="+" 
+                            Clicked="OnAddClicked"
+                            Style="{StaticResource PrimaryButton}"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            Padding="0" />
+                </HorizontalStackLayout>
+
+                <!-- Entries List -->
+                <Border Style="{StaticResource CardFrame}" Padding="0">
+                    <VerticalStackLayout Spacing="0">
+                        <Grid Padding="14" ColumnDefinitions="*,Auto">
+                            <Label Text="Ultimos Registros" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Grid.Column="1" Text="Ver todo" FontSize="11" TextColor="{StaticResource BrandSkyBlue}" VerticalOptions="Center" />
+                        </Grid>
+
+                        <Grid Padding="10" ColumnDefinitions="2*,3*,1.5*,1.5*,2*" BackgroundColor="{StaticResource SurfaceSecondary}">
+                            <Label Text="TRABAJADOR" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="1" Text="ACTIVIDAD" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="2" Text="LOTE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="3" Text="HORAS" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="4" Text="HORA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                        </Grid>
+
+                        <CollectionView x:Name="EntriesView" SelectionMode="Single">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10,8">
+                                        <Grid ColumnDefinitions="2*,3*,1.5*,1.5*,2*" ColumnSpacing="8">
+                                            <Label Text="{Binding WorkerName}" FontAttributes="Bold" FontSize="11" TextColor="{StaticResource TextPrimary}" />
+                                            <Label Grid.Column="1" Text="{Binding ActivityName}" FontSize="11" TextColor="{StaticResource TextPrimary}" />
+                                            <Label Grid.Column="2" Text="{Binding Lote}" FontSize="11" TextColor="{StaticResource TextSecondary}" />
+                                            <Label Grid.Column="3" Text="{Binding Hours, StringFormat='{0}h'}" FontAttributes="Bold" FontSize="11" TextColor="{StaticResource TextPrimary}" />
+                                            <Label Grid.Column="4" Text="{Binding Date, StringFormat='{0:HH:mm}'}" FontSize="11" TextColor="{StaticResource TextTertiary}" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

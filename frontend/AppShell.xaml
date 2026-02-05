@@ -1,14 +1,150 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Shell
     x:Class="frontend.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:frontend"
-    Title="frontend">
+    Title="Santa Cecilia"
+    FlyoutBehavior="Flyout"
+    Shell.FlyoutBackgroundColor="White"
+    Shell.FlyoutForegroundColor="{StaticResource TextPrimary}"
+    Shell.FlyoutItemTitleColor="{StaticResource TextPrimary}"
+    Shell.FlyoutItemSelectedColor="{StaticResource BrandSkyBlue}"
+    Shell.FlyoutItemUnselectedColor="{StaticResource TextSecondary}"
+    Shell.FlyoutWidth="240"
+    Shell.NavBarIsVisible="False">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <Shell.VisualStateManager.VisualStateGroups>
+        <VisualStateGroup Name="FlyoutStates">
+            <VisualState Name="Desktop">
+                <VisualState.StateTriggers>
+                    <OnIdiom x:TypeArguments="DeviceIdiom" Desktop="True" />
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                    <Setter Property="FlyoutBehavior" Value="Locked" />
+                    <Setter Property="FlyoutIsPresented" Value="True" />
+                    <Setter Property="FlyoutWidth" Value="240" />
+                </VisualState.Setters>
+            </VisualState>
+            <VisualState Name="Mobile">
+                <VisualState.StateTriggers>
+                    <OnIdiom x:TypeArguments="DeviceIdiom" Phone="True" Tablet="True" />
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                    <Setter Property="FlyoutBehavior" Value="Flyout" />
+                    <Setter Property="FlyoutIsPresented" Value="False" />
+                    <Setter Property="FlyoutWidth" Value="220" />
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </Shell.VisualStateManager.VisualStateGroups>
+
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid x:Name="ItemRoot" Padding="14,10">
+                <Label x:Name="ItemTitle" Text="{Binding Title}" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+            </Grid>
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup Name="CommonStates">
+                    <VisualState Name="Normal">
+                        <VisualState.Setters>
+                            <Setter TargetName="ItemRoot" Property="Grid.BackgroundColor" Value="Transparent" />
+                            <Setter TargetName="ItemTitle" Property="Label.TextColor" Value="{StaticResource TextSecondary}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState Name="Selected">
+                        <VisualState.Setters>
+                            <Setter TargetName="ItemRoot" Property="Grid.BackgroundColor" Value="{StaticResource BrandPastelGreen}" />
+                            <Setter TargetName="ItemTitle" Property="Label.TextColor" Value="{StaticResource TextPrimary}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <Shell.FlyoutHeader>
+        <VerticalStackLayout Padding="16,20,16,16" BackgroundColor="White" Spacing="8">
+            <Grid ColumnDefinitions="36,*" ColumnSpacing="10">
+                <Border BackgroundColor="{StaticResource AccentBlue}" WidthRequest="36" HeightRequest="36">
+                    <Grid>
+                        <Label Text="SC" FontAttributes="Bold" FontSize="12" TextColor="{StaticResource BrandSkyBlueDark}" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                    <Label Text="Santa Cecilia" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                    <Label Text="Gestion de Nomina" FontSize="10" TextColor="{StaticResource TextTertiary}" />
+                </VerticalStackLayout>
+            </Grid>
+            <BoxView HeightRequest="1" BackgroundColor="{StaticResource Border}" />
+        </VerticalStackLayout>
+    </Shell.FlyoutHeader>
+
+    <Shell.FlyoutFooter>
+        <Grid Padding="16" RowDefinitions="Auto,Auto,Auto,Auto" BackgroundColor="White">
+            <BoxView HeightRequest="1" BackgroundColor="{StaticResource Border}" />
+            <VerticalStackLayout Grid.Row="1" Spacing="2" Margin="0,12,0,10">
+                <Label Text="Proximo pago" FontSize="10" TextColor="{StaticResource TextTertiary}" />
+                <Label Text="Sabado 3:00 PM" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+            </VerticalStackLayout>
+            <Grid Grid.Row="2" ColumnDefinitions="32,*,Auto" ColumnSpacing="8">
+                <Border BackgroundColor="{StaticResource BrandSkyBlue}" WidthRequest="28" HeightRequest="28">
+                    <Grid>
+                        <Label Text="A" FontAttributes="Bold" FontSize="12" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+                <VerticalStackLayout Grid.Column="1" Spacing="0" VerticalOptions="Center">
+                    <Label Text="Administrador" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                    <Label Text="Ver perfil" FontSize="10" TextColor="{StaticResource TextTertiary}" />
+                </VerticalStackLayout>
+                <Button Grid.Column="2"
+                        Text="✎"
+                        FontSize="12"
+                        TextColor="{StaticResource TextTertiary}"
+                        BackgroundColor="Transparent"
+                        Padding="4"
+                        Clicked="OnEditProfileClicked" />
+            </Grid>
+                <Button Grid.Row="3"
+                    Text="Cerrar sesion"
+                    Style="{StaticResource OutlineButton}"
+                    FontSize="12"
+                    Padding="12,8"
+                    Margin="0,12,0,0"
+                    Clicked="OnLogoutClicked" />
+        </Grid>
+    </Shell.FlyoutFooter>
+
+    <FlyoutItem Title="Inicio" Route="dashboard">
+        <ShellContent Route="dashboard" ContentTemplate="{DataTemplate local:DashboardPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Registro Diario" Route="timetracking">
+        <ShellContent Route="timetracking" ContentTemplate="{DataTemplate local:TimeTrackingPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Trabajadores" Route="workers">
+        <ShellContent Route="workers" ContentTemplate="{DataTemplate local:WorkersPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Nomina" Route="payroll">
+        <ShellContent Route="payroll" ContentTemplate="{DataTemplate local:PayrollPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Reportes" Route="reports">
+        <ShellContent Route="reports" ContentTemplate="{DataTemplate local:ReportsPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Lotes" Route="batches">
+        <ShellContent Route="batches" ContentTemplate="{DataTemplate local:BatchesPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Tipos de Trabajo" Route="worktypes">
+        <ShellContent Route="worktypes" ContentTemplate="{DataTemplate local:WorkTypesPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Usuarios" Route="users">
+        <ShellContent Route="users" ContentTemplate="{DataTemplate local:UsersPage}" />
+    </FlyoutItem>
 
 </Shell>
