@@ -1,6 +1,20 @@
-@backend_HostAddress = http://localhost:5191
+@backend_HostAddress = http://localhost:5000
 
-GET {{backend_HostAddress}}/weatherforecast/
-Accept: application/json
+### Register nuevo usuario
+POST {{backend_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "Email": "test@example.com",
+  "Password": "123456"
+}
+
+### Login con IdToken
+POST {{backend_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "IdToken": "YOUR_FIREBASE_ID_TOKEN_HERE"
+}
 
 ###

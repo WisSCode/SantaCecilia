@@ -1,5 +1,6 @@
 ﻿using Google.Cloud.Firestore;
 namespace backend.Models;
+
 [FirestoreData]
 public class WorkedTimes
 {

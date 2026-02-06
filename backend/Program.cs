@@ -1,28 +1,45 @@
-using backend.Models;
-using backend.Services;
+﻿using backend.Services;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
 
 var builder = WebApplication.CreateBuilder(args);
-var firebaseconfig = builder.Configuration.GetSection("Firebase");
 
-//FirebaseAdmin
+//Cargar credenciales de Firebase
+var credential = GoogleCredential.FromFile("firebase-key.json");
+
+//Inicializar Firebase Admin
 FirebaseApp.Create(new AppOptions
 {
-    Credential = GoogleCredential.FromFile(firebaseconfig["credentialsPath"])
+    Credential = credential,
+    ProjectId = "santa-cecilia-s"
 });
 
-//FirestoreAccess
-builder.Services.AddSingleton(Provider =>
+//Firestore con credenciales explícitas
+builder.Services.AddSingleton(provider =>
 {
-    return FirestoreDb.Create(firebaseconfig["ProjectId"]);
+    return new FirestoreDbBuilder
+    {
+        ProjectId = "santa-cecilia-s",
+        Credential = credential
+    }.Build();
 });
 
-//Controllers
+// CORS - Permitir que el frontend se comunique con el backend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowMAUI", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+// Controllers
 builder.Services.AddControllers();
 
-//Services
+// Services
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<WorkerService>();
 builder.Services.AddScoped<WorkTypeService>();
@@ -30,7 +47,10 @@ builder.Services.AddScoped<BatchService>();
 builder.Services.AddScoped<WorkedTimeService>();
 builder.Services.AddScoped<PayrollService>();
 
-
 var app = builder.Build();
+
+// Usar CORS
+app.UseCors("AllowMAUI");
+
 app.MapControllers();
 app.Run();

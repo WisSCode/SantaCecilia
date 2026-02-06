@@ -11,16 +11,17 @@
             Stroke="#D6DAD7"
             StrokeThickness="1"
             BackgroundColor="White">
+
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="0" />
             </Border.StrokeShape>
 
             <VerticalStackLayout Spacing="0">
+
                 <!-- ENCABEZADO -->
                 <Grid BackgroundColor="#9EC9B4" Padding="24">
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
 
-                        <!-- LOGO EXISTENTE -->
                         <Image
                             Source="logo_santa_cecilia.png"
                             HeightRequest="64"
@@ -44,36 +45,42 @@
 
                 <!-- FORMULARIO -->
                 <VerticalStackLayout Padding="24" Spacing="16">
+
                     <Label
                         Text="Iniciar Sesión"
                         FontSize="16"
                         FontAttributes="Bold"
                         TextColor="#2E3A34" />
 
+                    <!-- EMAIL -->
                     <VerticalStackLayout Spacing="6">
                         <Label
-                            Text="Usuario"
+                            Text="Correo"
                             FontSize="12"
                             FontAttributes="Bold"
                             TextColor="#2E3A34" />
+
                         <Entry
-                            x:Name="UsernameEntry"
-                            Placeholder="Ingrese su usuario"
+                            Placeholder="Ingrese su correo"
+                            Keyboard="Email"
+                            Text="{Binding Email}"
                             FontSize="13"
                             TextColor="#2E3A34"
                             BackgroundColor="White" />
                     </VerticalStackLayout>
 
+                    <!-- PASSWORD -->
                     <VerticalStackLayout Spacing="6">
                         <Label
                             Text="Contraseña"
                             FontSize="12"
                             FontAttributes="Bold"
                             TextColor="#2E3A34" />
+
                         <Entry
-                            x:Name="PasswordEntry"
                             Placeholder="Ingrese su contraseña"
                             IsPassword="True"
+                            Text="{Binding Password}"
                             FontSize="13"
                             TextColor="#2E3A34"
                             BackgroundColor="White" />
@@ -86,7 +93,8 @@
                         BackgroundColor="#9EC9B4"
                         TextColor="White"
                         FontAttributes="Bold"
-                        Clicked="OnLoginClicked" />
+                        Clicked="OnLoginClicked"
+                        IsEnabled="True"/>
 
                     <!-- BOTÓN REGISTRARSE -->
                     <Button
@@ -99,13 +107,6 @@
                         BorderWidth="1"
                         Clicked="OnRegisterClicked" />
 
-                    <!-- INFO DE USUARIOS -->
-                    <VerticalStackLayout Margin="0,12,0,0" Padding="0,12,0,0" Spacing="4">
-                        <BoxView HeightRequest="1" BackgroundColor="#D6DAD7" />
-                        <Label FontSize="11" TextColor="#7C8B84" HorizontalTextAlignment="Center">
-                       
-                        </Label>
-                    </VerticalStackLayout>
                 </VerticalStackLayout>
             </VerticalStackLayout>
         </Border>

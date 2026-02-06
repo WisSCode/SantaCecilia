@@ -1,6 +1,4 @@
-﻿using Google.Cloud.Firestore;
-
-namespace backend.DTOs;
+﻿namespace backend.DTOs;
 public class PayrollDto
 {
     public required string WorkerId { get; set; }
