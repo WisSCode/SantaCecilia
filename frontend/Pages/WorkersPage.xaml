@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="frontend.Pages.WorkersPage"
+             Title=""
+             Padding="0">
+
+    <Grid RowDefinitions="*" ColumnDefinitions="*" Background="{StaticResource AppBackgroundBrush}">
+        <ScrollView Grid.Row="0" Grid.Column="0">
+            <VerticalStackLayout Padding="20" Spacing="16">
+
+                <!-- Header -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                        <Label Text="Trabajadores"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Gestion de personal de la finca"
+                                   FontSize="11"
+                            TextColor="{StaticResource TextSecondary}" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <!-- Search & Add -->
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                    <Border Grid.Column="0"
+                            Stroke="#D6DAD7" StrokeThickness="1"
+                            Padding="10,0" BackgroundColor="White"
+                            HeightRequest="44">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                        <Entry x:Name="SearchEntry"
+                                   Placeholder="Buscar trabajador..."
+                                   FontSize="12"
+                                   TextColor="{StaticResource TextPrimary}"
+                                   BackgroundColor="Transparent"
+                                   HorizontalOptions="Fill"
+                                   VerticalOptions="Center"
+                               TextChanged="OnSearchChanged" />
+                    </Border>
+                    <Button Grid.Column="1"
+                            Text="+ Nuevo Trabajador"
+                            Clicked="OnAddWorkerClicked"
+                            BackgroundColor="#9EC9B4"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            FontSize="12"
+                            HeightRequest="44"
+                            Padding="16,0"
+                            VerticalOptions="Center" />
+                </Grid>
+
+                <!-- 3 Stat Cards -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
+
+                    <!-- Activos -->
+                    <Border Grid.Column="0"
+                            Stroke="#D6DAD7" StrokeThickness="1"
+                            BackgroundColor="White" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="6">
+                            <HorizontalStackLayout Spacing="6">
+                                <Label Text="Activos"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource TextSecondary}"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <Label x:Name="ActiveCount"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Trabajadores activos"
+                                   FontSize="11"
+                                   TextColor="{StaticResource TextTertiary}" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Inactivos -->
+                    <Border Grid.Column="1"
+                            Stroke="#D6DAD7" StrokeThickness="1"
+                            BackgroundColor="White" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="6">
+                            <HorizontalStackLayout Spacing="6">
+                                <Label Text="Inactivos"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource TextSecondary}"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <Label x:Name="InactiveCount"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Trabajadores inactivos"
+                                   FontSize="11"
+                                   TextColor="{StaticResource TextTertiary}" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Total -->
+                    <Border Grid.Column="2"
+                            Stroke="Transparent" StrokeThickness="0"
+                            BackgroundColor="#9EC9B4" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="6">
+                            <HorizontalStackLayout Spacing="6">
+                                <Label Text="Total"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <Label x:Name="TotalCount"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="White" />
+                            <Label Text="Total trabajadores"
+                                   FontSize="11"
+                                   TextColor="#E8F5EE" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Tabla de Trabajadores -->
+                <Border Stroke="Transparent" StrokeThickness="0"
+                        BackgroundColor="White" Padding="0">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="0">
+
+                        <!-- Header verde -->
+                        <Grid BackgroundColor="#9EC9B4" Padding="16,12">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Lista de Trabajadores"
+                                       FontSize="15"
+                                       FontAttributes="Bold"
+                                       TextColor="White" />
+                                <Label x:Name="WorkersCountLabel"
+                                       Text="0 trabajadores encontrados"
+                                       FontSize="11"
+                                       TextColor="#E8F5EE" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Encabezados de columna -->
+                        <Grid Padding="16,10"
+                              ColumnDefinitions="0.8*,1.2*,1.4*,1.4*,0.9*,1*"
+                              BackgroundColor="#FAFAF7">
+                            <Label Text="ID" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="1" Text="NOMBRE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="2" Text="APELLIDO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="3" Text="CEDULA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="4" Text="ESTADO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="5" Text="ACCIONES" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                        </Grid>
+
+                        <!-- Filas -->
+                        <CollectionView x:Name="WorkersList" SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1"
+                                            Padding="16,10" BackgroundColor="White">
+                                        <Grid ColumnDefinitions="0.8*,1.2*,1.4*,1.4*,0.9*,1*"
+                                              ColumnSpacing="6">
+
+                                            <!-- ID -->
+                                            <Label Text="{Binding DisplayId}"
+                                                   FontSize="11"
+                                                   TextColor="{StaticResource TextSecondary}"
+                                                   VerticalOptions="Center" />
+
+                                            <!-- NOMBRE -->
+                                            <Label Grid.Column="1"
+                                                   Text="{Binding Name}"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource TextPrimary}"
+                                                   VerticalOptions="Center" />
+
+                                            <!-- APELLIDO -->
+                                            <Label Grid.Column="2"
+                                                   Text="{Binding LastName}"
+                                                   FontSize="11"
+                                                   TextColor="{StaticResource TextPrimary}"
+                                                   VerticalOptions="Center" />
+
+                                            <!-- CEDULA -->
+                                            <Label Grid.Column="3"
+                                                   Text="{Binding Identification}"
+                                                   FontSize="11"
+                                                   TextColor="{StaticResource TextSecondary}"
+                                                   VerticalOptions="Center" />
+
+                                            <!-- ESTADO -->
+                                            <Border Grid.Column="4"
+                                                    BackgroundColor="{Binding StatusBgColor}"
+                                                    Padding="8,4"
+                                                    HorizontalOptions="Start"
+                                                    VerticalOptions="Center"
+                                                    StrokeThickness="0">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="4" />
+                                                </Border.StrokeShape>
+                                                <Label Text="{Binding StatusText}"
+                                                       FontSize="10"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{Binding StatusTextColor}" />
+                                            </Border>
+
+                                            <!-- ACCIONES -->
+                                            <Label Grid.Column="5"
+                                                   Text="{Binding ToggleText}"
+                                                   TextColor="{Binding ToggleColor}"
+                                                   FontSize="11"
+                                                   TextDecorations="None"
+                                                   VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer
+                                                        Tapped="OnToggleActiveTapped"
+                                                        CommandParameter="{Binding .}" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
+
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

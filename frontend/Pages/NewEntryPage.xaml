@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="frontend.Pages.NewEntryPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#80000000">
+
+    <ScrollView VerticalOptions="Center" HorizontalOptions="Center">
+        <Grid Padding="20" HorizontalOptions="Center" VerticalOptions="Center">
+            <Border WidthRequest="440"
+                    Stroke="#D6DAD7"
+                    StrokeThickness="1"
+                    BackgroundColor="White">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="0" />
+                </Border.StrokeShape>
+
+                <Grid RowDefinitions="Auto,*">
+
+                    <!-- ENCABEZADO -->
+                    <Grid Grid.Row="0" BackgroundColor="#9EC9B4" Padding="20" ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Registrar Tiempo"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="White" />
+                            <Label Text="Complete la informacion de la actividad realizada"
+                                   FontSize="11"
+                                   TextColor="#F2F7F4" />
+                        </VerticalStackLayout>
+                        <Button Grid.Column="1"
+                                Text="X"
+                                FontSize="16"
+                                TextColor="White"
+                                BackgroundColor="Transparent"
+                                Padding="4"
+                                VerticalOptions="Start"
+                                Clicked="OnCancelClicked" />
+                    </Grid>
+
+                    <!-- FORMULARIO -->
+                    <VerticalStackLayout Grid.Row="1" Padding="24" Spacing="16">
+
+                        <!-- TRABAJADOR -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Trabajador"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#2E3A34" />
+                            <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
+                                    BackgroundColor="White" HeightRequest="44">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                                <Picker x:Name="WorkerPicker"
+                                        Title="Selecciona un trabajador"
+                                        FontSize="13"
+                                        TextColor="#2E3A34"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="Center"
+                                        SelectedIndexChanged="OnFieldChanged" />
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- ACTIVIDAD -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Actividad"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#2E3A34" />
+
+                            <!-- Barra de busqueda -->
+                            <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
+                                    BackgroundColor="White" HeightRequest="44">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                                <Entry x:Name="ActivitySearchEntry"
+                                       Placeholder="Buscar actividad..."
+                                       FontSize="13"
+                                       TextColor="#2E3A34"
+                                       BackgroundColor="Transparent"
+                                       TextChanged="OnActivitySearchChanged" />
+                            </Border>
+
+                            <!-- Lista de actividades -->
+                            <Border Stroke="#D6DAD7" StrokeThickness="1" BackgroundColor="White"
+                                    HeightRequest="150">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                                <CollectionView x:Name="ActivityListView"
+                                                SelectionMode="Single"
+                                                SelectionChanged="OnActivitySelected">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="12,10"
+                                                    StrokeThickness="0,0,0,1"
+                                                    Stroke="#EEEBE5"
+                                                    BackgroundColor="{Binding BackgroundColor}">
+                                                <Grid ColumnDefinitions="*,Auto">
+                                                    <Label Text="{Binding Name}"
+                                                           FontSize="13"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#2E3A34"
+                                                           VerticalOptions="Center" />
+                                                    <Label Grid.Column="1"
+                                                           Text="{Binding RateDisplay}"
+                                                           FontSize="13"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#9EC9B4"
+                                                           VerticalOptions="Center" />
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- LOTE -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Lote"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#2E3A34" />
+                            <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
+                                    BackgroundColor="White" HeightRequest="44">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                                <Picker x:Name="LotePicker"
+                                        Title="Selecciona un lote"
+                                        FontSize="13"
+                                        TextColor="#2E3A34"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="Center"
+                                        SelectedIndexChanged="OnFieldChanged" />
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- FECHA -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Fecha"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#2E3A34" />
+                            <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
+                                    BackgroundColor="White" HeightRequest="44">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                                <DatePicker x:Name="EntryDatePicker"
+                                            FontSize="13"
+                                            TextColor="#2E3A34"
+                                            HorizontalOptions="Fill"
+                                            VerticalOptions="Center" />
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- HORAS / MINUTOS -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                <Label Text="Horas"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="#2E3A34" />
+                                <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
+                                        BackgroundColor="White" HeightRequest="44">
+                                    <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                                    <Entry x:Name="HoursEntry"
+                                           Keyboard="Numeric"
+                                           Text="8"
+                                           FontSize="13"
+                                           TextColor="#2E3A34"
+                                           BackgroundColor="Transparent"
+                                           VerticalOptions="Center"
+                                           TextChanged="OnFieldChanged" />
+                                </Border>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="6">
+                                <Label Text="Minutos"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="#2E3A34" />
+                                <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
+                                        BackgroundColor="White" HeightRequest="44">
+                                    <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                                    <Picker x:Name="MinutesPicker"
+                                            FontSize="13"
+                                            TextColor="#2E3A34"
+                                            HorizontalOptions="Fill"
+                                            VerticalOptions="Center"
+                                            SelectedIndexChanged="OnFieldChanged" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- BOTONES -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
+                            <Button Grid.Column="0"
+                                    Text="Cancelar"
+                                    HeightRequest="44"
+                                    BackgroundColor="Transparent"
+                                    TextColor="#2E3A34"
+                                    FontAttributes="Bold"
+                                    BorderColor="#D6DAD7"
+                                    BorderWidth="1"
+                                    Clicked="OnCancelClicked" />
+                            <Button x:Name="SaveButton"
+                                    Grid.Column="1"
+                                    Text="Guardar Registro"
+                                    HeightRequest="44"
+                                    BackgroundColor="#9EC9B4"
+                                    TextColor="White"
+                                    FontAttributes="Bold"
+                                    IsEnabled="False"
+                                    Clicked="OnSaveClicked" />
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+        </Grid>
+    </ScrollView>
+
+</ContentPage>

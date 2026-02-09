@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Elementos de la solución/">
+    <File Path=".gitignore" />
+  </Folder>
+  <Project Path="backend/backend.csproj" Id="62d14bc2-46cc-4cf3-a88d-21326ab19eb8" />
+  <Project Path="frontend/frontend.csproj" Id="a523aa4a-1f55-467d-b079-aa128791ed9d" />
+</Solution>

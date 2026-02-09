@@ -53,6 +53,25 @@ public class PayrollsController : ControllerBase
         return Ok(dto);
     }
 
+    // GET api/payrolls
+    [HttpGet]
+    public async Task<ActionResult<List<PayrollDto>>> GetAll()
+    {
+        var payrolls = await _service.GetAllAsync();
+        var list = payrolls.Select(p => new PayrollDto
+        {
+            Id = p.Id,
+            WorkerId = p.Payroll.WorkerId,
+            WeekStart = p.Payroll.WeekStart.ToDateTime(),
+            WeekEnd = p.Payroll.WeekEnd.ToDateTime(),
+            TotalMinutes = p.Payroll.TotalMinutes,
+            GrossAmount = p.Payroll.GrossAmount,
+            Status = p.Payroll.Status,
+            PaidAt = p.Payroll.PaidAt?.ToDateTime()
+        }).ToList();
+        return Ok(list);
+    }
+
     //PUT api/payrolls/{id}
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(String id, [FromBody] PayrollDto dto) 

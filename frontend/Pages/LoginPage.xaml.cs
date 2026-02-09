@@ -1,4 +1,4 @@
-﻿using frontend.ViewModels;
+using frontend.ViewModels;
 
 namespace frontend.Pages;
 
@@ -21,21 +21,24 @@ public partial class LoginPage : ContentPage
         {
             if (!string.IsNullOrEmpty(_viewModel.ErrorMessage))
             {
-                await DisplayAlert("Error", _viewModel.ErrorMessage, "OK");
+                await DisplayAlertAsync("Error", _viewModel.ErrorMessage, "OK");
             }
             else
             {
-                await DisplayAlert("Error", "Credenciales inválidas", "OK");
+                await DisplayAlertAsync("Error", "Credenciales invalidas", "OK");
             }
             return;
         }
 
-        await DisplayAlert("Éxito", $"Bienvenido {result.Email}", "OK");
-
+        // Login exitoso - cambiar a AppShell con dashboard
+        if (Application.Current is App app)
+            await app.GoToDashboardAsync();
     }
 
     private async void OnRegisterClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("register");
+        var registerPage = Handler?.MauiContext?.Services.GetRequiredService<RegisterPage>();
+        if (registerPage is not null)
+            await Navigation.PushAsync(registerPage);
     }
 }

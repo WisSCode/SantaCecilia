@@ -33,6 +33,7 @@ namespace frontend
             // Registrar servicios
             builder.Services.AddSingleton<AuthService>();
             builder.Services.AddSingleton<SessionService>();
+            builder.Services.AddSingleton<ApiService>();
 
             // Registrar ViewModels
             builder.Services.AddTransient<LoginViewModel>();
@@ -41,6 +42,16 @@ namespace frontend
             // Registrar páginas
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
+            builder.Services.AddTransient<DashboardPage>();
+            builder.Services.AddTransient<WorkersPage>();
+            builder.Services.AddTransient<TimeTrackingPage>();
+            builder.Services.AddTransient<PayrollPage>();
+            builder.Services.AddTransient<ReportsPage>();
+            builder.Services.AddTransient<UsersPage>();
+            builder.Services.AddTransient<WorkTypesPage>();
+            builder.Services.AddTransient<BatchesPage>();
+            builder.Services.AddTransient<NewEntryPage>();
+            builder.Services.AddTransient<NewWorkerPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

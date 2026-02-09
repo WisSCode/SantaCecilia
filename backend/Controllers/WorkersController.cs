@@ -48,6 +48,23 @@ public class WorkersController : ControllerBase
         return Ok(dto);
     }
 
+    // GET api/workers
+    [HttpGet]
+    public async Task<ActionResult<List<WorkerDto>>> GetAll()
+    {
+        var workers = await _service.GetAllAsync();
+        var list = workers.Select(w => new WorkerDto
+        {
+            Id = w.Id,
+            UserId = w.Worker.UserId,
+            Name = w.Worker.Name,
+            LastName = w.Worker.LastName,
+            Identification = w.Worker.Identification,
+            Active = w.Worker.Active
+        }).ToList();
+        return Ok(list);
+    }
+
     //PUT api/workers/{id}
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(String id, [FromBody] WorkerDto dto) 

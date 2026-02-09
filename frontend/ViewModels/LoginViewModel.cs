@@ -3,7 +3,6 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using frontend.Services;
 using frontend.Models.Auth;
-using frontend.Configuration;
 
 namespace frontend.ViewModels;
 

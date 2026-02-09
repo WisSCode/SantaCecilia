@@ -23,6 +23,21 @@ public class WorkedTimeService
         return snapshot.Exists ? snapshot.ConvertTo<WorkedTimes>() : null;
     }
 
+    // SELECT ALL
+    public async Task<List<(string Id, WorkedTimes WorkedTime)>> GetAllAsync()
+    {
+        var list = new List<(string, WorkedTimes)>();
+        var snap = await _workedTimes.GetSnapshotAsync();
+        foreach (var doc in snap.Documents)
+        {
+            if (doc.Exists)
+            {
+                list.Add((doc.Id, doc.ConvertTo<WorkedTimes>()));
+            }
+        }
+        return list;
+    }
+
     // UPDATE
     public async Task UpdateAsync(string workedTimesId, WorkedTimes workedTimes)
     {

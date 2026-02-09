@@ -23,6 +23,21 @@ public class WorkTypeService
         return snapshot.Exists ? snapshot.ConvertTo<WorkTypes>() : null;
     }
 
+    // SELECT ALL
+    public async Task<List<(string Id, WorkTypes WorkType)>> GetAllAsync()
+    {
+        var list = new List<(string, WorkTypes)>();
+        var snap = await _workTypes.GetSnapshotAsync();
+        foreach (var doc in snap.Documents)
+        {
+            if (doc.Exists)
+            {
+                list.Add((doc.Id, doc.ConvertTo<WorkTypes>()));
+            }
+        }
+        return list;
+    }
+
     // UPDATE
     public async Task UpdateAsync(string workTypeId, WorkTypes workType)
     {

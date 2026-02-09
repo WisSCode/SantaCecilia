@@ -1,4 +1,4 @@
-using frontend.Configuration;
+ï»¿using frontend.Configuration;
 using frontend.Models.Auth;
 
 namespace frontend.Services;
@@ -13,7 +13,7 @@ public class SessionService
 
     public event EventHandler<bool>? AuthStateChanged;
 
-    // Guardar sesión
+    // Guardar sesion
     public async Task SaveSessionAsync(AuthResponse authResponse)
     {
         await SecureStorage.SetAsync(AppSettings.StorageKeys.UserToken, authResponse.Token);
@@ -30,7 +30,7 @@ public class SessionService
         AuthStateChanged?.Invoke(this, true);
     }
 
-    // Cargar sesión guardada
+    // Cargar sesion guardada
     public async Task<bool> LoadSessionAsync()
     {
         try
@@ -50,7 +50,7 @@ public class SessionService
         }
     }
 
-    // Cerrar sesión
+    // Cerrar sesion
     public async Task LogoutAsync()
     {
         SecureStorage.Remove(AppSettings.StorageKeys.UserToken);
@@ -67,7 +67,7 @@ public class SessionService
         AuthStateChanged?.Invoke(this, false);
     }
 
-    // Verificar si el usuario tiene un rol específico
+    // Verificar si el usuario tiene un rol especifico
     public bool HasRole(string role)
     {
         return IsLoggedIn && Role?.Equals(role, StringComparison.OrdinalIgnoreCase) == true;

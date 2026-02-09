@@ -23,6 +23,21 @@ public class PayrollService
         return snapshot.Exists ? snapshot.ConvertTo<Payrolls>() : null;
     }
 
+    // SELECT ALL
+    public async Task<List<(string Id, Payrolls Payroll)>> GetAllAsync()
+    {
+        var list = new List<(string, Payrolls)>();
+        var snap = await _payrolls.GetSnapshotAsync();
+        foreach (var doc in snap.Documents)
+        {
+            if (doc.Exists)
+            {
+                list.Add((doc.Id, doc.ConvertTo<Payrolls>()));
+            }
+        }
+        return list;
+    }
+
     // UPDATE
     public async Task UpdateAsync(string payrollId, Payrolls payroll)
     {

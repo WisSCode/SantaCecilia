@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="frontend.Pages.TimeTrackingPage"
+             Title=""
+             Padding="0">
+
+    <Grid RowDefinitions="*" ColumnDefinitions="*" Background="{StaticResource AppBackgroundBrush}">
+        <ScrollView Grid.Row="0" Grid.Column="0">
+            <VerticalStackLayout Padding="20" Spacing="16">
+
+                <!-- Header con boton -->
+                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                    <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                        <Label Text="Registro Diario"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Control de horas por actividad y lote"
+                                   FontSize="11"
+                            TextColor="{StaticResource TextSecondary}" />
+                    </VerticalStackLayout>
+                    <Button Grid.Column="1"
+                            Text="+ Nueva Actividad"
+                            Clicked="OnAddClicked"
+                            BackgroundColor="#9EC9B4"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            FontSize="12"
+                            HeightRequest="40"
+                            Padding="16,0"
+                            VerticalOptions="Center" />
+                </Grid>
+
+                <!-- 3 Stat Cards -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
+
+                    <!-- Hoy -->
+                    <Border Grid.Column="0"
+                            Stroke="#D6DAD7" StrokeThickness="1"
+                            BackgroundColor="White" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Hoy"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource TextSecondary}" />
+                            <Label x:Name="TodayCount"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Registros"
+                                   FontSize="11"
+                                   TextColor="{StaticResource TextTertiary}" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Total Hoy -->
+                    <Border Grid.Column="1"
+                            Stroke="#D6DAD7" StrokeThickness="1"
+                            BackgroundColor="White" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Total Hoy"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource TextSecondary}" />
+                            <Label x:Name="TotalHours"
+                                   Text="0h"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Horas trabajadas"
+                                   FontSize="11"
+                                   TextColor="{StaticResource TextTertiary}" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Esta Semana -->
+                    <Border Grid.Column="2"
+                            Stroke="Transparent" StrokeThickness="0"
+                            BackgroundColor="#9EC9B4" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Esta Semana"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="White" />
+                            <Label x:Name="WeekCount"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="White" />
+                            <Label Text="Registros totales"
+                                   FontSize="11"
+                                   TextColor="#E8F5EE" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Tabla de Registros -->
+                <Border Stroke="Transparent" StrokeThickness="0"
+                        BackgroundColor="White" Padding="0">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="0">
+
+                        <!-- Header verde de la tabla -->
+                        <Grid BackgroundColor="#9EC9B4" Padding="16,12">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Registros Recientes"
+                                       FontSize="15"
+                                       FontAttributes="Bold"
+                                       TextColor="White" />
+                                <Label Text="Actividades registradas por fecha"
+                                       FontSize="11"
+                                       TextColor="#E8F5EE" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Busqueda -->
+                        <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1" Padding="12,8"
+                                BackgroundColor="White">
+                            <Entry x:Name="SearchEntry"
+                                   Placeholder="Buscar trabajador o actividad..."
+                                   FontSize="12"
+                                   TextColor="{StaticResource TextPrimary}"
+                                   BackgroundColor="Transparent"
+                                   TextChanged="OnSearchChanged" />
+                        </Border>
+
+                        <!-- Encabezados de columna -->
+                        <Grid Padding="16,10"
+                              ColumnDefinitions="1.1*,1.8*,2.5*,1.5*,1.2*,1.2*"
+                              BackgroundColor="#FAFAF7">
+                            <Label Text="FECHA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="1" Text="TRABAJADOR" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="2" Text="ACTIVIDAD" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="3" Text="LOTE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="4" Text="TARIFA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="5" Text="TIEMPO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                        </Grid>
+
+                        <!-- Filas -->
+                        <CollectionView x:Name="EntriesView" SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1"
+                                            Padding="16,10" BackgroundColor="White">
+                                        <Grid ColumnDefinitions="1.1*,1.8*,2.5*,1.5*,1.2*,1.2*"
+                                              ColumnSpacing="6">
+
+                                            <!-- FECHA -->
+                                            <Label Text="{Binding DateShort}"
+                                                   FontSize="11"
+                                                   TextColor="{StaticResource TextSecondary}"
+                                                   VerticalOptions="Center" />
+
+                                            <!-- TRABAJADOR con inicial -->
+                                            <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                                                <Border BackgroundColor="{Binding InitialColor}"
+                                                        WidthRequest="28" HeightRequest="28"
+                                                        StrokeThickness="0"
+                                                        StrokeShape="RoundRectangle 14">
+                                                    <Label Text="{Binding Initial}"
+                                                           FontSize="12"
+                                                           FontAttributes="Bold"
+                                                           TextColor="White"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center" />
+                                                </Border>
+                                                <Label Text="{Binding WorkerName}"
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{StaticResource TextPrimary}"
+                                                       VerticalOptions="Center"
+                                                       LineBreakMode="TailTruncation" />
+                                            </HorizontalStackLayout>
+
+                                            <!-- ACTIVIDAD -->
+                                            <Label Grid.Column="2"
+                                                   Text="{Binding ActivityName}"
+                                                   FontSize="11"
+                                                   TextColor="{StaticResource TextPrimary}"
+                                                   VerticalOptions="Center"
+                                                   LineBreakMode="TailTruncation" />
+
+                                            <!-- LOTE -->
+                                            <Label Grid.Column="3"
+                                                   Text="{Binding Lote}"
+                                                   FontSize="11"
+                                                   TextColor="{StaticResource TextSecondary}"
+                                                   VerticalOptions="Center"
+                                                   LineBreakMode="TailTruncation" />
+
+                                            <!-- TARIFA -->
+                                            <Label Grid.Column="4"
+                                                   Text="{Binding RateDisplay}"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource TextPrimary}"
+                                                   VerticalOptions="Center" />
+
+                                            <!-- TIEMPO -->
+                                            <Label Grid.Column="5"
+                                                   Text="{Binding TimeDisplay}"
+                                                   FontSize="11"
+                                                   TextColor="{StaticResource TextPrimary}"
+                                                   VerticalOptions="Center" />
+
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

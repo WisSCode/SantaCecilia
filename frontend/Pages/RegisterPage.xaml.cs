@@ -23,32 +23,32 @@ public partial class RegisterPage : ContentPage
             {
                 if (!string.IsNullOrEmpty(_viewModel.ErrorMessage))
                 {
-                    await DisplayAlert("Error", _viewModel.ErrorMessage, "OK");
+                    await DisplayAlertAsync("Error", _viewModel.ErrorMessage, "OK");
                 }
                 else
                 {
-                    await DisplayAlert("Error", "No se pudo crear la cuenta", "OK");
+                    await DisplayAlertAsync("Error", "No se pudo crear la cuenta", "OK");
                 }
                 return;
             }
 
-            await DisplayAlert(
+            await DisplayAlertAsync(
                 "Registro exitoso",
-                "Tu cuenta ha sido creada. Un administrador debe validarla antes de que puedas iniciar sesión.",
+                "Tu cuenta ha sido creada. Un administrador debe validarla antes de que puedas iniciar sesion.",
                 "OK"
             );
 
             // Volver al login
-            await Shell.Current.GoToAsync("..");
+            await Navigation.PopAsync();
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", ex.Message, "OK");
+            await DisplayAlertAsync("Error", ex.Message, "OK");
         }
     }
 
     private async void OnBackToLoginClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("..");
+        await Navigation.PopAsync();
     }
 }

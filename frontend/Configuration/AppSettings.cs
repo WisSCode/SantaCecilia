@@ -1,4 +1,4 @@
-namespace frontend.Configuration;
+ï»¿namespace frontend.Configuration;
 
 public static class AppSettings
 {
@@ -7,7 +7,7 @@ public static class AppSettings
     #if DEBUG
         "http://localhost:5191";
     #else
-        "https://tu-api-produccion.com"; // Reemplazar con la URL cuando se use en producción
+        "https://tu-api-produccion.com"; // Reemplazar con la URL cuando se use en produccion
     #endif
 
     // Firebase Web API Key

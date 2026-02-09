@@ -15,7 +15,7 @@ FirebaseApp.Create(new AppOptions
     ProjectId = "santa-cecilia-s"
 });
 
-//Firestore con credenciales explícitas
+//Firestore con credenciales explicitas
 builder.Services.AddSingleton(provider =>
 {
     return new FirestoreDbBuilder

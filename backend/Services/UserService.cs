@@ -23,6 +23,21 @@ public class UserService
         return snapshot.Exists ? snapshot.ConvertTo<Users>() : null;
     }
 
+    // SELECT ALL
+    public async Task<List<(string Id, Users User)>> GetAllAsync()
+    {
+        var list = new List<(string, Users)>();
+        var snap = await _users.GetSnapshotAsync();
+        foreach (var doc in snap.Documents)
+        {
+            if (doc.Exists)
+            {
+                list.Add((doc.Id, doc.ConvertTo<Users>()));
+            }
+        }
+        return list;
+    }
+
     // UPDATE
     public async Task UpdateAsync(string userId, Users user)
     {

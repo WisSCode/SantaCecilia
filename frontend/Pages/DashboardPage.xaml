@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="frontend.Pages.DashboardPage"
+             Title=""
+             Padding="0">
+
+    <Grid RowDefinitions="*" ColumnDefinitions="*" Background="{StaticResource AppBackgroundBrush}">
+        <ScrollView Grid.Row="0" Grid.Column="0">
+            <VerticalStackLayout Padding="20" Spacing="16">
+
+                <!-- Header -->
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Panel de Control"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}" />
+                    <Label x:Name="DateLabel"
+                           FontSize="11"
+                           TextColor="{StaticResource TextSecondary}" />
+                </VerticalStackLayout>
+
+                <!-- Alerts -->
+                <VerticalStackLayout Spacing="8">
+                    <Border BackgroundColor="#FFF4E1" Stroke="#F1C27B" StrokeThickness="1"
+                            Padding="12" StrokeShape="RoundRectangle 0">
+                        <Label x:Name="PayrollAlertLabel"
+                                   Text="Faltan 0 dias para el cierre de nomina semanal"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#7A5A26"
+                                   VerticalOptions="Center" />
+                    </Border>
+                    <Border x:Name="ValidationAlertBorder"
+                            BackgroundColor="#E9F4FE" Stroke="#A7C9E5" StrokeThickness="1"
+                            Padding="12" StrokeShape="RoundRectangle 0">
+                        <Label x:Name="ValidationAlertLabel"
+                                   Text="0 usuarios pendientes de validacion"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#24507A"
+                                   VerticalOptions="Center" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- 4 Stat Cards -->
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="12">
+
+                    <!-- Trabajadores Activos -->
+                    <Border Grid.Column="0"
+                            Stroke="#D6DAD7" StrokeThickness="1"
+                            BackgroundColor="White" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                        <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="6">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Border Grid.Column="1"
+                                        BackgroundColor="#E8F5EE"
+                                        Padding="6,2" StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 10"
+                                        VerticalOptions="Start">
+                                    <Label x:Name="WorkersNewBadge" Text="+0"
+                                           FontSize="10" FontAttributes="Bold"
+                                           TextColor="#2E7D5B"
+                                           HorizontalOptions="Center" />
+                                </Border>
+                            </Grid>
+                            <VerticalStackLayout Grid.Row="1" Spacing="2">
+                                <Label Text="Trabajadores Activos"
+                                       FontSize="11"
+                                       TextColor="{StaticResource TextSecondary}" />
+                                <Label x:Name="WorkersCount" Text="0"
+                                       FontSize="24" FontAttributes="Bold"
+                                       TextColor="{StaticResource TextPrimary}" />
+                            </VerticalStackLayout>
+                            <Label Grid.Row="2" Text="esta semana"
+                                   FontSize="10" TextColor="{StaticResource TextTertiary}" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Horas Trabajadas -->
+                    <Border Grid.Column="1"
+                            Stroke="#D6DAD7" StrokeThickness="1"
+                            BackgroundColor="White" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                        <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="6">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Border Grid.Column="1"
+                                        BackgroundColor="#E9F4FE"
+                                        Padding="6,2" StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 10"
+                                        VerticalOptions="Start">
+                                    <Label x:Name="HoursDailyBadge" Text="0"
+                                           FontSize="10" FontAttributes="Bold"
+                                           TextColor="#2C6AA3"
+                                           HorizontalOptions="Center" />
+                                </Border>
+                            </Grid>
+                            <VerticalStackLayout Grid.Row="1" Spacing="2">
+                                <Label Text="Horas Trabajadas"
+                                       FontSize="11"
+                                       TextColor="{StaticResource TextSecondary}" />
+                                <Label x:Name="HoursCount" Text="0"
+                                       FontSize="24" FontAttributes="Bold"
+                                       TextColor="{StaticResource TextPrimary}" />
+                            </VerticalStackLayout>
+                            <Label Grid.Row="2" Text="promedio diario"
+                                   FontSize="10" TextColor="{StaticResource TextTertiary}" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Nomina Semanal -->
+                    <Border Grid.Column="2"
+                            Stroke="#D6DAD7" StrokeThickness="1"
+                            BackgroundColor="White" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                        <Grid RowDefinitions="Auto,Auto" RowSpacing="6">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Nomina Semanal"
+                                       FontSize="11"
+                                       TextColor="{StaticResource TextSecondary}" />
+                                <Label x:Name="PayrollAmount" Text="B/.0"
+                                       FontSize="24" FontAttributes="Bold"
+                                       TextColor="{StaticResource TextPrimary}" />
+                            </VerticalStackLayout>
+                            <Label Grid.Row="1" Text="3:00 PM"
+                                   FontSize="10" TextColor="{StaticResource TextTertiary}" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Actividades -->
+                    <Border Grid.Column="3"
+                            Stroke="#D6DAD7" StrokeThickness="1"
+                            BackgroundColor="White" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                        <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="6">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Border Grid.Column="1"
+                                        BackgroundColor="#E8F5EE"
+                                        Padding="6,2" StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 10"
+                                        VerticalOptions="Start">
+                                    <Label x:Name="ActivitiesNewBadge" Text="+0"
+                                           FontSize="10" FontAttributes="Bold"
+                                           TextColor="#2E7D5B"
+                                           HorizontalOptions="Center" />
+                                </Border>
+                            </Grid>
+                            <VerticalStackLayout Grid.Row="1" Spacing="2">
+                                <Label Text="Actividades"
+                                       FontSize="11"
+                                       TextColor="{StaticResource TextSecondary}" />
+                                <Label x:Name="ActivitiesCount" Text="0"
+                                       FontSize="24" FontAttributes="Bold"
+                                       TextColor="{StaticResource TextPrimary}" />
+                            </VerticalStackLayout>
+                            <Label Grid.Row="2" Text="vs semana anterior"
+                                   FontSize="10" TextColor="{StaticResource TextTertiary}" />
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- Actividades Recientes -->
+                <Border Stroke="Transparent" StrokeThickness="0"
+                        BackgroundColor="White" Padding="0">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="0">
+
+                        <!-- Header -->
+                        <Grid Padding="16,14" ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Actividades Recientes"
+                                       FontSize="15" FontAttributes="Bold"
+                                       TextColor="{StaticResource TextPrimary}" />
+                                <Label Text="Ultimos registros del dia de hoy"
+                                       FontSize="11"
+                                       TextColor="{StaticResource TextSecondary}" />
+                            </VerticalStackLayout>
+                            <Label Grid.Column="1" Text="Ver todo >"
+                                   FontSize="11"
+                                   TextColor="{StaticResource TextSecondary}"
+                                   VerticalOptions="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnViewAllTapped" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Grid>
+
+                        <!-- Encabezados -->
+                        <Grid Padding="16,10"
+                              ColumnDefinitions="1.8*,2.5*,1.3*,1.2*,1*,1.2*"
+                              BackgroundColor="#FAFAF7">
+                            <Label Text="TRABAJADOR" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="1" Text="ACTIVIDAD" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="2" Text="LOTE" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="3" Text="TARIFA" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="4" Text="HORAS" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="5" Text="FECHA" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                        </Grid>
+
+                        <!-- Filas -->
+                        <CollectionView x:Name="RecentActivitiesCollection" SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1"
+                                            Padding="16,10" BackgroundColor="White">
+                                        <Grid ColumnDefinitions="1.8*,2.5*,1.3*,1.2*,1*,1.2*"
+                                              ColumnSpacing="6">
+
+                                            <!-- TRABAJADOR -->
+                                            <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                                <Border BackgroundColor="{Binding InitialColor}"
+                                                        WidthRequest="28" HeightRequest="28"
+                                                        StrokeThickness="0"
+                                                        StrokeShape="RoundRectangle 14">
+                                                    <Label Text="{Binding Initial}"
+                                                           FontSize="11" FontAttributes="Bold"
+                                                           TextColor="White"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center" />
+                                                </Border>
+                                                <Label Text="{Binding WorkerName}"
+                                                       FontSize="11" FontAttributes="Bold"
+                                                       TextColor="{StaticResource TextPrimary}"
+                                                       VerticalOptions="Center"
+                                                       LineBreakMode="TailTruncation" />
+                                            </HorizontalStackLayout>
+
+                                            <!-- ACTIVIDAD -->
+                                            <Label Grid.Column="1"
+                                                   Text="{Binding ActivityName}"
+                                                   FontSize="11"
+                                                   TextColor="{StaticResource TextPrimary}"
+                                                   VerticalOptions="Center"
+                                                   LineBreakMode="TailTruncation" />
+
+                                            <!-- LOTE -->
+                                            <Label Grid.Column="2"
+                                                   Text="{Binding Lote}"
+                                                   FontSize="11"
+                                                   TextColor="{StaticResource TextSecondary}"
+                                                   VerticalOptions="Center" />
+
+                                            <!-- TARIFA -->
+                                            <Label Grid.Column="3"
+                                                   Text="{Binding RateDisplay}"
+                                                   FontSize="11"
+                                                   TextColor="{StaticResource TextPrimary}"
+                                                   VerticalOptions="Center" />
+
+                                            <!-- HORAS -->
+                                            <Label Grid.Column="4"
+                                                   Text="{Binding TimeDisplay}"
+                                                   FontSize="11" FontAttributes="Bold"
+                                                   TextColor="{StaticResource TextPrimary}"
+                                                   VerticalOptions="Center" />
+
+                                            <!-- FECHA -->
+                                            <Label Grid.Column="5"
+                                                   Text="{Binding DateShort}"
+                                                   FontSize="11"
+                                                   TextColor="{StaticResource TextSecondary}"
+                                                   VerticalOptions="Center" />
+
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

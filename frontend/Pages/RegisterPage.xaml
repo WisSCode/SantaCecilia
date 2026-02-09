@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="frontend.Pages.RegisterPage"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    BackgroundColor="#F7F7F3">
+x:Class="frontend.Pages.RegisterPage"
+xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+NavigationPage.HasNavigationBar="False"
+BackgroundColor="#F7F7F3">
 
     <ScrollView>
         <Grid VerticalOptions="Center" HorizontalOptions="Center">
