@@ -10,7 +10,7 @@ public partial class RegisterPage : ContentPage
     private async void OnRegisterCompleted(object sender, EventArgs e)
     {
         // Aquí luego irá la lógica real de registro
-        await DisplayAlert("Registro", "Cuenta creada correctamente", "OK");
+        await DisplayAlert("Error", "Campos vacíos", "OK");
         await Shell.Current.GoToAsync("..");
     }
 

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="frontend.WorkersHomePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="#F6F5EF">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="20">
+
+            <!-- HEADER -->
+            <Grid BackgroundColor="#9EC9B4" Padding="20" ColumnDefinitions="Auto,*,Auto">
+                <Frame WidthRequest="42"
+                       HeightRequest="42"
+                       CornerRadius="21"
+                       BackgroundColor="White"
+                       VerticalOptions="Center">
+                    <Label Text="J"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           FontAttributes="Bold"
+                           TextColor="#2E3A34"/>
+                </Frame>
+
+                <VerticalStackLayout Grid.Column="1" Padding="12,0">
+                    <Label Text="Juan Pérez"
+                           FontAttributes="Bold"
+                           FontSize="16"
+                           TextColor="White"/>
+                    <Label Text="TRB-código trabajador"
+                           FontSize="12"
+                           TextColor="#F2F7F4"/>
+                </VerticalStackLayout>
+
+                <Button Grid.Column="2"
+                        Text="Cerrar Sesión"
+                        TextColor="White"
+                        BackgroundColor="Transparent"/>
+            </Grid>
+
+            <!-- RESUMEN -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+
+                <Frame BackgroundColor="#FAFAF7" BorderColor="#D6DAD7">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Horas Esta Semana"
+                               FontSize="12"
+                               TextColor="#6B7280"/>
+                        <Label Text="42.5h"
+                               FontSize="22"
+                               FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame BackgroundColor="#9EC9B4">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Pago Neto Estimado"
+                               FontSize="12"
+                               TextColor="White"/>
+                        <Label Text="B/.356.33"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+            </Grid>
+
+            <!-- ACTIVIDADES ASIGNADAS -->
+            <Frame BorderColor="#D6DAD7">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Actividades Asignadas"
+                           FontAttributes="Bold"
+                           FontSize="14"/>
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Frame BackgroundColor="#FAFAF7" Padding="8">
+                            <Label Text="Control de Sigatoka"/>
+                        </Frame>
+                        <Frame BackgroundColor="#FAFAF7" Padding="8">
+                            <Label Text="Deshoje"/>
+                        </Frame>
+                        <Frame BackgroundColor="#FAFAF7" Padding="8">
+                            <Label Text="Mantenimiento general"/>
+                        </Frame>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- DESGLOSE -->
+            <Frame BorderColor="#D6DAD7">
+                <VerticalStackLayout Spacing="10">
+
+                    <Label Text="Desglose de Pago Semanal"
+                           FontAttributes="Bold"
+                           FontSize="14"/>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Devengado Bruto:"/>
+                        <Label Grid.Column="1" Text="B/.398.14"/>
+                    </Grid>
+
+                    <Frame BackgroundColor="#FFF5F5" BorderColor="#FCA5A5">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="DESCUENTOS:"
+                                   FontAttributes="Bold"
+                                   TextColor="#DC2626"/>
+
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Seguro Social (9%)"/>
+                                <Label Grid.Column="1" Text="-B/.35.83" TextColor="Red"/>
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Seguro Educativo (1.25%)"/>
+                                <Label Grid.Column="1" Text="-B/.4.98" TextColor="Red"/>
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Sindicato"/>
+                                <Label Grid.Column="1" Text="-B/.1.00" TextColor="Red"/>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame BackgroundColor="#9EC9B4">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="TOTAL A RECIBIR:"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            <Label Grid.Column="1"
+                                   Text="B/.356.33"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                        </Grid>
+                    </Frame>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- ACTIVIDADES RECIENTES -->
+            <Frame BorderColor="#D6DAD7">
+                <VerticalStackLayout Spacing="12">
+
+                    <Label Text="Actividades Recientes"
+                           FontAttributes="Bold"
+                           FontSize="14"/>
+
+                    <!-- HEADER TABLA -->
+                    <Grid ColumnDefinitions="Auto,2*,*,*,*,*">
+                        <Label Text="FECHA" FontSize="11" TextColor="#6B7280"/>
+                        <Label Grid.Column="1" Text="ACTIVIDAD" FontSize="11" TextColor="#6B7280"/>
+                        <Label Grid.Column="2" Text="LOTE" FontSize="11" TextColor="#6B7280"/>
+                        <Label Grid.Column="3" Text="HORAS" FontSize="11" TextColor="#6B7280"/>
+                        <Label Grid.Column="4" Text="TARIFA" FontSize="11" TextColor="#6B7280"/>
+                        <Label Grid.Column="5" Text="MONTO" FontSize="11" TextColor="#6B7280"/>
+                    </Grid>
+
+                    <CollectionView ItemsSource="{Binding Actividades}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="Auto,2*,*,*,*,*" Padding="8">
+                                    <Label Text="{Binding Fecha}" TextColor="#9CA3AF"/>
+                                    <Label Grid.Column="1" Text="{Binding Actividad}" FontAttributes="Bold"/>
+                                    <Label Grid.Column="2" Text="{Binding Lote}" TextColor="#6B7280"/>
+                                    <Label Grid.Column="3" Text="{Binding Horas}"/>
+                                    <Label Grid.Column="4" Text="{Binding Tarifa}" TextColor="#9EC9B4"/>
+                                    <Label Grid.Column="5" Text="{Binding Monto}" TextColor="#9EC9B4"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
