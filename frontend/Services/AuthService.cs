@@ -94,6 +94,24 @@ public class AuthService
         }
     }
 
+    public async Task SendPasswordResetEmailAsync(string email)
+    {
+        var url =
+            $"https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key={_firebaseApiKey}";
+
+        var payload = new
+        {
+            requestType = "PASSWORD_RESET",
+            email
+        };
+
+        var response = await _firebaseClient.PostAsJsonAsync(url, payload);
+
+        if (!response.IsSuccessStatusCode)
+            throw new Exception("No se pudo enviar el correo de restablecimiento");
+    }
+
+
     private string TryParseError(string errorContent)
     {
         try

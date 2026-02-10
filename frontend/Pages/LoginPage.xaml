@@ -85,6 +85,17 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                             FontSize="13"
                             TextColor="#2E3A34"
                             BackgroundColor="White" />
+
+                        <Label
+                            Text="¿Olvidaste tu contraseña?"
+                            FontSize="12"
+                            TextColor="#2E3A34"
+                            HorizontalTextAlignment="Center">           
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnForgotPasswordTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+
                     </VerticalStackLayout>
 
                     <!-- BOTÓN INGRESAR -->
