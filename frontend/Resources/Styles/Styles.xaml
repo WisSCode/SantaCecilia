@@ -124,6 +124,7 @@
         <Setter Property="FontSize" Value="14" />
         <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
         <Setter Property="PlaceholderColor" Value="{StaticResource TextTertiary}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
     </Style>
 
     <!-- BORDER STYLES (formerly Frame) -->

@@ -34,7 +34,7 @@
                 <!-- Actions -->
                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                     <Border Grid.Column="0" Style="{StaticResource CardFrame}" Padding="10">
-                        <Entry x:Name="SearchEntry" Placeholder="Buscar actividad..." />
+                        <Entry x:Name="SearchEntry" Placeholder="Buscar actividad..." TextChanged="OnSearchChanged" />
                     </Border>
                     <Button Grid.Column="1" Text="+ Agregar" Style="{StaticResource PrimaryButton}" Clicked="OnAddClicked" />
                 </Grid>
@@ -47,8 +47,16 @@
                         </Grid>
 
                         <Grid Padding="10" ColumnDefinitions="3*,2*,Auto" BackgroundColor="{StaticResource SurfaceSecondary}">
-                            <Label Text="NOMBRE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                            <Label Grid.Column="1" Text="TARIFA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label x:Name="HeaderName" Text="NOMBRE &#x2191;" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSortByName" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="HeaderRate" Grid.Column="1" Text="TARIFA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSortByRate" />
+                                </Label.GestureRecognizers>
+                            </Label>
                             <Label Grid.Column="2" Text="ACCIONES" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
                         </Grid>
 
@@ -58,7 +66,7 @@
                                     <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10">
                                         <Grid ColumnDefinitions="3*,2*,Auto" ColumnSpacing="8">
                                             <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="12" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
-                                            <Label Grid.Column="1" Text="{Binding DefaultRate, StringFormat='B/.{0:F2}/hr'}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
+                                            <Label Grid.Column="1" Text="{Binding DefaultRate, StringFormat='B/.{0:F4}/hr'}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
                                             <Button Grid.Column="2" Text="Editar" 
                                                     Clicked="OnEditClicked"
                                                     CommandParameter="{Binding .}"

@@ -7,6 +7,8 @@ public partial class WorkersPage : ContentPage
 {
     private readonly ApiService _api;
     private List<Worker> allWorkers = new();
+    private string _sortColumn = "Id";
+    private bool _sortAscending = true;
 
     public WorkersPage(ApiService api)
     {
@@ -37,7 +39,7 @@ public partial class WorkersPage : ContentPage
                 SequentialId = index + 1
             }).ToList();
 
-            WorkersList.ItemsSource = allWorkers;
+            ApplySort();
             UpdateStats();
         }
         catch (Exception ex)
@@ -45,6 +47,49 @@ public partial class WorkersPage : ContentPage
             await DisplayAlertAsync("Error", $"No se pudieron cargar los trabajadores: {ex.Message}", "OK");
         }
     }
+
+    private void ApplySort()
+    {
+        IEnumerable<Worker> sorted = _sortColumn switch
+        {
+            "Id" => _sortAscending ? allWorkers.OrderBy(w => w.SequentialId) : allWorkers.OrderByDescending(w => w.SequentialId),
+            "Name" => _sortAscending ? allWorkers.OrderBy(w => w.Name) : allWorkers.OrderByDescending(w => w.Name),
+            "LastName" => _sortAscending ? allWorkers.OrderBy(w => w.LastName) : allWorkers.OrderByDescending(w => w.LastName),
+            "Identification" => _sortAscending ? allWorkers.OrderBy(w => w.Identification) : allWorkers.OrderByDescending(w => w.Identification),
+            "Status" => _sortAscending ? allWorkers.OrderBy(w => w.Active) : allWorkers.OrderByDescending(w => w.Active),
+            _ => allWorkers.AsEnumerable()
+        };
+        WorkersList.ItemsSource = sorted.ToList();
+        UpdateSortHeaders();
+    }
+
+    private void ToggleSort(string column)
+    {
+        if (_sortColumn == column)
+            _sortAscending = !_sortAscending;
+        else
+        {
+            _sortColumn = column;
+            _sortAscending = true;
+        }
+        ApplySort();
+    }
+
+    private void UpdateSortHeaders()
+    {
+        var arrow = _sortAscending ? " \u2191" : " \u2193";
+        HeaderId.Text = "ID" + (_sortColumn == "Id" ? arrow : "");
+        HeaderName.Text = "NOMBRE" + (_sortColumn == "Name" ? arrow : "");
+        HeaderLastName.Text = "APELLIDO" + (_sortColumn == "LastName" ? arrow : "");
+        HeaderId2.Text = "CEDULA" + (_sortColumn == "Identification" ? arrow : "");
+        HeaderStatus.Text = "ESTADO" + (_sortColumn == "Status" ? arrow : "");
+    }
+
+    private void OnSortById(object sender, TappedEventArgs e) => ToggleSort("Id");
+    private void OnSortByName(object sender, TappedEventArgs e) => ToggleSort("Name");
+    private void OnSortByLastName(object sender, TappedEventArgs e) => ToggleSort("LastName");
+    private void OnSortByIdentification(object sender, TappedEventArgs e) => ToggleSort("Identification");
+    private void OnSortByStatus(object sender, TappedEventArgs e) => ToggleSort("Status");
 
     private void UpdateStats()
     {
@@ -83,8 +128,7 @@ public partial class WorkersPage : ContentPage
                 UserId = worker.UserId,
                 Active = worker.Active
             });
-            WorkersList.ItemsSource = null;
-            WorkersList.ItemsSource = allWorkers;
+            ApplySort();
             UpdateStats();
         }
         catch (Exception ex)
@@ -99,7 +143,7 @@ public partial class WorkersPage : ContentPage
         var query = e.NewTextValue?.Trim();
         if (string.IsNullOrEmpty(query))
         {
-            WorkersList.ItemsSource = allWorkers;
+            ApplySort();
             WorkersCountLabel.Text = $"{allWorkers.Count} trabajadores encontrados";
             return;
         }
