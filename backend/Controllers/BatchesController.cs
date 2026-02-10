@@ -2,6 +2,7 @@
 using backend.DTOs;
 using backend.Models;
 using backend.Services;
+using Google.Cloud.Firestore;
 namespace backend.Controllers;
 
 [Route("api/batches")]
@@ -9,10 +10,12 @@ namespace backend.Controllers;
 public class BatchesController : ControllerBase
 {
     private readonly BatchService _service;
+    private readonly AuditLogService _audit;
 
-    public BatchesController(BatchService service)
+    public BatchesController(BatchService service, AuditLogService audit)
     {
         _service = service;
+        _audit = audit;
     }
     //POST api/batches/{id}
     [HttpPost("{id}")]
@@ -25,6 +28,7 @@ public class BatchesController : ControllerBase
         };
 
         await _service.CreateAsync(id, batch);
+        await LogAsync("create", "batch", id, $"Creado lote {dto.Name}");
         return CreatedAtAction(nameof(Get), new { id }, dto);
     }
     //GET api/batches/{id}
@@ -69,6 +73,28 @@ public class BatchesController : ControllerBase
         batch.Location = dto.Location;
 
         await _service.UpdateAsync(id, batch);
+        await LogAsync("update", "batch", id, $"Actualizado lote {dto.Name}");
         return NoContent();
+    }
+
+    private string GetActorId()
+    {
+        if (Request.Headers.TryGetValue("X-User-Id", out var actorId))
+            return actorId.ToString();
+
+        return "system";
+    }
+
+    private Task LogAsync(string action, string entity, string entityId, string message)
+    {
+        return _audit.CreateAsync(new AuditLog
+        {
+            Action = action,
+            Entity = entity,
+            EntityId = entityId,
+            ActorId = GetActorId(),
+            Message = message,
+            CreatedAt = Timestamp.GetCurrentTimestamp()
+        });
     }
 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using backend.DTOs;
 using backend.Models;
 using backend.Services;
+using Google.Cloud.Firestore;
 namespace backend.Controllers;
 
 [Route("api/users")]
@@ -9,10 +10,12 @@ namespace backend.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly UserService _service;
+    private readonly AuditLogService _audit;
 
-    public UsersController(UserService service)
+    public UsersController(UserService service, AuditLogService audit)
     {
         _service = service;
+        _audit = audit;
     }
 
     // GET api/users
@@ -56,6 +59,7 @@ public class UsersController : ControllerBase
 
         user.Validated = true;
         await _service.UpdateAsync(id, user);
+        await LogAsync("validate", "user", id, $"Usuario validado {user.Email}");
         return NoContent();
     }
 
@@ -72,6 +76,28 @@ public class UsersController : ControllerBase
         user.Validated = dto.Validated;
 
         await _service.UpdateAsync(id, user);
+        await LogAsync("update", "user", id, $"Usuario actualizado {dto.Email}");
         return NoContent();
+    }
+
+    private string GetActorId()
+    {
+        if (Request.Headers.TryGetValue("X-User-Id", out var actorId))
+            return actorId.ToString();
+
+        return "system";
+    }
+
+    private Task LogAsync(string action, string entity, string entityId, string message)
+    {
+        return _audit.CreateAsync(new AuditLog
+        {
+            Action = action,
+            Entity = entity,
+            EntityId = entityId,
+            ActorId = GetActorId(),
+            Message = message,
+            CreatedAt = Timestamp.GetCurrentTimestamp()
+        });
     }
 }

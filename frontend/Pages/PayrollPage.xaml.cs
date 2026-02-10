@@ -11,6 +11,9 @@ public partial class PayrollPage : ContentPage
     private List<Payroll> payrolls = new();
     private Dictionary<string, string> workerNameMap = new();
     private Dictionary<string, string> workerTypeMap = new();
+    private List<WorkedTimeDto> workedTimesCache = new();
+    private Dictionary<string, WorkTypeDto> workTypeMap = new();
+    private Dictionary<string, string> batchMap = new();
 
     public PayrollPage(ApiService api)
     {
@@ -32,10 +35,14 @@ public partial class PayrollPage : ContentPage
         {
             var workers = await _api.GetWorkersAsync();
             var workTypes = await _api.GetWorkTypesAsync();
+            var batches = await _api.GetBatchesAsync();
             var workedTimes = await _api.GetWorkedTimesAsync();
             var payrollDtos = await _api.GetPayrollsAsync();
 
             workerNameMap = workers.ToDictionary(w => w.Id, w => $"{w.Name} {w.LastName}");
+            workTypeMap = workTypes.ToDictionary(wt => wt.Id, wt => wt);
+            workedTimesCache = workedTimes;
+            batchMap = batches.ToDictionary(b => b.Id, b => b.Name);
             var workTypeNameMap = workTypes.ToDictionary(wt => wt.Id, wt => wt.Name);
 
             // Map each worker to their most recent work type
@@ -128,61 +135,112 @@ public partial class PayrollPage : ContentPage
     {
         var week = $"{payroll.WeekStart:dd MMM} - {payroll.WeekEnd:dd MMM yyyy}";
 
+        var weekStart = payroll.WeekStart.Date;
+        var weekEnd = payroll.WeekEnd.Date;
+        var entries = workedTimesCache
+            .Where(wt => wt.WorkerId == payroll.WorkerId && wt.Date.Date >= weekStart && wt.Date.Date <= weekEnd)
+            .OrderBy(wt => wt.Date)
+            .ToList();
+
         var sb = new StringBuilder();
         sb.Append("<!doctype html><html><head><meta charset='utf-8'>");
         sb.Append("<style>");
-        sb.Append("body{font-family:Segoe UI,Arial;padding:20px;color:#2f3e3a;background:#F6F5F0;}");
-        sb.Append(".card{background:#fff;border:1px solid #E2DDD3;border-radius:0;padding:0;overflow:hidden;}");
-        sb.Append(".title{font-size:16px;font-weight:700;color:#2f3e3a;}");
-        sb.Append(".sub{font-size:11px;color:#6b7f78;}");
-        sb.Append(".content{padding:16px;}");
-        sb.Append(".section{margin-bottom:14px;}");
-        sb.Append(".section-title{font-size:11px;letter-spacing:.04em;color:#6b7f78;text-transform:uppercase;margin-bottom:8px;}");
-        sb.Append(".meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;}");
-        sb.Append(".meta .item{border:1px solid #EEE7DC;padding:10px;}");
-        sb.Append(".label{font-size:10px;color:#9fb2ab;text-transform:uppercase;letter-spacing:.03em;}");
-        sb.Append(".value{font-size:14px;font-weight:600;margin-top:4px;}");
-        sb.Append(".list{border:1px solid #EEE7DC;}");
-        sb.Append(".row{display:flex;justify-content:space-between;padding:8px 10px;border-bottom:1px solid #EEE7DC;font-size:12px;}");
-        sb.Append(".row:last-child{border-bottom:none;}");
-        sb.Append(".neg{color:#c05858;font-weight:600;}");
-        sb.Append(".total-bar{background:#9BC7B3;color:#fff;font-weight:700;text-align:center;padding:10px 8px;}");
-        sb.Append(".muted{color:#6b7f78;font-size:11px;margin-top:10px;}");
+        sb.Append("@page{size:5.5in 8.5in;margin:0.35in;}");
+        sb.Append("body{font-family:Segoe UI,Arial;padding:0;margin:0;color:#1f2c27;background:#fff;}");
+        sb.Append(".page{width:5.2in;margin:0 auto;border:1px solid #1f2c27;padding:10px;box-sizing:border-box;}");
+        sb.Append(".header{display:flex;align-items:center;gap:8px;margin-bottom:6px;}");
+        sb.Append(".logo{width:34px;height:34px;border:1px solid #1f2c27;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;}");
+        sb.Append(".title{font-size:12px;font-weight:700;text-align:center;flex:1;}");
+        sb.Append(".subtitle{font-size:9px;text-align:center;color:#3c4b45;}");
+        sb.Append(".divider{border-top:1px solid #1f2c27;margin:6px 0;}");
+        sb.Append(".section-title{font-size:9px;font-weight:700;text-transform:uppercase;margin:6px 0 4px 0;}");
+        sb.Append(".info{border:1px solid #1f2c27;border-collapse:collapse;width:100%;font-size:9px;margin-bottom:6px;}");
+        sb.Append(".info td{border:1px solid #1f2c27;padding:4px;}");
+        sb.Append(".table{border:1px solid #1f2c27;border-collapse:collapse;width:100%;font-size:9px;}");
+        sb.Append(".table th,.table td{border:1px solid #1f2c27;padding:4px;}");
+        sb.Append(".table th{background:#f4f2ed;text-transform:uppercase;font-size:8px;}");
+        sb.Append(".right{text-align:right;}");
+        sb.Append(".summary{border:1px solid #1f2c27;border-collapse:collapse;width:100%;font-size:9px;margin-top:6px;}");
+        sb.Append(".summary td{border:1px solid #1f2c27;padding:4px;}");
+        sb.Append(".neg{color:#c05858;font-weight:700;}");
+        sb.Append(".total-row td{font-weight:700;}");
+        sb.Append(".sign{margin-top:10px;display:flex;gap:10px;font-size:9px;}");
+        sb.Append(".sign .line{flex:1;border-top:1px solid #1f2c27;text-align:center;padding-top:3px;}");
+        sb.Append(".footer{margin-top:6px;font-size:8px;color:#5b6a64;text-align:center;}");
         sb.Append("</style></head><body>");
 
-        sb.Append("<div class='card'>");
-        sb.Append("<div class='content'>");
-        sb.Append("<div class='section'>");
-        sb.Append("<div class='title'>Detalle de Boleta de Pago</div>");
-        sb.Append($"<div class='sub'>Semana {week}</div>");
+        sb.Append("<div class='page'>");
+        sb.Append("<div class='header'>");
+        sb.Append("<div class='logo'>SC</div>");
+        sb.Append("<div>");
+        sb.Append("<div class='title'>FINCA BANANERA SANTA CECILIA</div>");
+        sb.Append("<div class='subtitle'>Sistema de Gestion de Nomina</div>");
         sb.Append("</div>");
-        sb.Append("<div class='section'>");
-        sb.Append("<div class='section-title'>Trabajador</div>");
-        sb.Append($"<div class='value'>{payroll.WorkerName}</div>");
-        sb.Append($"<div class='muted'>{payroll.WorkerType}</div>");
         sb.Append("</div>");
+        sb.Append("<div class='divider'></div>");
+        sb.Append("<div class='section-title' style='text-align:center;'>BOLETA DE PAGO SEMANAL</div>");
+        sb.Append("<div class='divider'></div>");
 
-        sb.Append("<div class='section'>");
-        sb.Append("<div class='section-title'>Resumen</div>");
-        sb.Append("<div class='meta'>");
-        sb.Append($"<div class='item'><div class='label'>Horas</div><div class='value'>{payroll.TotalHours:F2}h</div></div>");
-        sb.Append($"<div class='item'><div class='label'>Bruto</div><div class='value'>B/.{payroll.GrossAmount:F2}</div></div>");
-        sb.Append($"<div class='item'><div class='label'>Neto</div><div class='value'>B/.{payroll.NetAmount:F2}</div></div>");
-        sb.Append($"<div class='item'><div class='label'>Descuentos</div><div class='value'>B/.{(payroll.GrossAmount - payroll.NetAmount):F2}</div></div>");
-        sb.Append("</div>");
-        sb.Append("</div>");
+        sb.Append("<table class='info'>");
+        sb.Append("<tr><td><strong>TRABAJADOR</strong></td>");
+        sb.Append($"<td>{payroll.WorkerName}</td></tr>");
+        sb.Append("<tr><td><strong>CODIGO</strong></td>");
+        sb.Append($"<td>{payroll.DisplayId}</td></tr>");
+        sb.Append("<tr><td><strong>TIPO DE LABOR</strong></td>");
+        sb.Append($"<td>{payroll.WorkerType}</td></tr>");
+        sb.Append("<tr><td><strong>PERIODO</strong></td>");
+        sb.Append($"<td>{week}</td></tr>");
+        sb.Append("</table>");
 
-        sb.Append("<div class='section'>");
-        sb.Append("<div class='section-title'>Descuentos</div>");
-        sb.Append("<div class='list'>");
-        sb.Append($"<div class='row'><span>Seguro Social</span><span class='neg'>-B/.{payroll.SocialSecurity:F2}</span></div>");
-        sb.Append($"<div class='row'><span>Seguro Educativo</span><span class='neg'>-B/.{payroll.EducationalInsurance:F2}</span></div>");
-        sb.Append($"<div class='row'><span>Sindicato Bananero</span><span class='neg'>-B/.{payroll.UnionFee:F2}</span></div>");
-        sb.Append("</div>");
-        sb.Append("</div>");
-        sb.Append("</div>");
+        sb.Append("<div class='section-title'>DETALLE DE ACTIVIDADES SEMANALES</div>");
+        sb.Append("<table class='table'>");
+        sb.Append("<tr><th>Fecha</th><th>Actividad</th><th>Lote</th><th class='right'>Horas</th><th class='right'>Tarifa</th><th class='right'>Monto</th></tr>");
 
-        sb.Append($"<div class='total-bar'>Total a pagar  B/.{payroll.NetAmount:F2}</div>");
+        if (entries.Count == 0)
+        {
+            sb.Append("<tr><td colspan='6' style='text-align:center;'>Sin registros</td></tr>");
+        }
+        else
+        {
+            foreach (var entry in entries)
+            {
+                var hours = entry.MinutesWorked / 60m;
+                var workType = workTypeMap.GetValueOrDefault(entry.WorkTypeId);
+                var activityName = workType?.Name ?? entry.WorkTypeId;
+                var rate = (decimal)(workType?.DefaultRate ?? 0);
+                var gross = hours * rate;
+                var lote = batchMap.GetValueOrDefault(entry.BatchId, entry.BatchId);
+
+                sb.Append("<tr>");
+                sb.Append($"<td>{entry.Date:dd MMM}</td>");
+                sb.Append($"<td>{activityName}</td>");
+                sb.Append($"<td>{lote}</td>");
+                sb.Append($"<td class='right'>{hours:F2}</td>");
+                sb.Append($"<td class='right'>B/.{rate:F4}</td>");
+                sb.Append($"<td class='right'>B/.{gross:F2}</td>");
+                sb.Append("</tr>");
+            }
+        }
+
+        sb.Append("</table>");
+
+        sb.Append("<table class='summary'>");
+        sb.Append("<tr><td><strong>DEVENGADO BRUTO</strong></td>");
+        sb.Append($"<td class='right'>B/.{payroll.GrossAmount:F2}</td></tr>");
+        sb.Append("<tr><td><strong>DESCUENTOS DE LEY</strong></td><td></td></tr>");
+        sb.Append($"<tr><td>&nbsp;&nbsp;Seguro Social (9.75%)</td><td class='right neg'>-B/.{payroll.SocialSecurity:F2}</td></tr>");
+        sb.Append($"<tr><td>&nbsp;&nbsp;Seguro Educativo (1.25%)</td><td class='right neg'>-B/.{payroll.EducationalInsurance:F2}</td></tr>");
+        sb.Append($"<tr><td>&nbsp;&nbsp;Aporte Sindical (Sindicato Bananero de Chiriqui)</td><td class='right neg'>-B/.{payroll.UnionFee:F2}</td></tr>");
+        sb.Append($"<tr class='total-row'><td>TOTAL NETO A PAGAR</td><td class='right'>B/.{payroll.NetAmount:F2}</td></tr>");
+        sb.Append("</table>");
+
+        sb.Append("<div class='sign'>");
+        sb.Append("<div class='line'>Firma del Trabajador</div>");
+        sb.Append("<div class='line'>Firma Autorizada</div>");
+        sb.Append("</div>");
+        sb.Append("<div class='footer'>Documento generado electronicamente - Finca Bananera Santa Cecilia</div>");
+        sb.Append($"<div class='footer'>Fecha de emision: {DateTime.Now:dd MMM yyyy}</div>");
+
         sb.Append("</div>");
         sb.Append("</body></html>");
 

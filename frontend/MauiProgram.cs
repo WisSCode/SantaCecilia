@@ -50,6 +50,7 @@ namespace frontend
             builder.Services.AddTransient<UsersPage>();
             builder.Services.AddTransient<WorkTypesPage>();
             builder.Services.AddTransient<BatchesPage>();
+            builder.Services.AddTransient<LogsPage>();
             builder.Services.AddTransient<NewEntryPage>();
             builder.Services.AddTransient<NewWorkerPage>();
             builder.Services.AddTransient<NewBatchPage>();

@@ -103,4 +103,8 @@
         <ShellContent Route="usersContent" ContentTemplate="{DataTemplate pages:UsersPage}" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Logs" Route="logs">
+        <ShellContent Route="logsContent" ContentTemplate="{DataTemplate pages:LogsPage}" />
+    </FlyoutItem>
+
 </Shell>

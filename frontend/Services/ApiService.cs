@@ -102,4 +102,11 @@ public class ApiService
     {
         await _http.PutAsync($"api/users/{id}/validate", null);
     }
+
+    // Audit Logs
+    public async Task<List<AuditLogDto>> GetAuditLogsAsync(int limit = 200)
+    {
+        var result = await _http.GetFromJsonAsync<List<AuditLogDto>>($"api/auditLogs?limit={limit}");
+        return result ?? [];
+    }
 }
