@@ -41,4 +41,40 @@ public partial class LoginPage : ContentPage
         if (registerPage is not null)
             await Navigation.PushAsync(registerPage);
     }
+
+    private async void OnForgotPasswordTapped(object sender, EventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(_viewModel.Email))
+        {
+            await DisplayAlert(
+                "Restablecer contraseña",
+                "Ingresa tu correo electrónico primero.",
+                "OK");
+            return;
+        }
+
+        bool confirm = await DisplayAlert(
+            "Restablecer contraseña",
+            $"¿Enviar enlace de recuperación a:\n{_viewModel.Email}?",
+            "Enviar",
+            "Cancelar");
+
+        if (!confirm)
+            return;
+
+        try
+        {
+            await _viewModel.SendPasswordResetAsync();
+            await DisplayAlert(
+                "Correo enviado",
+                "Revisa tu correo para restablecer tu contraseña",
+                "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", ex.Message, "OK");
+        }
+    }
+
+
 }

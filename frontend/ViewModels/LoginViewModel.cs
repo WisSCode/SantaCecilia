@@ -109,4 +109,14 @@ public class LoginViewModel : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    public async Task SendPasswordResetAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Email))
+            throw new Exception("El email es obligatorio");
+
+        await _authService.SendPasswordResetEmailAsync(Email);
+    }
+
+
 }

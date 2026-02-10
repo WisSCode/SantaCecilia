@@ -3,8 +3,10 @@
 public static class AppSettings
 {
     // URL del backend
-    public static string BackendUrl => 
-    #if DEBUG
+    public static string BackendUrl =>
+    #if ANDROID
+        "http://10.0.2.2:5191";
+    #elif DEBUG
         "http://localhost:5191";
     #else
         "https://tu-api-produccion.com"; // Reemplazar con la URL cuando se use en produccion
