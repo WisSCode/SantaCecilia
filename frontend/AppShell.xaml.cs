@@ -1,4 +1,4 @@
-using frontend.Pages;
+﻿using frontend.Pages;
 using frontend.Services;
 
 namespace frontend;
@@ -18,6 +18,8 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("newworker", typeof(NewWorkerPage));
 
         ConfigureShellForAuthState(false);
+
+        UpdateNextPaymentDate();
     }
 
     public void ConfigureShellForAuthState(bool isLoggedIn)
@@ -41,4 +43,30 @@ public partial class AppShell : Shell
     {
         await DisplayAlertAsync("Perfil", "Funcionalidad en desarrollo", "OK");
     }
+
+    private void UpdateNextPaymentDate()
+    {
+        var now = DateTime.Now;
+
+        // Próximo sábado
+        int daysUntilSaturday = ((int)DayOfWeek.Saturday - (int)now.DayOfWeek + 7) % 7;
+
+        var nextSaturday = now.Date.AddDays(daysUntilSaturday);
+
+        var paymentTime = nextSaturday.AddHours(15); // 3:00 PM
+
+        // Si hoy es sábado y ya pasó las 3 PM → ir al siguiente sábado
+        if (now >= paymentTime)
+        {
+            nextSaturday = nextSaturday.AddDays(7);
+            paymentTime = nextSaturday.AddHours(15);
+        }
+
+        // Formato bonito en español
+        var culture = new System.Globalization.CultureInfo("es-ES");
+        var formattedDate = paymentTime.ToString("dddd dd 'de' MMMM h:mm tt", culture);
+
+        NextPaymentLabel.Text = char.ToUpper(formattedDate[0]) + formattedDate.Substring(1);
+    }
+
 }
