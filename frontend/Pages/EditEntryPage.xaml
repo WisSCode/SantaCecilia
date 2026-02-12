@@ -5,9 +5,10 @@
              Shell.NavBarIsVisible="False"
              BackgroundColor="#80000000">
 
-    <ScrollView VerticalOptions="Center" HorizontalOptions="Center">
-        <Grid Padding="20" HorizontalOptions="Center" VerticalOptions="Center">
-            <Border WidthRequest="440"
+    <ScrollView VerticalOptions="Center" HorizontalOptions="Fill">
+        <Grid Padding="{OnIdiom Phone=12, Desktop=20}" HorizontalOptions="Fill" VerticalOptions="Center">
+            <Border HorizontalOptions="Fill"
+                    MaximumWidthRequest="440"
                     Stroke="#D6DAD7"
                     StrokeThickness="1"
                     BackgroundColor="White">
@@ -19,19 +20,19 @@
                 <Grid RowDefinitions="Auto,*">
 
                     <!-- ENCABEZADO -->
-                    <Grid Grid.Row="0" BackgroundColor="#9EC9B4" Padding="20" ColumnDefinitions="*,Auto">
-                        <VerticalStackLayout Spacing="4">
+                    <Grid Grid.Row="0" BackgroundColor="#9EC9B4" Padding="{OnIdiom Phone=14, Desktop=20}" ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="{OnIdiom Phone=2, Desktop=4}">
                             <Label Text="Editar Tiempo"
-                                   FontSize="16"
+                                   FontSize="{OnIdiom Phone=15, Desktop=16}"
                                    FontAttributes="Bold"
                                    TextColor="White" />
                             <Label Text="Modifique la informacion de la actividad realizada"
-                                   FontSize="11"
+                                   FontSize="{OnIdiom Phone=10, Desktop=11}"
                                    TextColor="#F2F7F4" />
                         </VerticalStackLayout>
                         <Button Grid.Column="1"
                                 Text="X"
-                                FontSize="16"
+                                FontSize="{OnIdiom Phone=14, Desktop=16}"
                                 TextColor="White"
                                 BackgroundColor="Transparent"
                                 Padding="4"
@@ -40,20 +41,20 @@
                     </Grid>
 
                     <!-- FORMULARIO -->
-                    <VerticalStackLayout Grid.Row="1" Padding="24" Spacing="16">
+                    <VerticalStackLayout Grid.Row="1" Padding="{OnIdiom Phone=14, Desktop=24}" Spacing="{OnIdiom Phone=12, Desktop=16}">
 
                         <!-- TRABAJADOR -->
                         <VerticalStackLayout Spacing="6">
                             <Label Text="Trabajador"
-                                   FontSize="12"
+                                   FontSize="{OnIdiom Phone=11, Desktop=12}"
                                    FontAttributes="Bold"
                                    TextColor="#2E3A34" />
                             <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
-                                    BackgroundColor="White" HeightRequest="44">
+                                    BackgroundColor="White" HeightRequest="{OnIdiom Phone=42, Desktop=44}">
                                 <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                                 <Picker x:Name="WorkerPicker"
                                         Title="Selecciona un trabajador"
-                                        FontSize="13"
+                                        FontSize="{OnIdiom Phone=12, Desktop=13}"
                                         TextColor="#2E3A34"
                                         HorizontalOptions="Fill"
                                         VerticalOptions="Center"
@@ -64,17 +65,17 @@
                         <!-- ACTIVIDAD -->
                         <VerticalStackLayout Spacing="6">
                             <Label Text="Actividad"
-                                   FontSize="12"
+                                   FontSize="{OnIdiom Phone=11, Desktop=12}"
                                    FontAttributes="Bold"
                                    TextColor="#2E3A34" />
 
                             <!-- Barra de busqueda -->
                             <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
-                                    BackgroundColor="White" HeightRequest="44">
+                                    BackgroundColor="White" HeightRequest="{OnIdiom Phone=42, Desktop=44}">
                                 <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                                 <Entry x:Name="ActivitySearchEntry"
                                        Placeholder="Buscar actividad..."
-                                       FontSize="13"
+                                       FontSize="{OnIdiom Phone=12, Desktop=13}"
                                        TextColor="#2E3A34"
                                        BackgroundColor="Transparent"
                                        TextChanged="OnActivitySearchChanged" />
@@ -82,7 +83,7 @@
 
                             <!-- Lista de actividades -->
                             <Border Stroke="#D6DAD7" StrokeThickness="1" BackgroundColor="White"
-                                    HeightRequest="150">
+                                    HeightRequest="{OnIdiom Phone=130, Desktop=150}">
                                 <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                                 <CollectionView x:Name="ActivityListView"
                                                 SelectionMode="Single"
@@ -95,13 +96,13 @@
                                                     BackgroundColor="{Binding BackgroundColor}">
                                                 <Grid ColumnDefinitions="*,Auto">
                                                     <Label Text="{Binding Name}"
-                                                           FontSize="13"
+                                                           FontSize="{OnIdiom Phone=12, Desktop=13}"
                                                            FontAttributes="Bold"
                                                            TextColor="#2E3A34"
                                                            VerticalOptions="Center" />
                                                     <Label Grid.Column="1"
                                                            Text="{Binding RateDisplay}"
-                                                           FontSize="13"
+                                                           FontSize="{OnIdiom Phone=12, Desktop=13}"
                                                            FontAttributes="Bold"
                                                            TextColor="#9EC9B4"
                                                            VerticalOptions="Center" />
@@ -116,15 +117,15 @@
                         <!-- LOTE -->
                         <VerticalStackLayout Spacing="6">
                             <Label Text="Lote"
-                                   FontSize="12"
+                                   FontSize="{OnIdiom Phone=11, Desktop=12}"
                                    FontAttributes="Bold"
                                    TextColor="#2E3A34" />
                             <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
-                                    BackgroundColor="White" HeightRequest="44">
+                                    BackgroundColor="White" HeightRequest="{OnIdiom Phone=42, Desktop=44}">
                                 <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                                 <Picker x:Name="LotePicker"
                                         Title="Selecciona un lote"
-                                        FontSize="13"
+                                        FontSize="{OnIdiom Phone=12, Desktop=13}"
                                         TextColor="#2E3A34"
                                         HorizontalOptions="Fill"
                                         VerticalOptions="Center"
@@ -135,14 +136,14 @@
                         <!-- FECHA -->
                         <VerticalStackLayout Spacing="6">
                             <Label Text="Fecha"
-                                   FontSize="12"
+                                   FontSize="{OnIdiom Phone=11, Desktop=12}"
                                    FontAttributes="Bold"
                                    TextColor="#2E3A34" />
                             <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
-                                    BackgroundColor="White" HeightRequest="44">
+                                    BackgroundColor="White" HeightRequest="{OnIdiom Phone=42, Desktop=44}">
                                 <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                                 <DatePicker x:Name="EntryDatePicker"
-                                            FontSize="13"
+                                            FontSize="{OnIdiom Phone=12, Desktop=13}"
                                             TextColor="#2E3A34"
                                             HorizontalOptions="Fill"
                                             VerticalOptions="Center" />
@@ -150,35 +151,40 @@
                         </VerticalStackLayout>
 
                         <!-- HORAS / MINUTOS -->
-                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                            <VerticalStackLayout Grid.Column="0" Spacing="6">
+                        <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,*'}"
+                              RowDefinitions="{OnIdiom Phone='Auto,Auto', Desktop='Auto'}"
+                              ColumnSpacing="12"
+                              RowSpacing="{OnIdiom Phone=10, Desktop=0}">
+                            <VerticalStackLayout Grid.Column="0" Grid.Row="0" Spacing="6">
                                 <Label Text="Horas"
-                                       FontSize="12"
+                                       FontSize="{OnIdiom Phone=11, Desktop=12}"
                                        FontAttributes="Bold"
                                        TextColor="#2E3A34" />
                                 <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
-                                        BackgroundColor="White" HeightRequest="44">
+                                        BackgroundColor="White" HeightRequest="{OnIdiom Phone=42, Desktop=44}">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                                     <Entry x:Name="HoursEntry"
                                            Keyboard="Numeric"
                                            Text="8"
-                                           FontSize="13"
+                                           FontSize="{OnIdiom Phone=12, Desktop=13}"
                                            TextColor="#2E3A34"
                                            BackgroundColor="Transparent"
                                            VerticalOptions="Center"
                                            TextChanged="OnFieldChanged" />
                                 </Border>
                             </VerticalStackLayout>
-                            <VerticalStackLayout Grid.Column="1" Spacing="6">
+                            <VerticalStackLayout Grid.Column="{OnIdiom Phone=0, Desktop=1}"
+                                                 Grid.Row="{OnIdiom Phone=1, Desktop=0}"
+                                                 Spacing="6">
                                 <Label Text="Minutos"
-                                       FontSize="12"
+                                       FontSize="{OnIdiom Phone=11, Desktop=12}"
                                        FontAttributes="Bold"
                                        TextColor="#2E3A34" />
                                 <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
-                                        BackgroundColor="White" HeightRequest="44">
+                                        BackgroundColor="White" HeightRequest="{OnIdiom Phone=42, Desktop=44}">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                                     <Picker x:Name="MinutesPicker"
-                                            FontSize="13"
+                                            FontSize="{OnIdiom Phone=12, Desktop=13}"
                                             TextColor="#2E3A34"
                                             HorizontalOptions="Fill"
                                             VerticalOptions="Center"
@@ -188,19 +194,25 @@
                         </Grid>
 
                         <!-- BOTONES -->
-                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12" Margin="0,8,0,0">
+                        <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,*,*'}"
+                              RowDefinitions="{OnIdiom Phone='Auto,Auto,Auto', Desktop='Auto'}"
+                              ColumnSpacing="12"
+                              RowSpacing="{OnIdiom Phone=10, Desktop=0}"
+                              Margin="0,8,0,0">
                             <Button Grid.Column="0"
+                                Grid.Row="0"
                                     Text="Eliminar"
-                                    HeightRequest="44"
+                                HeightRequest="{OnIdiom Phone=42, Desktop=44}"
                                     BackgroundColor="Transparent"
                                     TextColor="#E07A5F"
                                     FontAttributes="Bold"
                                     BorderColor="#E07A5F"
                                     BorderWidth="1"
                                     Clicked="OnDeleteClicked" />
-                            <Button Grid.Column="1"
+                            <Button Grid.Column="{OnIdiom Phone=0, Desktop=1}"
+                                Grid.Row="{OnIdiom Phone=1, Desktop=0}"
                                     Text="Cancelar"
-                                    HeightRequest="44"
+                                HeightRequest="{OnIdiom Phone=42, Desktop=44}"
                                     BackgroundColor="Transparent"
                                     TextColor="#2E3A34"
                                     FontAttributes="Bold"
@@ -208,9 +220,10 @@
                                     BorderWidth="1"
                                     Clicked="OnCancelClicked" />
                             <Button x:Name="UpdateButton"
-                                    Grid.Column="2"
+                                Grid.Column="{OnIdiom Phone=0, Desktop=2}"
+                                Grid.Row="{OnIdiom Phone=2, Desktop=0}"
                                     Text="Guardar Cambios"
-                                    HeightRequest="44"
+                                HeightRequest="{OnIdiom Phone=42, Desktop=44}"
                                     BackgroundColor="#9EC9B4"
                                     TextColor="White"
                                     FontAttributes="Bold"
