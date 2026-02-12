@@ -23,13 +23,17 @@ public partial class App : Application
         return _services.GetRequiredService<LoginPage>();
     }
 
-    public async Task GoToDashboardAsync()
+    public async Task GoToShellAsync()
     {
         var sessionService = _services.GetRequiredService<SessionService>();
         var shell = new AppShell(sessionService);
         shell.ConfigureShellForAuthState(true);
         MainPage = shell;
-        await Shell.Current.GoToAsync("//dashboard");
+
+        if (sessionService.HasRole("admin"))
+            await Shell.Current.GoToAsync("//dashboard");
+        else
+            await Shell.Current.GoToAsync("//workershome");
     }
 
     public async Task GoToLoginAsync()
