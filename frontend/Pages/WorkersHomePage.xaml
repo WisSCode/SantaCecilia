@@ -6,12 +6,15 @@
     BackgroundColor="#F6F5EF">
 
     <ScrollView>
-        <VerticalStackLayout Padding="24" Spacing="20">
+                            <VerticalStackLayout Padding="{OnIdiom Phone='16,14', Desktop='24'}"
+                                                                                                   Spacing="{OnIdiom Phone=16, Desktop=20}">
 
             <!-- HEADER -->
-            <Grid BackgroundColor="#9EC9B4"
-                  Padding="20"
-                  ColumnDefinitions="Auto,*,Auto">
+                                          <Grid BackgroundColor="#9EC9B4"
+                                                               Padding="{OnIdiom Phone=16, Desktop=20}"
+                                                               ColumnDefinitions="{OnIdiom Phone='Auto,*', Desktop='Auto,*,Auto'}"
+                                                               RowDefinitions="{OnIdiom Phone='Auto,Auto', Desktop='Auto'}"
+                                                               RowSpacing="{OnIdiom Phone=8, Desktop=0}">
 
                 <Frame WidthRequest="42"
                        HeightRequest="42"
@@ -31,18 +34,23 @@
                     <Label x:Name="WorkerNameLabel"
                            Text="Cargando..."
                            FontAttributes="Bold"
-                           FontSize="16"
+                           FontSize="{OnIdiom Phone=14, Desktop=16}"
                            TextColor="White"/>
                     <Label x:Name="WorkerCodeLabel"
                            Text=""
-                           FontSize="12"
+                           FontSize="{OnIdiom Phone=11, Desktop=12}"
                            TextColor="#F2F7F4"/>
                 </VerticalStackLayout>
 
-                <Button Grid.Column="2"
+              <Button Grid.Column="{OnIdiom Phone=0, Desktop=2}"
+                     Grid.Row="{OnIdiom Phone=1, Desktop=0}"
+                     Grid.ColumnSpan="{OnIdiom Phone=2, Desktop=1}"
                         Text="Cerrar Sesión"
                         TextColor="White"
                         BackgroundColor="Transparent"
+                        FontSize="{OnIdiom Phone=11, Desktop=12}"
+                        Padding="{OnIdiom Phone='8,4', Desktop='12,6'}"
+                     HorizontalOptions="{OnIdiom Phone=Start, Desktop=End}"
                         Clicked="OnLogoutClicked"/>
             </Grid>
 
@@ -50,17 +58,17 @@
             <Frame BackgroundColor="White"
                    BorderColor="#D6DAD7"
                    CornerRadius="0"
-                   Padding="16"
+                   Padding="{OnIdiom Phone=12, Desktop=16}"
                    HasShadow="False">
 
                 <VerticalStackLayout Spacing="6">
                     <Label Text="Horas de esta semana"
-                           FontSize="14"
+                           FontSize="{OnIdiom Phone=13, Desktop=14}"
                            FontAttributes="Bold"
                            TextColor="#2E3A34"/>
                     <Label x:Name="WeeklyHoursLabel"
                            Text="0h"
-                           FontSize="24"
+                           FontSize="{OnIdiom Phone=22, Desktop=24}"
                            FontAttributes="Bold"
                            TextColor="#2E3A34"/>
                 </VerticalStackLayout>
@@ -69,16 +77,16 @@
             <!-- PAGO NETO -->
             <Frame BackgroundColor="#9EC9B4"
                    CornerRadius="0"
-                   Padding="16"
+                   Padding="{OnIdiom Phone=12, Desktop=16}"
                    HasShadow="False">
 
                 <VerticalStackLayout Spacing="6">
                     <Label Text="Pago Neto Estimado"
-                           FontSize="14"
+                           FontSize="{OnIdiom Phone=13, Desktop=14}"
                            TextColor="White"/>
                     <Label x:Name="NetPayLabel"
                            Text="B/.0.00"
-                           FontSize="24"
+                           FontSize="{OnIdiom Phone=22, Desktop=24}"
                            FontAttributes="Bold"
                            TextColor="White"/>
                 </VerticalStackLayout>
@@ -88,7 +96,7 @@
             <Frame BorderColor="#D6DAD7"
                    BackgroundColor="White"
                    CornerRadius="0"
-                   Padding="16"
+                   Padding="{OnIdiom Phone=12, Desktop=16}"
                    HasShadow="False">
 
                 <VerticalStackLayout Spacing="10">
@@ -111,7 +119,7 @@
                     <Frame BackgroundColor="#FFF5F5"
                            BorderColor="#FCA5A5"
                            CornerRadius="0"
-                           Padding="12"
+                           Padding="{OnIdiom Phone=10, Desktop=12}"
                            HasShadow="False">
 
                         <VerticalStackLayout Spacing="6">
@@ -153,7 +161,7 @@
 
                     <Frame BackgroundColor="#9EC9B4"
                            CornerRadius="0"
-                           Padding="12"
+                           Padding="{OnIdiom Phone=10, Desktop=12}"
                            HasShadow="False">
 
                         <Grid ColumnDefinitions="*,Auto">
@@ -176,7 +184,7 @@
             <Frame BorderColor="#D6DAD7"
                    BackgroundColor="White"
                    CornerRadius="0"
-                   Padding="16"
+                   Padding="{OnIdiom Phone=12, Desktop=16}"
                    HasShadow="False">
 
                 <VerticalStackLayout Spacing="12">
@@ -186,79 +194,83 @@
                            FontSize="14"
                            TextColor="#2E3A34"/>
 
-                    <!-- HEADER TABLA -->
-                    <Grid ColumnDefinitions="70,3*,90,70,90,90"
-                          Padding="0,0,0,4">
+                    <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                        <VerticalStackLayout Spacing="8">
+                            <!-- HEADER TABLA -->
+                            <Grid ColumnDefinitions="{OnIdiom Phone='70,3*,90,70,90,90', Desktop='70,3*,90,70,90,90'}"
+                                  Padding="0,0,0,4">
 
-                        <Label Text="FECHA"
-                               FontSize="11"
-                               TextColor="#6B7280"/>
+                                <Label Text="FECHA"
+                                       FontSize="11"
+                                       TextColor="#6B7280"/>
 
-                        <Label Grid.Column="1"
-                               Text="ACTIVIDAD"
-                               FontSize="11"
-                               TextColor="#6B7280"/>
+                                <Label Grid.Column="1"
+                                       Text="ACTIVIDAD"
+                                       FontSize="11"
+                                       TextColor="#6B7280"/>
 
-                        <Label Grid.Column="2"
-                               Text="LOTE"
-                               FontSize="11"
-                               TextColor="#6B7280"/>
+                                <Label Grid.Column="2"
+                                       Text="LOTE"
+                                       FontSize="11"
+                                       TextColor="#6B7280"/>
 
-                        <Label Grid.Column="3"
-                               Text="HORAS"
-                               FontSize="11"
-                               HorizontalTextAlignment="End"
-                               TextColor="#6B7280"/>
+                                <Label Grid.Column="3"
+                                       Text="HORAS"
+                                       FontSize="11"
+                                       HorizontalTextAlignment="End"
+                                       TextColor="#6B7280"/>
 
-                        <Label Grid.Column="4"
-                               Text="TARIFA"
-                               FontSize="11"
-                               HorizontalTextAlignment="End"
-                               TextColor="#6B7280"/>
+                                <Label Grid.Column="4"
+                                       Text="TARIFA"
+                                       FontSize="11"
+                                       HorizontalTextAlignment="End"
+                                       TextColor="#6B7280"/>
 
-                        <Label Grid.Column="5"
-                               Text="MONTO"
-                               FontSize="11"
-                               HorizontalTextAlignment="End"
-                               TextColor="#6B7280"/>
-                    </Grid>
+                                <Label Grid.Column="5"
+                                       Text="MONTO"
+                                       FontSize="11"
+                                       HorizontalTextAlignment="End"
+                                       TextColor="#6B7280"/>
+                            </Grid>
 
-                    <CollectionView x:Name="ActivitiesCollection">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid ColumnDefinitions="70,3*,90,70,90,90"
-                                      Padding="0,6">
+                            <CollectionView x:Name="ActivitiesCollection">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="{OnIdiom Phone='70,3*,90,70,90,90', Desktop='70,3*,90,70,90,90'}"
+                                              Padding="0,6">
 
-                                    <Label Text="{Binding Fecha}"
-                                           TextColor="#9CA3AF"/>
+                                            <Label Text="{Binding Fecha}"
+                                                   TextColor="#9CA3AF"/>
 
-                                    <Label Grid.Column="1"
-                                           Text="{Binding Actividad}"
-                                           FontAttributes="Bold"
-                                           TextColor="#2E3A34"/>
+                                            <Label Grid.Column="1"
+                                                   Text="{Binding Actividad}"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#2E3A34"/>
 
-                                    <Label Grid.Column="2"
-                                           Text="{Binding Lote}"
-                                           TextColor="#6B7280"/>
+                                            <Label Grid.Column="2"
+                                                   Text="{Binding Lote}"
+                                                   TextColor="#6B7280"/>
 
-                                    <Label Grid.Column="3"
-                                           Text="{Binding Horas}"
-                                           HorizontalTextAlignment="End"
-                                           TextColor="#2E3A34"/>
+                                            <Label Grid.Column="3"
+                                                   Text="{Binding Horas}"
+                                                   HorizontalTextAlignment="End"
+                                                   TextColor="#2E3A34"/>
 
-                                    <Label Grid.Column="4"
-                                           Text="{Binding Tarifa}"
-                                           HorizontalTextAlignment="End"
-                                           TextColor="#9EC9B4"/>
+                                            <Label Grid.Column="4"
+                                                   Text="{Binding Tarifa}"
+                                                   HorizontalTextAlignment="End"
+                                                   TextColor="#9EC9B4"/>
 
-                                    <Label Grid.Column="5"
-                                           Text="{Binding Monto}"
-                                           HorizontalTextAlignment="End"
-                                           TextColor="#9EC9B4"/>
-                                </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                                            <Label Grid.Column="5"
+                                                   Text="{Binding Monto}"
+                                                   HorizontalTextAlignment="End"
+                                                   TextColor="#9EC9B4"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </ScrollView>
 
                 </VerticalStackLayout>
             </Frame>

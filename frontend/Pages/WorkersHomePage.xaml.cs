@@ -115,7 +115,7 @@ public partial class WorkersHomePage : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"No se pudieron cargar los datos: {ex.Message}", "OK");
+            await DisplayAlertAsync("Error", $"No se pudieron cargar los datos: {ex.Message}", "OK");
         }
     }
 

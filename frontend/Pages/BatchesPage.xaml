@@ -7,7 +7,7 @@
 
     <Grid RowDefinitions="*" ColumnDefinitions="*" Background="{StaticResource AppBackgroundBrush}">
         <ScrollView Grid.Row="0" Grid.Column="0">
-            <VerticalStackLayout Padding="20" Spacing="16">
+            <VerticalStackLayout Padding="{OnIdiom Phone=12, Desktop=20}" Spacing="{OnIdiom Phone=12, Desktop=16}">
                 
                 <!-- Header -->
                 <VerticalStackLayout Spacing="4">
@@ -16,14 +16,19 @@
                 </VerticalStackLayout>
 
                 <!-- Summary Stats -->
-                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,*'}"
+                      RowDefinitions="{OnIdiom Phone='Auto,Auto', Desktop='Auto'}"
+                      ColumnSpacing="12"
+                      RowSpacing="{OnIdiom Phone=10, Desktop=0}">
                     <Border Grid.Column="0" Style="{StaticResource CardFrame}">
                         <VerticalStackLayout Spacing="6">
                             <Label x:Name="TotalBatchesLabel" Text="0" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
                             <Label Text="Total Lotes" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
                         </VerticalStackLayout>
                     </Border>
-                    <Border Grid.Column="1" Style="{StaticResource CardFrame}">
+                    <Border Grid.Column="{OnIdiom Phone=0, Desktop=1}"
+                            Grid.Row="{OnIdiom Phone=1, Desktop=0}"
+                            Style="{StaticResource CardFrame}">
                         <VerticalStackLayout Spacing="6">
                             <Label x:Name="TotalLocationsLabel" Text="0" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
                             <Label Text="Ubicaciones" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
@@ -32,11 +37,19 @@
                 </Grid>
 
                 <!-- Actions -->
-                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,Auto'}"
+                      RowDefinitions="{OnIdiom Phone='Auto,Auto', Desktop='Auto'}"
+                      ColumnSpacing="10"
+                      RowSpacing="{OnIdiom Phone=10, Desktop=0}">
                     <Border Grid.Column="0" Style="{StaticResource CardFrame}" Padding="10">
                         <Entry x:Name="SearchEntry" Placeholder="Buscar lote..." TextChanged="OnSearchChanged" />
                     </Border>
-                    <Button Grid.Column="1" Text="+ Agregar" Style="{StaticResource PrimaryButton}" Clicked="OnAddClicked" />
+                    <Button Grid.Column="{OnIdiom Phone=0, Desktop=1}"
+                            Grid.Row="{OnIdiom Phone=1, Desktop=0}"
+                            Text="+ Agregar"
+                            Style="{StaticResource PrimaryButton}"
+                            HorizontalOptions="{OnIdiom Phone=Start, Desktop=End}"
+                            Clicked="OnAddClicked" />
                 </Grid>
 
                 <!-- Batches List -->
@@ -46,51 +59,57 @@
                             <Label Text="Listado de Lotes" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
                         </Grid>
 
-                        <Grid Padding="10" ColumnDefinitions="2*,2*,Auto" BackgroundColor="{StaticResource SurfaceSecondary}">
-                            <Label x:Name="HeaderName" Text="NOMBRE &#x2191;" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnSortByName" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                            <Label x:Name="HeaderLocation" Grid.Column="1" Text="UBICACION" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnSortByLocation" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                            <Label Grid.Column="2" Text="ACCIONES" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                        </Grid>
+                        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                            <VerticalStackLayout Spacing="0">
+                                <Grid Padding="10"
+                                      ColumnDefinitions="{OnIdiom Phone='180,160,200', Desktop='2*,2*,Auto'}"
+                                      BackgroundColor="{StaticResource SurfaceSecondary}">
+                                    <Label x:Name="HeaderName" Text="NOMBRE &#x2191;" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByName" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label x:Name="HeaderLocation" Grid.Column="1" Text="UBICACION" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByLocation" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label Grid.Column="2" Text="ACCIONES" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                </Grid>
 
-                        <CollectionView x:Name="BatchesList" SelectionMode="None">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10">
-                                        <Grid ColumnDefinitions="2*,2*,Auto" ColumnSpacing="8">
-                                            <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="12" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
-                                            <Label Grid.Column="1" Text="{Binding Location}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
-                                            <HorizontalStackLayout Grid.Column="2" Spacing="6">
-                                                <Button Text="Editar" 
-                                                        Clicked="OnEditClicked"
-                                                        CommandParameter="{Binding .}"
-                                                        Style="{StaticResource OutlineButton}"
-                                                        FontSize="11"
-                                                        Padding="10,6"
-                                                        MinimumHeightRequest="32" />
-                                                <Button Text="Eliminar" 
-                                                        Clicked="OnDeleteClicked"
-                                                        CommandParameter="{Binding .}"
-                                                        BackgroundColor="Transparent"
-                                                        TextColor="#E07A5F"
-                                                        BorderColor="#E07A5F"
-                                                        BorderWidth="1"
-                                                        FontSize="11"
-                                                        Padding="10,6"
-                                                        MinimumHeightRequest="32" />
-                                            </HorizontalStackLayout>
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
+                                <CollectionView x:Name="BatchesList" SelectionMode="None">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10">
+                                                <Grid ColumnDefinitions="{OnIdiom Phone='180,160,200', Desktop='2*,2*,Auto'}" ColumnSpacing="8">
+                                                    <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="12" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
+                                                    <Label Grid.Column="1" Text="{Binding Location}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
+                                                    <HorizontalStackLayout Grid.Column="2" Spacing="6">
+                                                        <Button Text="Editar" 
+                                                                Clicked="OnEditClicked"
+                                                                CommandParameter="{Binding .}"
+                                                                Style="{StaticResource OutlineButton}"
+                                                                FontSize="11"
+                                                                Padding="10,6"
+                                                                MinimumHeightRequest="32" />
+                                                        <Button Text="Eliminar" 
+                                                                Clicked="OnDeleteClicked"
+                                                                CommandParameter="{Binding .}"
+                                                                BackgroundColor="Transparent"
+                                                                TextColor="#E07A5F"
+                                                                BorderColor="#E07A5F"
+                                                                BorderWidth="1"
+                                                                FontSize="11"
+                                                                Padding="10,6"
+                                                                MinimumHeightRequest="32" />
+                                                    </HorizontalStackLayout>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </ScrollView>
                     </VerticalStackLayout>
                 </Border>
 

@@ -7,56 +7,66 @@
 
     <Grid RowDefinitions="*" ColumnDefinitions="*" Background="{StaticResource AppBackgroundBrush}">
         <ScrollView Grid.Row="0" Grid.Column="0">
-            <VerticalStackLayout Padding="20" Spacing="16">
+            <VerticalStackLayout Padding="{OnIdiom Phone=12, Desktop=20}" Spacing="{OnIdiom Phone=12, Desktop=16}">
 
                 <!-- Header -->
                 <Grid ColumnDefinitions="*,Auto">
                     <VerticalStackLayout Spacing="2" VerticalOptions="Center">
                         <Label Text="Trabajadores"
-                                   FontSize="20"
-                                   FontAttributes="Bold"
-                                   TextColor="{StaticResource TextPrimary}" />
-                            <Label Text="Gestion de personal de la finca"
-                                   FontSize="11"
-                            TextColor="{StaticResource TextSecondary}" />
+                               FontSize="{OnIdiom Phone=18, Desktop=20}"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimary}" />
+                        <Label Text="Gestion de personal de la finca"
+                               FontSize="{OnIdiom Phone=10, Desktop=11}"
+                               TextColor="{StaticResource TextSecondary}" />
                     </VerticalStackLayout>
                 </Grid>
 
                 <!-- Search & Add -->
-                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,Auto'}"
+                      RowDefinitions="{OnIdiom Phone='Auto,Auto', Desktop='Auto'}"
+                      ColumnSpacing="10"
+                      RowSpacing="{OnIdiom Phone=10, Desktop=0}">
                     <Border Grid.Column="0"
+                            Grid.Row="0"
                             Stroke="#D6DAD7" StrokeThickness="1"
                             Padding="10,0" BackgroundColor="White"
-                            HeightRequest="44">
+                            HeightRequest="{OnIdiom Phone=40, Desktop=44}">
                         <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                         <Entry x:Name="SearchEntry"
-                                   Placeholder="Buscar trabajador..."
-                                   FontSize="12"
-                                   TextColor="{StaticResource TextPrimary}"
-                                   BackgroundColor="Transparent"
-                                   HorizontalOptions="Fill"
-                                   VerticalOptions="Center"
+                               Placeholder="Buscar trabajador..."
+                               FontSize="12"
+                               TextColor="{StaticResource TextPrimary}"
+                               BackgroundColor="Transparent"
+                               HorizontalOptions="Fill"
+                               VerticalOptions="Center"
                                TextChanged="OnSearchChanged" />
                     </Border>
-                    <Button Grid.Column="1"
+                    <Button Grid.Column="{OnIdiom Phone=0, Desktop=1}"
+                            Grid.Row="{OnIdiom Phone=1, Desktop=0}"
                             Text="+ Nuevo Trabajador"
                             Clicked="OnAddWorkerClicked"
                             BackgroundColor="#9EC9B4"
                             TextColor="White"
                             FontAttributes="Bold"
-                            FontSize="12"
-                            HeightRequest="44"
-                            Padding="16,0"
+                            FontSize="{OnIdiom Phone=11, Desktop=12}"
+                            HeightRequest="{OnIdiom Phone=40, Desktop=44}"
+                            Padding="{OnIdiom Phone='12,0', Desktop='16,0'}"
+                            HorizontalOptions="{OnIdiom Phone=Start, Desktop=End}"
                             VerticalOptions="Center" />
                 </Grid>
 
                 <!-- 3 Stat Cards -->
-                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
+                <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,*,*'}"
+                      RowDefinitions="{OnIdiom Phone='Auto,Auto,Auto', Desktop='Auto'}"
+                      ColumnSpacing="12"
+                      RowSpacing="{OnIdiom Phone=10, Desktop=0}">
 
                     <!-- Activos -->
                     <Border Grid.Column="0"
+                            Grid.Row="{OnIdiom Phone=0, Desktop=0}"
                             Stroke="#D6DAD7" StrokeThickness="1"
-                            BackgroundColor="White" Padding="14">
+                            BackgroundColor="White" Padding="{OnIdiom Phone=12, Desktop=14}">
                         <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="6">
                             <HorizontalStackLayout Spacing="6">
@@ -78,9 +88,10 @@
                     </Border>
 
                     <!-- Inactivos -->
-                    <Border Grid.Column="1"
+                        <Border Grid.Column="{OnIdiom Phone=0, Desktop=1}"
+                            Grid.Row="{OnIdiom Phone=1, Desktop=0}"
                             Stroke="#D6DAD7" StrokeThickness="1"
-                            BackgroundColor="White" Padding="14">
+                            BackgroundColor="White" Padding="{OnIdiom Phone=12, Desktop=14}">
                         <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="6">
                             <HorizontalStackLayout Spacing="6">
@@ -102,9 +113,10 @@
                     </Border>
 
                     <!-- Total -->
-                    <Border Grid.Column="2"
+                        <Border Grid.Column="{OnIdiom Phone=0, Desktop=2}"
+                            Grid.Row="{OnIdiom Phone=2, Desktop=0}"
                             Stroke="Transparent" StrokeThickness="0"
-                            BackgroundColor="#9EC9B4" Padding="14">
+                            BackgroundColor="#9EC9B4" Padding="{OnIdiom Phone=12, Desktop=14}">
                         <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="6">
                             <HorizontalStackLayout Spacing="6">
@@ -146,120 +158,124 @@
                             </VerticalStackLayout>
                         </Grid>
 
-                        <!-- Encabezados de columna -->
-                        <Grid Padding="16,10"
-                              ColumnDefinitions="0.8*,1.2*,1.4*,1.4*,0.9*,1*"
-                              BackgroundColor="#FAFAF7">
-                            <Label x:Name="HeaderId" Text="ID &#x2191;" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnSortById" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                            <Label x:Name="HeaderName" Grid.Column="1" Text="NOMBRE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnSortByName" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                            <Label x:Name="HeaderLastName" Grid.Column="2" Text="APELLIDO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnSortByLastName" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                            <Label x:Name="HeaderId2" Grid.Column="3" Text="CEDULA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnSortByIdentification" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                            <Label x:Name="HeaderStatus" Grid.Column="4" Text="ESTADO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnSortByStatus" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                            <Label Grid.Column="5" Text="ACCIONES" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                        </Grid>
+                        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                            <VerticalStackLayout Spacing="0">
+                                <!-- Encabezados de columna -->
+                                <Grid Padding="16,10"
+                                      ColumnDefinitions="{OnIdiom Phone='70,120,130,140,90,130', Desktop='0.8*,1.2*,1.4*,1.4*,0.9*,1*'}"
+                                      BackgroundColor="#FAFAF7">
+                                    <Label x:Name="HeaderId" Text="ID &#x2191;" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortById" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label x:Name="HeaderName" Grid.Column="1" Text="NOMBRE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByName" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label x:Name="HeaderLastName" Grid.Column="2" Text="APELLIDO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByLastName" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label x:Name="HeaderId2" Grid.Column="3" Text="CEDULA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByIdentification" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label x:Name="HeaderStatus" Grid.Column="4" Text="ESTADO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByStatus" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label Grid.Column="5" Text="ACCIONES" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                </Grid>
 
-                        <!-- Filas -->
-                        <CollectionView x:Name="WorkersList" SelectionMode="None">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1"
-                                            Padding="16,10" BackgroundColor="White">
-                                        <Grid ColumnDefinitions="0.8*,1.2*,1.4*,1.4*,0.9*,1*"
-                                              ColumnSpacing="6">
+                                <!-- Filas -->
+                                <CollectionView x:Name="WorkersList" SelectionMode="None">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1"
+                                                    Padding="16,10" BackgroundColor="White">
+                                                <Grid ColumnDefinitions="{OnIdiom Phone='70,120,130,140,90,130', Desktop='0.8*,1.2*,1.4*,1.4*,0.9*,1*'}"
+                                                      ColumnSpacing="6">
 
-                                            <!-- ID -->
-                                            <Label Text="{Binding DisplayId}"
-                                                   FontSize="11"
-                                                   TextColor="{StaticResource TextSecondary}"
-                                                   VerticalOptions="Center" />
+                                                   <!-- ID -->
+                                                   <Label Text="{Binding DisplayId}"
+                                                       FontSize="11"
+                                                       TextColor="{StaticResource TextSecondary}"
+                                                       VerticalOptions="Center" />
 
-                                            <!-- NOMBRE -->
-                                            <Label Grid.Column="1"
-                                                   Text="{Binding Name}"
-                                                   FontSize="11"
-                                                   FontAttributes="Bold"
-                                                   TextColor="{StaticResource TextPrimary}"
-                                                   VerticalOptions="Center" />
-
-                                            <!-- APELLIDO -->
-                                            <Label Grid.Column="2"
-                                                   Text="{Binding LastName}"
-                                                   FontSize="11"
-                                                   TextColor="{StaticResource TextPrimary}"
-                                                   VerticalOptions="Center" />
-
-                                            <!-- CEDULA -->
-                                            <Label Grid.Column="3"
-                                                   Text="{Binding Identification}"
-                                                   FontSize="11"
-                                                   TextColor="{StaticResource TextSecondary}"
-                                                   VerticalOptions="Center" />
-
-                                            <!-- ESTADO -->
-                                            <Border Grid.Column="4"
-                                                    BackgroundColor="{Binding StatusBgColor}"
-                                                    Padding="8,4"
-                                                    HorizontalOptions="Start"
-                                                    VerticalOptions="Center"
-                                                    StrokeThickness="0">
-                                                <Border.StrokeShape>
-                                                    <RoundRectangle CornerRadius="4" />
-                                                </Border.StrokeShape>
-                                                <Label Text="{Binding StatusText}"
-                                                       FontSize="10"
+                                                   <!-- NOMBRE -->
+                                                   <Label Grid.Column="1"
+                                                       Text="{Binding Name}"
+                                                       FontSize="11"
                                                        FontAttributes="Bold"
-                                                       TextColor="{Binding StatusTextColor}" />
+                                                       TextColor="{StaticResource TextPrimary}"
+                                                       VerticalOptions="Center" />
+
+                                                   <!-- APELLIDO -->
+                                                   <Label Grid.Column="2"
+                                                       Text="{Binding LastName}"
+                                                       FontSize="11"
+                                                       TextColor="{StaticResource TextPrimary}"
+                                                       VerticalOptions="Center" />
+
+                                                   <!-- CEDULA -->
+                                                   <Label Grid.Column="3"
+                                                       Text="{Binding Identification}"
+                                                       FontSize="11"
+                                                       TextColor="{StaticResource TextSecondary}"
+                                                       VerticalOptions="Center" />
+
+                                                    <!-- ESTADO -->
+                                                    <Border Grid.Column="4"
+                                                            BackgroundColor="{Binding StatusBgColor}"
+                                                            Padding="8,4"
+                                                            HorizontalOptions="Start"
+                                                            VerticalOptions="Center"
+                                                            StrokeThickness="0">
+                                                        <Border.StrokeShape>
+                                                            <RoundRectangle CornerRadius="4" />
+                                                        </Border.StrokeShape>
+                                                        <Label Text="{Binding StatusText}"
+                                                               FontSize="10"
+                                                               FontAttributes="Bold"
+                                                               TextColor="{Binding StatusTextColor}" />
+                                                    </Border>
+
+                                                    <!-- ACCIONES -->
+                                                    <HorizontalStackLayout Grid.Column="5" Spacing="10" VerticalOptions="Center">
+                                                        <Label Text="Editar"
+                                                               TextColor="#2E7D5B"
+                                                               FontSize="11"
+                                                               TextDecorations="None">
+                                                            <Label.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                    Tapped="OnEditWorkerTapped"
+                                                                    CommandParameter="{Binding .}" />
+                                                            </Label.GestureRecognizers>
+                                                        </Label>
+                                                        <Label Text="{Binding ToggleText}"
+                                                               TextColor="{Binding ToggleColor}"
+                                                               FontSize="11"
+                                                               TextDecorations="None">
+                                                            <Label.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                    Tapped="OnToggleActiveTapped"
+                                                                    CommandParameter="{Binding .}" />
+                                                            </Label.GestureRecognizers>
+                                                        </Label>
+                                                    </HorizontalStackLayout>
+
+                                                </Grid>
                                             </Border>
-
-                                            <!-- ACCIONES -->
-                                            <HorizontalStackLayout Grid.Column="5" Spacing="10" VerticalOptions="Center">
-                                                <Label Text="Editar"
-                                                       TextColor="#2E7D5B"
-                                                       FontSize="11"
-                                                       TextDecorations="None">
-                                                    <Label.GestureRecognizers>
-                                                        <TapGestureRecognizer
-                                                            Tapped="OnEditWorkerTapped"
-                                                            CommandParameter="{Binding .}" />
-                                                    </Label.GestureRecognizers>
-                                                </Label>
-                                                <Label Text="{Binding ToggleText}"
-                                                       TextColor="{Binding ToggleColor}"
-                                                       FontSize="11"
-                                                       TextDecorations="None">
-                                                    <Label.GestureRecognizers>
-                                                        <TapGestureRecognizer
-                                                            Tapped="OnToggleActiveTapped"
-                                                            CommandParameter="{Binding .}" />
-                                                    </Label.GestureRecognizers>
-                                                </Label>
-                                            </HorizontalStackLayout>
-
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </ScrollView>
                     </VerticalStackLayout>
                 </Border>
 
