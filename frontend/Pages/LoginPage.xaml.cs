@@ -46,16 +46,16 @@ public partial class LoginPage : ContentPage
     {
         if (string.IsNullOrWhiteSpace(_viewModel.Email))
         {
-            await DisplayAlert(
-                "Restablecer contraseña",
-                "Ingresa tu correo electrónico primero.",
+            await DisplayAlertAsync(
+                "Restablecer contrasena",
+                "Ingresa tu correo electronico primero.",
                 "OK");
             return;
         }
 
-        bool confirm = await DisplayAlert(
-            "Restablecer contraseña",
-            $"¿Enviar enlace de recuperación a:\n{_viewModel.Email}?",
+        bool confirm = await DisplayAlertAsync(
+            "Restablecer contrasena",
+            $"Enviar enlace de recuperacion a:\n{_viewModel.Email}?",
             "Enviar",
             "Cancelar");
 
@@ -65,14 +65,14 @@ public partial class LoginPage : ContentPage
         try
         {
             await _viewModel.SendPasswordResetAsync();
-            await DisplayAlert(
+            await DisplayAlertAsync(
                 "Correo enviado",
-                "Revisa tu correo para restablecer tu contraseña",
+                "Revisa tu correo para restablecer tu contrasena",
                 "OK");
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", ex.Message, "OK");
+            await DisplayAlertAsync("Error", ex.Message, "OK");
         }
     }
 

@@ -131,7 +131,7 @@
 
                         <!-- Encabezados de columna -->
                         <Grid Padding="16,10"
-                              ColumnDefinitions="1.1*,1.8*,2.5*,1.5*,1.2*,1.2*"
+                              ColumnDefinitions="1.1*,1.8*,2.5*,1.5*,1.2*,1.2*,0.8*"
                               BackgroundColor="#FAFAF7">
                             <Label Text="FECHA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
                             <Label Grid.Column="1" Text="TRABAJADOR" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
@@ -139,6 +139,7 @@
                             <Label Grid.Column="3" Text="LOTE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
                             <Label Grid.Column="4" Text="TARIFA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
                             <Label Grid.Column="5" Text="TIEMPO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label Grid.Column="6" Text="ACCION" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
                         </Grid>
 
                         <!-- Filas -->
@@ -147,7 +148,7 @@
                                 <DataTemplate>
                                     <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1"
                                             Padding="16,10" BackgroundColor="White">
-                                        <Grid ColumnDefinitions="1.1*,1.8*,2.5*,1.5*,1.2*,1.2*"
+                                        <Grid ColumnDefinitions="1.1*,1.8*,2.5*,1.5*,1.2*,1.2*,0.8*"
                                               ColumnSpacing="6">
 
                                             <!-- FECHA -->
@@ -207,6 +208,20 @@
                                                    FontSize="11"
                                                    TextColor="{StaticResource TextPrimary}"
                                                    VerticalOptions="Center" />
+
+                                            <!-- ACCION -->
+                                            <Label Grid.Column="6"
+                                                   Text="Editar"
+                                                   TextColor="#2E7D5B"
+                                                   FontSize="11"
+                                                   TextDecorations="None"
+                                                   VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer
+                                                        Tapped="OnEditEntryTapped"
+                                                        CommandParameter="{Binding .}" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
 
                                         </Grid>
                                     </Border>

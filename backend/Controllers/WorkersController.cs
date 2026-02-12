@@ -2,6 +2,7 @@
 using backend.DTOs;
 using backend.Models;
 using backend.Services;
+using Google.Cloud.Firestore;
 namespace backend.Controllers;
 
 [Route("api/workers")]
@@ -9,10 +10,12 @@ namespace backend.Controllers;
 public class WorkersController : ControllerBase
 {
     private readonly WorkerService _service;
+    private readonly AuditLogService _audit;
 
-    public WorkersController(WorkerService service)
+    public WorkersController(WorkerService service, AuditLogService audit)
     {
         _service = service;
+        _audit = audit;
     }
     //POST api/workers/{id}
     [HttpPost("{id}")]
@@ -28,6 +31,7 @@ public class WorkersController : ControllerBase
         };
 
         await _service.CreateAsync(id, worker);
+        await LogAsync("create", "worker", id, $"Creado trabajador {dto.Name} {dto.LastName}");
         return CreatedAtAction(nameof(Get), new { id }, dto);
     }
     //GET api/workers/{id}
@@ -81,6 +85,28 @@ public class WorkersController : ControllerBase
         worker.Active = dto.Active;
 
         await _service.UpdateAsync(id, worker);
+        await LogAsync("update", "worker", id, $"Actualizado trabajador {dto.Name} {dto.LastName}");
         return NoContent();
+    }
+
+    private string GetActorId()
+    {
+        if (Request.Headers.TryGetValue("X-User-Id", out var actorId))
+            return actorId.ToString();
+
+        return "system";
+    }
+
+    private Task LogAsync(string action, string entity, string entityId, string message)
+    {
+        return _audit.CreateAsync(new AuditLog
+        {
+            Action = action,
+            Entity = entity,
+            EntityId = entityId,
+            ActorId = GetActorId(),
+            Message = message,
+            CreatedAt = Timestamp.GetCurrentTimestamp()
+        });
     }
 }

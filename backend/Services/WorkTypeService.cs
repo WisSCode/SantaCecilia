@@ -43,4 +43,10 @@ public class WorkTypeService
     {
         await _workTypes.Document(workTypeId).SetAsync(workType, SetOptions.MergeAll);
     }
+
+    // DELETE
+    public async Task DeleteAsync(string workTypeId)
+    {
+        await _workTypes.Document(workTypeId).DeleteAsync();
+    }
 }

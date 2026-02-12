@@ -46,6 +46,7 @@ builder.Services.AddScoped<WorkTypeService>();
 builder.Services.AddScoped<BatchService>();
 builder.Services.AddScoped<WorkedTimeService>();
 builder.Services.AddScoped<PayrollService>();
+builder.Services.AddScoped<AuditLogService>();
 
 var app = builder.Build();
 

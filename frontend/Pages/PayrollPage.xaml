@@ -39,7 +39,8 @@
                                             FontSize="13"
                                             TextColor="{StaticResource TextPrimary}"
                                             HorizontalOptions="Fill"
-                                            VerticalOptions="Center" />
+                                            VerticalOptions="Center"
+                                            DateSelected="OnWeekChanged" />
                             </Border>
                             <Button Grid.Column="1"
                                     Text="Procesar Nomina Completa"
@@ -240,6 +241,16 @@
                                                        VerticalOptions="Center">
                                                     <Label.GestureRecognizers>
                                                         <TapGestureRecognizer Tapped="OnViewTapped"
+                                                                              CommandParameter="{Binding .}" />
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                                <Label Text="Marcar"
+                                                       FontSize="11"
+                                                       TextColor="{StaticResource TextSecondary}"
+                                                       VerticalOptions="Center"
+                                                       IsVisible="{Binding IsPending}">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="OnMarkPaidTapped"
                                                                               CommandParameter="{Binding .}" />
                                                     </Label.GestureRecognizers>
                                                 </Label>

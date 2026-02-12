@@ -43,4 +43,10 @@ public class WorkedTimeService
     {
         await _workedTimes.Document(workedTimesId).SetAsync(workedTimes, SetOptions.MergeAll);
     }
+
+    // DELETE
+    public async Task DeleteAsync(string workedTimesId)
+    {
+        await _workedTimes.Document(workedTimesId).DeleteAsync();
+    }
 }

@@ -10,10 +10,12 @@ namespace backend.Controllers;
 public class WorkTimesController : ControllerBase
 {
     private readonly WorkedTimeService _service;
+    private readonly AuditLogService _audit;
 
-    public WorkTimesController(WorkedTimeService service)
+    public WorkTimesController(WorkedTimeService service, AuditLogService audit)
     {
         _service = service;
+        _audit = audit;
     }
     //POST api/workTimes/{id}
     [HttpPost("{id}")]
@@ -29,6 +31,7 @@ public class WorkTimesController : ControllerBase
         };
 
         await _service.CreateAsync(id, workedTime);
+        await LogAsync("create", "workedTime", id, $"Registro creado para trabajador {dto.WorkerId}");
         return CreatedAtAction(nameof(Get), new { id }, dto);
     }
     //GET api/workedTimes/{id}
@@ -82,6 +85,42 @@ public class WorkTimesController : ControllerBase
         workedTime.date = Timestamp.FromDateTime(dto.date.ToUniversalTime());
 
         await _service.UpdateAsync(id, workedTime);
+        await LogAsync("update", "workedTime", id, $"Registro actualizado para trabajador {dto.WorkerId}");
         return NoContent();
+    }
+
+    //DELETE api/workedTimes/{id}
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var workedTime = await _service.GetAsync(id);
+        
+        if (workedTime == null)
+            return NotFound();
+
+        await _service.DeleteAsync(id);
+        await LogAsync("delete", "workedTime", id, $"Registro eliminado para trabajador {workedTime.WorkerId}");
+        return NoContent();
+    }
+
+    private string GetActorId()
+    {
+        if (Request.Headers.TryGetValue("X-User-Id", out var actorId))
+            return actorId.ToString();
+
+        return "system";
+    }
+
+    private Task LogAsync(string action, string entity, string entityId, string message)
+    {
+        return _audit.CreateAsync(new AuditLog
+        {
+            Action = action,
+            Entity = entity,
+            EntityId = entityId,
+            ActorId = GetActorId(),
+            Message = message,
+            CreatedAt = Timestamp.GetCurrentTimestamp()
+        });
     }
 }
