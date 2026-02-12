@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="frontend.Pages.ValidateUserPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#80000000">
+
+    <Grid VerticalOptions="Center" HorizontalOptions="Center" Padding="20">
+        <Border WidthRequest="440"
+                Stroke="#D6DAD7"
+                StrokeThickness="1"
+                BackgroundColor="White">
+
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0" />
+            </Border.StrokeShape>
+
+            <VerticalStackLayout Spacing="0">
+
+                <!-- ENCABEZADO -->
+                <Grid BackgroundColor="#9EC9B4" Padding="20" ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Validar Usuario"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+                        <Label x:Name="SubtitleLabel"
+                               Text="Asigne un trabajador al usuario"
+                               FontSize="11"
+                               TextColor="#F2F7F4" />
+                    </VerticalStackLayout>
+                    <Button Grid.Column="1"
+                            Text="X"
+                            FontSize="16"
+                            TextColor="White"
+                            BackgroundColor="Transparent"
+                            Padding="4"
+                            VerticalOptions="Start"
+                            Clicked="OnCancelClicked" />
+                </Grid>
+
+                <!-- FORMULARIO -->
+                <VerticalStackLayout Padding="24" Spacing="16">
+
+                    <!-- EMAIL (solo lectura) -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Correo del usuario"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#2E3A34" />
+                        <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
+                                BackgroundColor="#F6F5F0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="0" />
+                            </Border.StrokeShape>
+                            <Label x:Name="EmailLabel"
+                                   FontSize="13"
+                                   TextColor="#6b7f78"
+                                   VerticalOptions="Center"
+                                   HeightRequest="30" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- TRABAJADOR A ASIGNAR -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Trabajador a asignar"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#2E3A34" />
+
+                        <Border Stroke="#D6DAD7" StrokeThickness="1" BackgroundColor="White"
+                                HeightRequest="180">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="0" />
+                            </Border.StrokeShape>
+                            <CollectionView x:Name="WorkersListView"
+                                            SelectionMode="Single"
+                                            SelectionChanged="OnWorkerSelected">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="12,10"
+                                                StrokeThickness="0,0,0,1"
+                                                Stroke="#EEEBE5"
+                                                BackgroundColor="{Binding BackgroundColor}">
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <VerticalStackLayout Spacing="2">
+                                                    <Label Text="{Binding FullName}"
+                                                           FontSize="13"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#2E3A34" />
+                                                    <Label Text="{Binding Identification}"
+                                                           FontSize="11"
+                                                           TextColor="#6b7f78" />
+                                                </VerticalStackLayout>
+                                                <Label Grid.Column="1"
+                                                       Text="&#x2713;"
+                                                       FontSize="16"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#9EC9B4"
+                                                       IsVisible="{Binding IsSelected}"
+                                                       VerticalOptions="Center" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </Border>
+
+                        <Label x:Name="NoWorkersLabel"
+                               Text="No hay trabajadores disponibles sin usuario asignado."
+                               FontSize="11"
+                               TextColor="#E07A5F"
+                               IsVisible="False" />
+                    </VerticalStackLayout>
+
+                    <!-- BOTONES -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
+                        <Button Grid.Column="0"
+                                Text="Cancelar"
+                                HeightRequest="44"
+                                BackgroundColor="Transparent"
+                                TextColor="#2E3A34"
+                                FontAttributes="Bold"
+                                BorderColor="#D6DAD7"
+                                BorderWidth="1"
+                                Clicked="OnCancelClicked" />
+                        <Button x:Name="ValidateButton"
+                                Grid.Column="1"
+                                Text="Validar"
+                                HeightRequest="44"
+                                BackgroundColor="#9EC9B4"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                IsEnabled="False"
+                                Clicked="OnValidateClicked" />
+                    </Grid>
+
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+
+</ContentPage>

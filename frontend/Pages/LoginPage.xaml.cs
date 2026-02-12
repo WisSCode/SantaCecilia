@@ -30,9 +30,9 @@ public partial class LoginPage : ContentPage
             return;
         }
 
-        // Login exitoso - cambiar a AppShell con dashboard
+        // Login exitoso - navegar segun rol
         if (Application.Current is App app)
-            await app.GoToDashboardAsync();
+            await app.GoToShellAsync();
     }
 
     private async void OnRegisterClicked(object sender, EventArgs e)

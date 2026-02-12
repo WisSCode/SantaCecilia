@@ -6,7 +6,7 @@ using Google.Cloud.Firestore;
 var builder = WebApplication.CreateBuilder(args);
 
 //Cargar credenciales de Firebase
-var credential = GoogleCredential.FromFile("firebase-key.json");
+    var credential = GoogleCredential.FromFile("firebase-key.json");
 
 //Inicializar Firebase Admin
 FirebaseApp.Create(new AppOptions

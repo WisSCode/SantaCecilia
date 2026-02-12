@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Shell
-    x:Class="frontend.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:frontend.Pages"
+    x:Class="frontend.AppShell"
     Title="Santa Cecilia"
     FlyoutBehavior="Disabled"
     FlyoutBackgroundColor="White"
@@ -70,36 +70,41 @@
         </Grid>
     </Shell.FlyoutFooter>
 
-    <!-- Main Menu -->
-    <FlyoutItem Title="Inicio" Route="dashboard">
+    <!-- Worker Menu -->
+    <FlyoutItem x:Name="WorkerHomeItem" Title="Mi Portal" Route="workershome" IsVisible="False">
+        <ShellContent Route="workershomeContent" ContentTemplate="{DataTemplate pages:WorkersHomePage}" />
+    </FlyoutItem>
+
+    <!-- Admin Menu -->
+    <FlyoutItem x:Name="DashboardItem" Title="Inicio" Route="dashboard">
         <ShellContent Route="dashboardContent" ContentTemplate="{DataTemplate pages:DashboardPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Registro Diario" Route="timetracking">
+    <FlyoutItem x:Name="TimeTrackingItem" Title="Registro Diario" Route="timetracking">
         <ShellContent Route="timetrackingContent" ContentTemplate="{DataTemplate pages:TimeTrackingPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Trabajadores" Route="workers">
+    <FlyoutItem x:Name="WorkersItem" Title="Trabajadores" Route="workers">
         <ShellContent Route="workersContent" ContentTemplate="{DataTemplate pages:WorkersPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Nómina" Route="payroll">
+    <FlyoutItem x:Name="PayrollItem" Title="Nómina" Route="payroll">
         <ShellContent Route="payrollContent" ContentTemplate="{DataTemplate pages:PayrollPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Reportes" Route="reports">
+    <FlyoutItem x:Name="ReportsItem" Title="Reportes" Route="reports">
         <ShellContent Route="reportsContent" ContentTemplate="{DataTemplate pages:ReportsPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Lotes" Route="batches">
+    <FlyoutItem x:Name="BatchesItem" Title="Lotes" Route="batches">
         <ShellContent Route="batchesContent" ContentTemplate="{DataTemplate pages:BatchesPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Tipos de Trabajo" Route="worktypes">
+    <FlyoutItem x:Name="WorkTypesItem" Title="Tipos de Trabajo" Route="worktypes">
         <ShellContent Route="worktypesContent" ContentTemplate="{DataTemplate pages:WorkTypesPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Usuarios" Route="users">
+    <FlyoutItem x:Name="UsersItem" Title="Usuarios" Route="users">
         <ShellContent Route="usersContent" ContentTemplate="{DataTemplate pages:UsersPage}" />
     </FlyoutItem>
 
