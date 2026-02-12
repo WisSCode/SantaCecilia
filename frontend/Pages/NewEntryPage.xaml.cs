@@ -41,7 +41,11 @@ public partial class NewEntryPage : ContentPage
             allWorkTypes = await _api.GetWorkTypesAsync();
             batchItems = await _api.GetBatchesAsync();
 
-            WorkerPicker.ItemsSource = workerItems.Select(w => $"{w.Name} {w.LastName}").ToList();
+            WorkerPicker.ItemsSource = workerItems
+                .Select(w => string.IsNullOrWhiteSpace(w.Identification)
+                    ? $"{w.Name} {w.LastName}"
+                    : $"{w.Name} {w.LastName} -> {w.Identification}")
+                .ToList();
             WorkerPicker.SelectedIndex = -1;
 
             LotePicker.ItemsSource = batchItems.Select(b => b.Name).ToList();
