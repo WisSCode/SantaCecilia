@@ -57,6 +57,11 @@ public class ApiService
         await _http.PostAsJsonAsync($"api/workTypes/{id}", dto);
     }
 
+    public async Task UpdateWorkTypeAsync(string id, WorkTypeDto dto)
+    {
+        await _http.PutAsJsonAsync($"api/workTypes/{id}", dto);
+    }
+
     // Worked Times
     public async Task<List<WorkedTimeDto>> GetWorkedTimesAsync()
     {

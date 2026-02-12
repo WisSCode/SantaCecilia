@@ -7,6 +7,8 @@ public partial class UsersPage : ContentPage
 {
     private readonly ApiService _api;
     private List<UserItem> users = new();
+    private string _sortColumn = "Mail";
+    private bool _sortAscending = true;
 
     public UsersPage(ApiService api)
     {
@@ -33,7 +35,7 @@ public partial class UsersPage : ContentPage
                 Validated = u.Validated
             }).ToList();
 
-            UsersList.ItemsSource = users;
+            ApplySort();
             TotalUsersLabel.Text = users.Count.ToString();
             ValidatedUsersLabel.Text = users.Count(u => u.Validated).ToString();
         }
@@ -43,10 +45,42 @@ public partial class UsersPage : ContentPage
         }
     }
 
-    private async void OnAddClicked(object sender, EventArgs e)
+    private void ApplySort()
     {
-        await DisplayAlertAsync("Agregar Usuario", "Formulario para crear nuevo usuario.", "OK");
+        IEnumerable<UserItem> sorted = _sortColumn switch
+        {
+            "Mail" => _sortAscending ? users.OrderBy(u => u.Mail) : users.OrderByDescending(u => u.Mail),
+            "Role" => _sortAscending ? users.OrderBy(u => u.Role) : users.OrderByDescending(u => u.Role),
+            "Status" => _sortAscending ? users.OrderBy(u => u.Validated) : users.OrderByDescending(u => u.Validated),
+            _ => users.AsEnumerable()
+        };
+        UsersList.ItemsSource = sorted.ToList();
+        UpdateHeaders();
     }
+
+    private void ToggleSort(string column)
+    {
+        if (_sortColumn == column)
+            _sortAscending = !_sortAscending;
+        else
+        {
+            _sortColumn = column;
+            _sortAscending = true;
+        }
+        ApplySort();
+    }
+
+    private void UpdateHeaders()
+    {
+        var arrow = _sortAscending ? " \u2191" : " \u2193";
+        HeaderEmail.Text = "EMAIL" + (_sortColumn == "Mail" ? arrow : "");
+        HeaderRole.Text = "ROL" + (_sortColumn == "Role" ? arrow : "");
+        HeaderStatus.Text = "ESTADO" + (_sortColumn == "Status" ? arrow : "");
+    }
+
+    private void OnSortByEmail(object sender, TappedEventArgs e) => ToggleSort("Mail");
+    private void OnSortByRole(object sender, TappedEventArgs e) => ToggleSort("Role");
+    private void OnSortByStatus(object sender, TappedEventArgs e) => ToggleSort("Status");
 
     private async void OnValidateClicked(object sender, EventArgs e)
     {
@@ -54,12 +88,51 @@ public partial class UsersPage : ContentPage
         {
             try
             {
+                var allWorkers = await _api.GetWorkersAsync();
+                var unassigned = allWorkers
+                    .Where(w => string.IsNullOrEmpty(w.UserId))
+                    .ToList();
+
+                if (unassigned.Count == 0)
+                {
+                    await DisplayAlertAsync("Sin trabajadores", "No hay trabajadores disponibles sin usuario asignado.", "OK");
+                    return;
+                }
+
+                var options = unassigned
+                    .Select(w => $"{w.Name} {w.LastName} - {w.Identification}")
+                    .ToArray();
+
+                var selected = await DisplayActionSheet(
+                    $"Asignar trabajador a {user.Mail}",
+                    "Cancelar",
+                    null,
+                    options);
+
+                if (selected is null || selected == "Cancelar") return;
+
+                var selectedIndex = Array.IndexOf(options, selected);
+                if (selectedIndex < 0) return;
+
+                var worker = unassigned[selectedIndex];
+
+                var workerDto = new WorkerDto
+                {
+                    Id = worker.Id,
+                    UserId = user.Id,
+                    Name = worker.Name,
+                    LastName = worker.LastName,
+                    Identification = worker.Identification,
+                    Active = worker.Active
+                };
+                await _api.UpdateWorkerAsync(worker.Id, workerDto);
+
                 await _api.ValidateUserAsync(user.Id);
-                user.Validated = true;
-                UsersList.ItemsSource = null;
-                UsersList.ItemsSource = users;
-                ValidatedUsersLabel.Text = users.Count(u => u.Validated).ToString();
-                await DisplayAlertAsync("Usuario Validado", $"{user.Mail} ha sido validado.", "OK");
+
+                await LoadUsersAsync();
+
+                await DisplayAlertAsync("Usuario Validado",
+                    $"{user.Mail} fue validado y asignado a {worker.Name} {worker.LastName}.", "OK");
             }
             catch (Exception ex)
             {
@@ -72,7 +145,12 @@ public partial class UsersPage : ContentPage
     {
         if (sender is Button btn && btn.CommandParameter is UserItem user)
         {
-            await DisplayAlertAsync("Editar Usuario", $"Editar: {user.Mail}", "OK");
+            var parameters = new Dictionary<string, object>
+            {
+                { "userId", user.Id },
+                { "userEmail", user.Mail }
+            };
+            await Shell.Current.GoToAsync("/edituser", parameters);
         }
     }
 }

@@ -16,6 +16,11 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("register", typeof(RegisterPage));
         Routing.RegisterRoute("newtimeentry", typeof(NewEntryPage));
         Routing.RegisterRoute("newworker", typeof(NewWorkerPage));
+        Routing.RegisterRoute("newbatch", typeof(NewBatchPage));
+        Routing.RegisterRoute("newworktype", typeof(NewWorkTypePage));
+        Routing.RegisterRoute("editbatch", typeof(EditBatchPage));
+        Routing.RegisterRoute("editworktype", typeof(EditWorkTypePage));
+        Routing.RegisterRoute("edituser", typeof(EditUserPage));
 
         ConfigureShellForAuthState(false);
 

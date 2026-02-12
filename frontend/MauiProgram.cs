@@ -52,6 +52,11 @@ namespace frontend
             builder.Services.AddTransient<BatchesPage>();
             builder.Services.AddTransient<NewEntryPage>();
             builder.Services.AddTransient<NewWorkerPage>();
+            builder.Services.AddTransient<NewBatchPage>();
+            builder.Services.AddTransient<NewWorkTypePage>();
+            builder.Services.AddTransient<EditBatchPage>();
+            builder.Services.AddTransient<EditWorkTypePage>();
+            builder.Services.AddTransient<EditUserPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

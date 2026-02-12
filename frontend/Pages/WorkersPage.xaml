@@ -150,11 +150,31 @@
                         <Grid Padding="16,10"
                               ColumnDefinitions="0.8*,1.2*,1.4*,1.4*,0.9*,1*"
                               BackgroundColor="#FAFAF7">
-                            <Label Text="ID" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                            <Label Grid.Column="1" Text="NOMBRE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                            <Label Grid.Column="2" Text="APELLIDO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                            <Label Grid.Column="3" Text="CEDULA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                            <Label Grid.Column="4" Text="ESTADO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label x:Name="HeaderId" Text="ID &#x2191;" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSortById" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="HeaderName" Grid.Column="1" Text="NOMBRE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSortByName" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="HeaderLastName" Grid.Column="2" Text="APELLIDO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSortByLastName" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="HeaderId2" Grid.Column="3" Text="CEDULA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSortByIdentification" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="HeaderStatus" Grid.Column="4" Text="ESTADO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSortByStatus" />
+                                </Label.GestureRecognizers>
+                            </Label>
                             <Label Grid.Column="5" Text="ACCIONES" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
                         </Grid>
 
