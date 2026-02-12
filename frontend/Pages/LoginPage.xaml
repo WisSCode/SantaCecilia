@@ -78,18 +78,39 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                             FontAttributes="Bold"
                             TextColor="#2E3A34" />
 
-                        <Entry
-                            Placeholder="Ingrese su contraseña"
-                            IsPassword="True"
-                            Text="{Binding Password}"
-                            FontSize="13"
-                            TextColor="#2E3A34"
-                            BackgroundColor="White" />
+                        <Grid ColumnDefinitions="*,Auto"
+                              VerticalOptions="Center">
+                            <Entry
+                                x:Name="PasswordEntry"
+                                Grid.Column="0"
+                                Placeholder="Ingrese su contraseña"
+                                IsPassword="True"
+                                Text="{Binding Password}"
+                                FontSize="13"
+                                TextColor="#2E3A34"
+                                BackgroundColor="White"
+                                VerticalOptions="Center" />
+
+                            <Button
+                                x:Name="PasswordToggleButton"
+                                Grid.Column="1"
+                                Text="Mostrar"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                TextColor="#9EC9B4"
+                                HeightRequest="30"
+                                MinimumWidthRequest="70"
+                                Margin="8,0,0,0"
+                                BackgroundColor="Transparent"
+                                Padding="0"
+                                VerticalOptions="Center"
+                                Clicked="OnTogglePasswordVisibilityClicked" />
+                        </Grid>
 
                         <Label
                             Text="¿Olvidaste tu contraseña?"
                             FontSize="12"
-                            TextColor="#2E3A34"
+                            TextColor="#9EC9B4"
                             HorizontalTextAlignment="Center">           
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnForgotPasswordTapped" />
@@ -100,7 +121,7 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 
                     <!-- BOTÓN INGRESAR -->
                     <Button
-                        Text="Ingresar"
+                        Text="Iniciar Sesión"
                         HeightRequest="44"
                         BackgroundColor="#9EC9B4"
                         TextColor="White"
@@ -108,16 +129,23 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                         Clicked="OnLoginClicked"
                         IsEnabled="True"/>
 
-                    <!-- BOTÓN REGISTRARSE -->
-                    <Button
-                        Text="Registrarse"
-                        HeightRequest="44"
-                        BackgroundColor="Transparent"
-                        TextColor="#2E3A34"
-                        FontAttributes="Bold"
-                        BorderColor="#9EC9B4"
-                        BorderWidth="1"
-                        Clicked="OnRegisterClicked" />
+                    <!-- TEXTO REGISTRO -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="4">
+                        <Label
+                            Text="¿Eres nuevo?"
+                            FontSize="12"
+                            TextColor="#2E3A34" />
+
+                        <Label
+                            Text="Registrate"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="#9EC9B4">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnRegisterClicked" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
 
                 </VerticalStackLayout>
             </VerticalStackLayout>

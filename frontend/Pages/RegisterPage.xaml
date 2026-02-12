@@ -59,13 +59,34 @@ BackgroundColor="#F7F7F3">
                                 FontSize="12"
                                 FontAttributes="Bold"
                                 TextColor="#2E3A34" />
-                            <Entry
-                                Placeholder="Ingrese su contraseña (mínimo 6 caracteres)"
-                                Text="{Binding Password}"
-                                IsPassword="True"
-                                FontSize="13"
-                                TextColor="#2E3A34"
-                                BackgroundColor="White" />
+                            <Grid ColumnDefinitions="*,Auto"
+                                  VerticalOptions="Center">
+                                <Entry
+                                    x:Name="RegisterPasswordEntry"
+                                    Grid.Column="0"
+                                    Placeholder="Ingrese mínimo 8 carácteres"
+                                    Text="{Binding Password}"
+                                    IsPassword="True"
+                                    FontSize="13"
+                                    TextColor="#2E3A34"
+                                    BackgroundColor="White"
+                                    VerticalOptions="Center" />
+
+                                <Button
+                                    x:Name="RegisterPasswordToggleButton"
+                                    Grid.Column="1"
+                                    Text="Mostrar"
+                                    FontSize="12"
+                                    FontAttributes="Bold"
+                                    TextColor="#9EC9B4"
+                                    HeightRequest="30"
+                                    MinimumWidthRequest="70"
+                                    Margin="8,0,0,0"
+                                    BackgroundColor="Transparent"
+                                    Padding="0"
+                                    VerticalOptions="Center"
+                                    Clicked="OnTogglePasswordVisibilityClicked" />
+                            </Grid>
                         </VerticalStackLayout>
 
                         <!-- BOTÓN CREAR CUENTA -->
@@ -79,7 +100,7 @@ BackgroundColor="#F7F7F3">
 
                         <!-- BOTÓN VOLVER -->
                         <Button
-                            Text="Volver al login"
+                            Text="Volver al inicio de sesión"
                             HeightRequest="44"
                             BackgroundColor="Transparent"
                             TextColor="#2E3A34"
