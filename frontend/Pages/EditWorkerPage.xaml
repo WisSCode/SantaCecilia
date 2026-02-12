@@ -5,8 +5,9 @@
              Shell.NavBarIsVisible="False"
              BackgroundColor="#80000000">
 
-    <Grid VerticalOptions="Center" HorizontalOptions="Center" Padding="20">
-        <Border WidthRequest="400"
+    <Grid VerticalOptions="Center" HorizontalOptions="Fill" Padding="{OnIdiom Phone=12, Desktop=20}">
+        <Border HorizontalOptions="Fill"
+                MaximumWidthRequest="400"
                 Stroke="#D6DAD7"
                 StrokeThickness="1"
                 BackgroundColor="White">
@@ -18,19 +19,19 @@
             <VerticalStackLayout Spacing="0">
 
                 <!-- ENCABEZADO -->
-                <Grid BackgroundColor="#9EC9B4" Padding="20" ColumnDefinitions="*,Auto">
-                    <VerticalStackLayout Spacing="4">
+                <Grid BackgroundColor="#9EC9B4" Padding="{OnIdiom Phone=14, Desktop=20}" ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Spacing="{OnIdiom Phone=2, Desktop=4}">
                         <Label Text="Editar Trabajador"
-                               FontSize="16"
+                               FontSize="{OnIdiom Phone=15, Desktop=16}"
                                FontAttributes="Bold"
                                TextColor="White" />
                         <Label Text="Modifique la informacion del trabajador"
-                               FontSize="11"
+                               FontSize="{OnIdiom Phone=10, Desktop=11}"
                                TextColor="#F2F7F4" />
                     </VerticalStackLayout>
                     <Button Grid.Column="1"
                             Text="X"
-                            FontSize="16"
+                            FontSize="{OnIdiom Phone=14, Desktop=16}"
                             TextColor="White"
                             BackgroundColor="Transparent"
                             Padding="4"
@@ -39,12 +40,12 @@
                 </Grid>
 
                 <!-- FORMULARIO -->
-                <VerticalStackLayout Padding="24" Spacing="16">
+                <VerticalStackLayout Padding="{OnIdiom Phone=14, Desktop=24}" Spacing="{OnIdiom Phone=12, Desktop=16}">
 
                     <!-- NOMBRE -->
                     <VerticalStackLayout Spacing="6">
                         <Label Text="Nombre"
-                               FontSize="12"
+                               FontSize="{OnIdiom Phone=11, Desktop=12}"
                                FontAttributes="Bold"
                                TextColor="#2E3A34" />
                         <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
@@ -54,7 +55,7 @@
                             </Border.StrokeShape>
                             <Entry x:Name="NameEntry"
                                    Placeholder="Ej: Juan"
-                                   FontSize="13"
+                                FontSize="{OnIdiom Phone=12, Desktop=13}"
                                    TextColor="#2E3A34"
                                    BackgroundColor="White"
                                    TextChanged="OnFieldChanged" />
@@ -64,7 +65,7 @@
                     <!-- APELLIDO -->
                     <VerticalStackLayout Spacing="6">
                         <Label Text="Apellido"
-                               FontSize="12"
+                               FontSize="{OnIdiom Phone=11, Desktop=12}"
                                FontAttributes="Bold"
                                TextColor="#2E3A34" />
                         <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
@@ -74,7 +75,7 @@
                             </Border.StrokeShape>
                             <Entry x:Name="LastNameEntry"
                                    Placeholder="Ej: Perez Gomez"
-                                   FontSize="13"
+                                FontSize="{OnIdiom Phone=12, Desktop=13}"
                                    TextColor="#2E3A34"
                                    BackgroundColor="White"
                                    TextChanged="OnFieldChanged" />
@@ -84,7 +85,7 @@
                     <!-- CEDULA -->
                     <VerticalStackLayout Spacing="6">
                         <Label Text="Cedula"
-                               FontSize="12"
+                               FontSize="{OnIdiom Phone=11, Desktop=12}"
                                FontAttributes="Bold"
                                TextColor="#2E3A34" />
                         <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
@@ -94,7 +95,7 @@
                             </Border.StrokeShape>
                             <Entry x:Name="IdentificationEntry"
                                    Placeholder="Ej: 8-123-456"
-                                   FontSize="13"
+                                FontSize="{OnIdiom Phone=12, Desktop=13}"
                                    TextColor="#2E3A34"
                                    BackgroundColor="White"
                                    TextChanged="OnFieldChanged" />
@@ -102,10 +103,14 @@
                     </VerticalStackLayout>
 
                     <!-- BOTONES -->
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
+                        <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,*'}"
+                          RowDefinitions="{OnIdiom Phone='Auto,Auto', Desktop='Auto'}"
+                          ColumnSpacing="12"
+                          RowSpacing="{OnIdiom Phone=10, Desktop=0}"
+                          Margin="0,8,0,0">
                         <Button Grid.Column="0"
                                 Text="Cancelar"
-                                HeightRequest="44"
+                            HeightRequest="{OnIdiom Phone=42, Desktop=44}"
                                 BackgroundColor="Transparent"
                                 TextColor="#2E3A34"
                                 FontAttributes="Bold"
@@ -113,9 +118,10 @@
                                 BorderWidth="1"
                                 Clicked="OnCancelClicked" />
                         <Button x:Name="UpdateButton"
-                                Grid.Column="1"
+                            Grid.Column="{OnIdiom Phone=0, Desktop=1}"
+                            Grid.Row="{OnIdiom Phone=1, Desktop=0}"
                                 Text="Guardar Cambios"
-                                HeightRequest="44"
+                            HeightRequest="{OnIdiom Phone=42, Desktop=44}"
                                 BackgroundColor="#9EC9B4"
                                 TextColor="White"
                                 FontAttributes="Bold"
