@@ -9,6 +9,7 @@ public partial class PayrollPage : ContentPage
 {
     private readonly ApiService _api;
     private List<Payroll> payrolls = new();
+    private List<Payroll> allPayrolls = new();
     private Dictionary<string, string> workerNameMap = new();
     private Dictionary<string, string> workerTypeMap = new();
     private List<WorkedTimeDto> workedTimesCache = new();
@@ -24,12 +25,12 @@ public partial class PayrollPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        var weekStart = DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek);
+        var weekStart = GetWeekStart(DateTime.Now);
         PayrollWeekPicker.Date = weekStart.Date;
-        await LoadPayrollsAsync();
+        await LoadPayrollsAsync(weekStart.Date);
     }
 
-    private async Task LoadPayrollsAsync()
+    private async Task LoadPayrollsAsync(DateTime weekStart)
     {
         try
         {
@@ -54,7 +55,7 @@ public partial class PayrollPage : ContentPage
                 kv => kv.Key,
                 kv => workTypeNameMap.GetValueOrDefault(kv.Value, "-"));
 
-            payrolls = payrollDtos.Select((p, index) =>
+            allPayrolls = payrollDtos.Select((p, index) =>
             {
                 var payroll = new Payroll
                 {
@@ -80,8 +81,7 @@ public partial class PayrollPage : ContentPage
                 return payroll;
             }).ToList();
 
-            PayrollList.ItemsSource = payrolls;
-            UpdateStats();
+            ApplyWeekFilter(weekStart);
         }
         catch (Exception ex)
         {
@@ -89,9 +89,20 @@ public partial class PayrollPage : ContentPage
         }
     }
 
+    private void ApplyWeekFilter(DateTime weekStart)
+    {
+        payrolls = allPayrolls
+            .Where(p => p.WeekStart.Date == weekStart.Date)
+            .OrderBy(p => p.WorkerName)
+            .ToList();
+
+        PayrollList.ItemsSource = payrolls;
+        UpdateStats();
+    }
+
     private void UpdateStats()
     {
-        var weekStart = PayrollWeekPicker.Date;
+        var weekStart = PayrollWeekPicker.Date ?? DateTime.Today;
         PayrollWeekLabel.Text = $"Semana del {weekStart:dd MMM yyyy}";
 
         var totalGross = payrolls.Sum(p => p.GrossAmount);
@@ -108,12 +119,35 @@ public partial class PayrollPage : ContentPage
         TotalNetLabel.Text = $"B/.{totalNet:F2}";
     }
 
+    private DateTime GetWeekStart(DateTime date)
+    {
+        return date.Date.AddDays(-(int)date.DayOfWeek);
+    }
+
+    private async void OnWeekChanged(object sender, DateChangedEventArgs e)
+    {
+        var selected = e.NewDate ?? DateTime.Today;
+        var weekStart = GetWeekStart(selected);
+        if (PayrollWeekPicker.Date != weekStart)
+            PayrollWeekPicker.Date = weekStart;
+
+        await LoadPayrollsAsync(weekStart);
+    }
+
     private async void OnViewTapped(object sender, TappedEventArgs e)
     {
         if (e.Parameter is Payroll payroll)
         {
             var html = BuildReceiptHtml(payroll);
-            await Navigation.PushModalAsync(new PayrollReceiptPage(html));
+            var workerName = workerNameMap.GetValueOrDefault(payroll.WorkerId, "Desconocido");
+            await Navigation.PushModalAsync(new PayrollReceiptPage(
+                html,
+                payroll.Id,
+                payroll.WorkerId,
+                workerName,
+                payroll.WeekStart,
+                payroll.GrossAmount
+            ));
         }
     }
 
@@ -122,13 +156,86 @@ public partial class PayrollPage : ContentPage
         if (e.Parameter is Payroll payroll)
         {
             var html = BuildReceiptHtml(payroll);
-            await Navigation.PushModalAsync(new PayrollReceiptPage(html));
+            var workerName = workerNameMap.GetValueOrDefault(payroll.WorkerId, "Desconocido");
+            await Navigation.PushModalAsync(new PayrollReceiptPage(
+                html,
+                payroll.Id,
+                payroll.WorkerId,
+                workerName,
+                payroll.WeekStart,
+                payroll.GrossAmount
+            ));
         }
     }
 
     private async void OnProcessPayrollClicked(object sender, EventArgs e)
     {
-        await DisplayAlertAsync("Nomina", "Procesando nomina completa.", "OK");
+        var selected = PayrollWeekPicker.Date ?? DateTime.Today;
+        var weekStart = GetWeekStart(selected);
+        var confirm = await DisplayAlertAsync(
+            "Procesar nomina",
+            $"Se generara la nomina de la semana del {weekStart:dd MMM yyyy}. Continuar?",
+            "Procesar",
+            "Cancelar");
+
+        if (!confirm)
+            return;
+
+        try
+        {
+            var count = await _api.ProcessPayrollAsync(weekStart);
+            await DisplayAlertAsync("Nomina", $"Nomina procesada. Registros: {count}", "OK");
+            await LoadPayrollsAsync(weekStart);
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlertAsync("Error", $"No se pudo procesar la nomina: {ex.Message}", "OK");
+        }
+    }
+
+    private async void OnMarkPaidTapped(object sender, TappedEventArgs e)
+    {
+        if (e.Parameter is not Payroll payroll)
+            return;
+
+        if (!payroll.IsPending)
+            return;
+
+        var confirm = await DisplayAlertAsync(
+            "Marcar pagado",
+            $"Marcar como pagada la nomina de {payroll.WorkerName}?",
+            "Marcar",
+            "Cancelar");
+
+        if (!confirm)
+            return;
+
+        try
+        {
+            payroll.Status = PayrollStatus.Paid;
+            payroll.PaidAt = DateTime.Now;
+
+            await _api.UpdatePayrollAsync(payroll.Id, new PayrollDto
+            {
+                Id = payroll.Id,
+                WorkerId = payroll.WorkerId,
+                WeekStart = payroll.WeekStart,
+                WeekEnd = payroll.WeekEnd,
+                TotalMinutes = payroll.TotalMinutes,
+                GrossAmount = (double)payroll.GrossAmount,
+                Status = "Paid",
+                PaidAt = payroll.PaidAt
+            });
+
+            var selected = PayrollWeekPicker.Date ?? DateTime.Today;
+            ApplyWeekFilter(GetWeekStart(selected));
+        }
+        catch (Exception ex)
+        {
+            payroll.Status = PayrollStatus.Pending;
+            payroll.PaidAt = null;
+            await DisplayAlertAsync("Error", $"No se pudo actualizar la nomina: {ex.Message}", "OK");
+        }
     }
 
     private string BuildReceiptHtml(Payroll payroll)

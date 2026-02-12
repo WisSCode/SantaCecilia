@@ -10,8 +10,45 @@
             <VerticalStackLayout Padding="20" Spacing="16">
                 <VerticalStackLayout Spacing="4">
                     <Label Text="Reportes" Style="{StaticResource Heading2}" />
-                    <Label x:Name="ReportWeekLabel" Style="{StaticResource BodySecondary}" />
+                    <Label x:Name="ReportPeriodLabel" Style="{StaticResource BodySecondary}" />
                 </VerticalStackLayout>
+
+                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                    <Border Grid.Column="0" Style="{StaticResource CardFrame}" Padding="10">
+                        <Picker x:Name="ReportViewPicker"
+                                Title="Vista"
+                                SelectedIndexChanged="OnReportViewChanged">
+                            <Picker.Items>
+                                <x:String>Por actividad</x:String>
+                                <x:String>Por trabajador</x:String>
+                                <x:String>Por periodo</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </Border>
+                    <Button Grid.Column="1"
+                            Text="Aplicar"
+                            Style="{StaticResource PrimaryButton}"
+                            Clicked="OnApplyClicked" />
+                    <Button Grid.Column="2"
+                            Text="Descargar"
+                            Style="{StaticResource PrimaryButton}"
+                            Clicked="OnDownloadClicked" />
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Border Grid.Column="0" Style="{StaticResource CardFrame}" Padding="10">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Desde" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
+                            <DatePicker x:Name="StartDatePicker" DateSelected="OnDateRangeChanged" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource CardFrame}" Padding="10">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Hasta" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
+                            <DatePicker x:Name="EndDatePicker" DateSelected="OnDateRangeChanged" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
 
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                     <Border Grid.Column="0" Style="{StaticResource CardFrame}">
@@ -31,26 +68,39 @@
                 <Border Style="{StaticResource CardFrame}" Padding="0">
                     <VerticalStackLayout Spacing="0">
                         <Grid Padding="14" ColumnDefinitions="*,Auto">
-                            <Label Text="Actividades de la semana" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
-                            <Label Grid.Column="1" Text="Ver todo" FontSize="11" TextColor="{StaticResource BrandSkyBlue}" VerticalOptions="Center" />
+                            <Label x:Name="ReportTitleLabel" Text="Resumen" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
                         </Grid>
 
                         <Grid Padding="10" ColumnDefinitions="3*,2*,2*" BackgroundColor="{StaticResource SurfaceSecondary}">
-                            <Label Text="ACTIVIDAD" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                            <Label Grid.Column="1" Text="CATEGORIA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                            <Label Grid.Column="2" Text="TOTAL" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label x:Name="HeaderCol1" Text="ACTIVIDAD" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label x:Name="HeaderCol2" Grid.Column="1" Text="TARIFA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                            <Label x:Name="HeaderCol3" Grid.Column="2" Text="TOTAL" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
                         </Grid>
 
                         <CollectionView x:Name="ReportList" SelectionMode="None">
+                            <CollectionView.EmptyView>
+                                <VerticalStackLayout Padding="40" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="Sin datos" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold" 
+                                           TextColor="{StaticResource TextSecondary}" 
+                                           HorizontalOptions="Center" />
+                                    <Label Text="No hay registros en el período seleccionado" 
+                                           FontSize="12" 
+                                           TextColor="{StaticResource TextTertiary}" 
+                                           HorizontalOptions="Center" 
+                                           Margin="0,8,0,0" />
+                                </VerticalStackLayout>
+                            </CollectionView.EmptyView>
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10,8">
                                         <Grid ColumnDefinitions="3*,2*,2*" ColumnSpacing="8">
-                                            <Label Text="{Binding ActivityName}" FontAttributes="Bold" FontSize="11" TextColor="{StaticResource TextPrimary}" />
-                                            <Label Grid.Column="1" Text="{Binding Category}" FontSize="11" TextColor="{StaticResource TextSecondary}" />
+                                            <Label Text="{Binding Col1}" FontAttributes="Bold" FontSize="11" TextColor="{StaticResource TextPrimary}" />
+                                            <Label Grid.Column="1" Text="{Binding Col2}" FontSize="11" TextColor="{StaticResource TextSecondary}" />
                                             <VerticalStackLayout Grid.Column="2" Spacing="2">
-                                                <Label Text="{Binding Hours, StringFormat='{0:F1}h'}" FontAttributes="Bold" FontSize="11" TextColor="{StaticResource TextPrimary}" />
-                                                <Label Text="{Binding Amount, StringFormat='B/.{0:F2}'}" FontSize="10" TextColor="{StaticResource TextTertiary}" />
+                                                <Label Text="{Binding Col3}" FontAttributes="Bold" FontSize="11" TextColor="{StaticResource TextPrimary}" />
+                                                <Label Text="{Binding Col3Sub}" FontSize="10" TextColor="{StaticResource TextTertiary}" IsVisible="{Binding HasCol3Sub}" />
                                             </VerticalStackLayout>
                                         </Grid>
                                     </Border>

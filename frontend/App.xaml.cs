@@ -1,4 +1,5 @@
-﻿using frontend.Pages;
+﻿using System.Linq;
+using frontend.Pages;
 using frontend.Services;
 
 namespace frontend;
@@ -28,13 +29,19 @@ public partial class App : Application
         var sessionService = _services.GetRequiredService<SessionService>();
         var shell = new AppShell(sessionService);
         shell.ConfigureShellForAuthState(true);
-        MainPage = shell;
+        var window = Application.Current?.Windows.FirstOrDefault();
+        if (window == null)
+            return;
+        window.Page = shell;
         await Shell.Current.GoToAsync("//dashboard");
     }
 
     public async Task GoToLoginAsync()
     {
-        MainPage = new NavigationPage(ResolveLoginPage());
+        var window = Application.Current?.Windows.FirstOrDefault();
+        if (window == null)
+            return;
+        window.Page = new NavigationPage(ResolveLoginPage());
         await Task.CompletedTask;
     }
 }

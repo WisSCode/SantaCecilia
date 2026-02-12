@@ -232,18 +232,28 @@
                                             </Border>
 
                                             <!-- ACCIONES -->
-                                            <Label Grid.Column="5"
-                                                   Text="{Binding ToggleText}"
-                                                   TextColor="{Binding ToggleColor}"
-                                                   FontSize="11"
-                                                   TextDecorations="None"
-                                                   VerticalOptions="Center">
-                                                <Label.GestureRecognizers>
-                                                    <TapGestureRecognizer
-                                                        Tapped="OnToggleActiveTapped"
-                                                        CommandParameter="{Binding .}" />
-                                                </Label.GestureRecognizers>
-                                            </Label>
+                                            <HorizontalStackLayout Grid.Column="5" Spacing="10" VerticalOptions="Center">
+                                                <Label Text="Editar"
+                                                       TextColor="#2E7D5B"
+                                                       FontSize="11"
+                                                       TextDecorations="None">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer
+                                                            Tapped="OnEditWorkerTapped"
+                                                            CommandParameter="{Binding .}" />
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                                <Label Text="{Binding ToggleText}"
+                                                       TextColor="{Binding ToggleColor}"
+                                                       FontSize="11"
+                                                       TextDecorations="None">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer
+                                                            Tapped="OnToggleActiveTapped"
+                                                            CommandParameter="{Binding .}" />
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                            </HorizontalStackLayout>
 
                                         </Grid>
                                     </Border>

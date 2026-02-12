@@ -77,6 +77,19 @@ public class BatchesController : ControllerBase
         return NoContent();
     }
 
+    //DELETE api/batches/{id}
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var batch = await _service.GetAsync(id);
+        if (batch == null)
+            return NotFound();
+
+        await _service.DeleteAsync(id);
+        await LogAsync("delete", "batch", id, $"Eliminado lote {batch.Name}");
+        return NoContent();
+    }
+
     private string GetActorId()
     {
         if (Request.Headers.TryGetValue("X-User-Id", out var actorId))

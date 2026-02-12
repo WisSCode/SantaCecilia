@@ -67,13 +67,25 @@
                                         <Grid ColumnDefinitions="3*,2*,Auto" ColumnSpacing="8">
                                             <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="12" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
                                             <Label Grid.Column="1" Text="{Binding DefaultRate, StringFormat='B/.{0:F4}/hr'}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
-                                            <Button Grid.Column="2" Text="Editar" 
-                                                    Clicked="OnEditClicked"
-                                                    CommandParameter="{Binding .}"
-                                                    Style="{StaticResource OutlineButton}"
-                                                    FontSize="11"
-                                                    Padding="10,6"
-                                                    MinimumHeightRequest="32" />
+                                            <HorizontalStackLayout Grid.Column="2" Spacing="6">
+                                                <Button Text="Editar" 
+                                                        Clicked="OnEditClicked"
+                                                        CommandParameter="{Binding .}"
+                                                        Style="{StaticResource OutlineButton}"
+                                                        FontSize="11"
+                                                        Padding="10,6"
+                                                        MinimumHeightRequest="32" />
+                                                <Button Text="Eliminar" 
+                                                        Clicked="OnDeleteClicked"
+                                                        CommandParameter="{Binding .}"
+                                                        BackgroundColor="Transparent"
+                                                        TextColor="#E07A5F"
+                                                        BorderColor="#E07A5F"
+                                                        BorderWidth="1"
+                                                        FontSize="11"
+                                                        Padding="10,6"
+                                                        MinimumHeightRequest="32" />
+                                            </HorizontalStackLayout>
                                         </Grid>
                                     </Border>
                                 </DataTemplate>

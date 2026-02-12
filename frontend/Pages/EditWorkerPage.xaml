@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="frontend.Pages.EditWorkerPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#80000000">
+
+    <Grid VerticalOptions="Center" HorizontalOptions="Center" Padding="20">
+        <Border WidthRequest="400"
+                Stroke="#D6DAD7"
+                StrokeThickness="1"
+                BackgroundColor="White">
+
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0" />
+            </Border.StrokeShape>
+
+            <VerticalStackLayout Spacing="0">
+
+                <!-- ENCABEZADO -->
+                <Grid BackgroundColor="#9EC9B4" Padding="20" ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Editar Trabajador"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+                        <Label Text="Modifique la informacion del trabajador"
+                               FontSize="11"
+                               TextColor="#F2F7F4" />
+                    </VerticalStackLayout>
+                    <Button Grid.Column="1"
+                            Text="X"
+                            FontSize="16"
+                            TextColor="White"
+                            BackgroundColor="Transparent"
+                            Padding="4"
+                            VerticalOptions="Start"
+                            Clicked="OnCancelClicked" />
+                </Grid>
+
+                <!-- FORMULARIO -->
+                <VerticalStackLayout Padding="24" Spacing="16">
+
+                    <!-- NOMBRE -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Nombre"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#2E3A34" />
+                        <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
+                                BackgroundColor="White">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="0" />
+                            </Border.StrokeShape>
+                            <Entry x:Name="NameEntry"
+                                   Placeholder="Ej: Juan"
+                                   FontSize="13"
+                                   TextColor="#2E3A34"
+                                   BackgroundColor="White"
+                                   TextChanged="OnFieldChanged" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- APELLIDO -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Apellido"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#2E3A34" />
+                        <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
+                                BackgroundColor="White">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="0" />
+                            </Border.StrokeShape>
+                            <Entry x:Name="LastNameEntry"
+                                   Placeholder="Ej: Perez Gomez"
+                                   FontSize="13"
+                                   TextColor="#2E3A34"
+                                   BackgroundColor="White"
+                                   TextChanged="OnFieldChanged" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- CEDULA -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Cedula"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#2E3A34" />
+                        <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
+                                BackgroundColor="White">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="0" />
+                            </Border.StrokeShape>
+                            <Entry x:Name="IdentificationEntry"
+                                   Placeholder="Ej: 8-123-456"
+                                   FontSize="13"
+                                   TextColor="#2E3A34"
+                                   BackgroundColor="White"
+                                   TextChanged="OnFieldChanged" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- BOTONES -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
+                        <Button Grid.Column="0"
+                                Text="Cancelar"
+                                HeightRequest="44"
+                                BackgroundColor="Transparent"
+                                TextColor="#2E3A34"
+                                FontAttributes="Bold"
+                                BorderColor="#D6DAD7"
+                                BorderWidth="1"
+                                Clicked="OnCancelClicked" />
+                        <Button x:Name="UpdateButton"
+                                Grid.Column="1"
+                                Text="Guardar Cambios"
+                                HeightRequest="44"
+                                BackgroundColor="#9EC9B4"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                IsEnabled="False"
+                                Clicked="OnUpdateClicked" />
+                    </Grid>
+
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+
+</ContentPage>

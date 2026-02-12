@@ -103,4 +103,27 @@ public partial class BatchesPage : ContentPage
             await Shell.Current.GoToAsync("/editbatch", parameters);
         }
     }
+
+    private async void OnDeleteClicked(object sender, EventArgs e)
+    {
+        if (sender is Button btn && btn.CommandParameter is BatchDto batch)
+        {
+            bool confirm = await DisplayAlertAsync("Confirmar eliminacion",
+                $"¿Está seguro que desea eliminar el lote '{batch.Name}'?\n\nEsta acción no se puede deshacer.",
+                "Eliminar", "Cancelar");
+
+            if (!confirm) return;
+
+            try
+            {
+                await _api.DeleteBatchAsync(batch.Id);
+                await DisplayAlertAsync("Eliminado", $"El lote '{batch.Name}' fue eliminado exitosamente.", "OK");
+                await LoadBatchesAsync();
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlertAsync("Error", $"No se pudo eliminar el lote: {ex.Message}", "OK");
+            }
+        }
+    }
 }

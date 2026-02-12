@@ -43,4 +43,10 @@ public class BatchService
     {
         await _batches.Document(batchId).SetAsync(batch, SetOptions.MergeAll);
     }
+
+    // DELETE
+    public async Task DeleteAsync(string batchId)
+    {
+        await _batches.Document(batchId).DeleteAsync();
+    }
 }

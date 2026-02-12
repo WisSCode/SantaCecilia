@@ -89,6 +89,20 @@ public class WorkTimesController : ControllerBase
         return NoContent();
     }
 
+    //DELETE api/workedTimes/{id}
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var workedTime = await _service.GetAsync(id);
+        
+        if (workedTime == null)
+            return NotFound();
+
+        await _service.DeleteAsync(id);
+        await LogAsync("delete", "workedTime", id, $"Registro eliminado para trabajador {workedTime.WorkerId}");
+        return NoContent();
+    }
+
     private string GetActorId()
     {
         if (Request.Headers.TryGetValue("X-User-Id", out var actorId))

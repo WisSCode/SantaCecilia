@@ -103,7 +103,7 @@ public partial class UsersPage : ContentPage
                     .Select(w => $"{w.Name} {w.LastName} - {w.Identification}")
                     .ToArray();
 
-                var selected = await DisplayActionSheet(
+                var selected = await DisplayActionSheetAsync(
                     $"Asignar trabajador a {user.Mail}",
                     "Cancelar",
                     null,
