@@ -5,10 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:frontend.Pages"
     Title="Santa Cecilia"
-    FlyoutBehavior="Disabled"
+    FlyoutBehavior="Flyout"
     FlyoutBackgroundColor="White"
     FlyoutWidth="240"
-    Shell.NavBarIsVisible="False">
+    Shell.NavBarIsVisible="True">
 
     <Shell.ItemTemplate>
         <DataTemplate>
