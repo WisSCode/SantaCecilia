@@ -9,11 +9,15 @@
         <VerticalStackLayout Padding="24" Spacing="20">
 
             <!-- HEADER -->
-            <Grid BackgroundColor="#9EC9B4" Padding="20" ColumnDefinitions="Auto,*,Auto">
+            <Grid BackgroundColor="#9EC9B4"
+                  Padding="20"
+                  ColumnDefinitions="Auto,*,Auto">
+
                 <Frame WidthRequest="42"
                        HeightRequest="42"
-                       CornerRadius="21"
+                       CornerRadius="0"
                        BackgroundColor="White"
+                       HasShadow="False"
                        VerticalOptions="Center">
                     <Label Text="J"
                            HorizontalOptions="Center"
@@ -38,92 +42,110 @@
                         BackgroundColor="Transparent"/>
             </Grid>
 
-            <!-- RESUMEN -->
-            <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+            <!-- HORAS DE ESTA SEMANA -->
+            <Frame BackgroundColor="White"
+                   BorderColor="#D6DAD7"
+                   CornerRadius="0"
+                   Padding="16"
+                   HasShadow="False">
 
-                <Frame BackgroundColor="#FAFAF7" BorderColor="#D6DAD7">
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Horas Esta Semana"
-                               FontSize="12"
-                               TextColor="#6B7280"/>
-                        <Label Text="42.5h"
-                               FontSize="22"
-                               FontAttributes="Bold"/>
-                    </VerticalStackLayout>
-                </Frame>
-
-                <Frame BackgroundColor="#9EC9B4">
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Pago Neto Estimado"
-                               FontSize="12"
-                               TextColor="White"/>
-                        <Label Text="B/.356.33"
-                               FontSize="22"
-                               FontAttributes="Bold"
-                               TextColor="White"/>
-                    </VerticalStackLayout>
-                </Frame>
-
-            </Grid>
-
-            <!-- ACTIVIDADES ASIGNADAS -->
-            <Frame BorderColor="#D6DAD7">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Actividades Asignadas"
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Horas de esta semana"
+                           FontSize="14"
                            FontAttributes="Bold"
-                           FontSize="14"/>
+                           TextColor="#2E3A34"/>
+                    <Label Text="42.5h"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="#2E3A34"/>
+                </VerticalStackLayout>
+            </Frame>
 
-                    <HorizontalStackLayout Spacing="8">
-                        <Frame BackgroundColor="#FAFAF7" Padding="8">
-                            <Label Text="Control de Sigatoka"/>
-                        </Frame>
-                        <Frame BackgroundColor="#FAFAF7" Padding="8">
-                            <Label Text="Deshoje"/>
-                        </Frame>
-                        <Frame BackgroundColor="#FAFAF7" Padding="8">
-                            <Label Text="Mantenimiento general"/>
-                        </Frame>
-                    </HorizontalStackLayout>
+            <!-- PAGO NETO -->
+            <Frame BackgroundColor="#9EC9B4"
+                   CornerRadius="0"
+                   Padding="16"
+                   HasShadow="False">
+
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Pago Neto Estimado"
+                           FontSize="14"
+                           TextColor="White"/>
+                    <Label Text="B/.356.33"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White"/>
                 </VerticalStackLayout>
             </Frame>
 
             <!-- DESGLOSE -->
-            <Frame BorderColor="#D6DAD7">
+            <Frame BorderColor="#D6DAD7"
+                   BackgroundColor="White"
+                   CornerRadius="0"
+                   Padding="16"
+                   HasShadow="False">
+
                 <VerticalStackLayout Spacing="10">
 
                     <Label Text="Desglose de Pago Semanal"
                            FontAttributes="Bold"
-                           FontSize="14"/>
+                           FontSize="14"
+                           TextColor="#2E3A34"/>
 
                     <Grid ColumnDefinitions="*,Auto">
-                        <Label Text="Devengado Bruto:"/>
-                        <Label Grid.Column="1" Text="B/.398.14"/>
+                        <Label Text="Devengado Bruto:"
+                               TextColor="#2E3A34"/>
+                        <Label Grid.Column="1"
+                               Text="B/.398.14"
+                               HorizontalTextAlignment="End"
+                               TextColor="#2E3A34"/>
                     </Grid>
 
-                    <Frame BackgroundColor="#FFF5F5" BorderColor="#FCA5A5">
+                    <Frame BackgroundColor="#FFF5F5"
+                           BorderColor="#FCA5A5"
+                           CornerRadius="0"
+                           Padding="12"
+                           HasShadow="False">
+
                         <VerticalStackLayout Spacing="6">
                             <Label Text="DESCUENTOS:"
                                    FontAttributes="Bold"
                                    TextColor="#DC2626"/>
 
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Seguro Social (9%)"/>
-                                <Label Grid.Column="1" Text="-B/.35.83" TextColor="Red"/>
+                                <Label Text="Seguro Social (9%)"
+                                       TextColor="#2E3A34"/>
+                                <Label Grid.Column="1"
+                                       Text="-B/.35.83"
+                                       HorizontalTextAlignment="End"
+                                       TextColor="#DC2626"/>
                             </Grid>
 
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Seguro Educativo (1.25%)"/>
-                                <Label Grid.Column="1" Text="-B/.4.98" TextColor="Red"/>
+                                <Label Text="Seguro Educativo (1.25%)"
+                                       TextColor="#2E3A34"/>
+                                <Label Grid.Column="1"
+                                       Text="-B/.4.98"
+                                       HorizontalTextAlignment="End"
+                                       TextColor="#DC2626"/>
                             </Grid>
 
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Sindicato"/>
-                                <Label Grid.Column="1" Text="-B/.1.00" TextColor="Red"/>
+                                <Label Text="Sindicato"
+                                       TextColor="#2E3A34"/>
+                                <Label Grid.Column="1"
+                                       Text="-B/.1.00"
+                                       HorizontalTextAlignment="End"
+                                       TextColor="#DC2626"/>
                             </Grid>
                         </VerticalStackLayout>
                     </Frame>
 
-                    <Frame BackgroundColor="#9EC9B4">
+                    <Frame BackgroundColor="#9EC9B4"
+                           CornerRadius="0"
+                           Padding="12"
+                           HasShadow="False">
+
                         <Grid ColumnDefinitions="*,Auto">
                             <Label Text="TOTAL A RECIBIR:"
                                    FontAttributes="Bold"
@@ -131,6 +153,7 @@
                             <Label Grid.Column="1"
                                    Text="B/.356.33"
                                    FontAttributes="Bold"
+                                   HorizontalTextAlignment="End"
                                    TextColor="White"/>
                         </Grid>
                     </Frame>
@@ -139,33 +162,88 @@
             </Frame>
 
             <!-- ACTIVIDADES RECIENTES -->
-            <Frame BorderColor="#D6DAD7">
+            <Frame BorderColor="#D6DAD7"
+                   BackgroundColor="White"
+                   CornerRadius="0"
+                   Padding="16"
+                   HasShadow="False">
+
                 <VerticalStackLayout Spacing="12">
 
                     <Label Text="Actividades Recientes"
                            FontAttributes="Bold"
-                           FontSize="14"/>
+                           FontSize="14"
+                           TextColor="#2E3A34"/>
 
                     <!-- HEADER TABLA -->
-                    <Grid ColumnDefinitions="Auto,2*,*,*,*,*">
-                        <Label Text="FECHA" FontSize="11" TextColor="#6B7280"/>
-                        <Label Grid.Column="1" Text="ACTIVIDAD" FontSize="11" TextColor="#6B7280"/>
-                        <Label Grid.Column="2" Text="LOTE" FontSize="11" TextColor="#6B7280"/>
-                        <Label Grid.Column="3" Text="HORAS" FontSize="11" TextColor="#6B7280"/>
-                        <Label Grid.Column="4" Text="TARIFA" FontSize="11" TextColor="#6B7280"/>
-                        <Label Grid.Column="5" Text="MONTO" FontSize="11" TextColor="#6B7280"/>
+                    <Grid ColumnDefinitions="70,3*,90,70,90,90"
+                          Padding="0,0,0,4">
+
+                        <Label Text="FECHA"
+                               FontSize="11"
+                               TextColor="#6B7280"/>
+
+                        <Label Grid.Column="1"
+                               Text="ACTIVIDAD"
+                               FontSize="11"
+                               TextColor="#6B7280"/>
+
+                        <Label Grid.Column="2"
+                               Text="LOTE"
+                               FontSize="11"
+                               TextColor="#6B7280"/>
+
+                        <Label Grid.Column="3"
+                               Text="HORAS"
+                               FontSize="11"
+                               HorizontalTextAlignment="End"
+                               TextColor="#6B7280"/>
+
+                        <Label Grid.Column="4"
+                               Text="TARIFA"
+                               FontSize="11"
+                               HorizontalTextAlignment="End"
+                               TextColor="#6B7280"/>
+
+                        <Label Grid.Column="5"
+                               Text="MONTO"
+                               FontSize="11"
+                               HorizontalTextAlignment="End"
+                               TextColor="#6B7280"/>
                     </Grid>
 
                     <CollectionView ItemsSource="{Binding Actividades}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Grid ColumnDefinitions="Auto,2*,*,*,*,*" Padding="8">
-                                    <Label Text="{Binding Fecha}" TextColor="#9CA3AF"/>
-                                    <Label Grid.Column="1" Text="{Binding Actividad}" FontAttributes="Bold"/>
-                                    <Label Grid.Column="2" Text="{Binding Lote}" TextColor="#6B7280"/>
-                                    <Label Grid.Column="3" Text="{Binding Horas}"/>
-                                    <Label Grid.Column="4" Text="{Binding Tarifa}" TextColor="#9EC9B4"/>
-                                    <Label Grid.Column="5" Text="{Binding Monto}" TextColor="#9EC9B4"/>
+                                <Grid ColumnDefinitions="70,3*,90,70,90,90"
+                                      Padding="0,6">
+
+                                    <Label Text="{Binding Fecha}"
+                                           TextColor="#9CA3AF"/>
+
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Actividad}"
+                                           FontAttributes="Bold"
+                                           TextColor="#2E3A34"/>
+
+                                    <Label Grid.Column="2"
+                                           Text="{Binding Lote}"
+                                           TextColor="#6B7280"/>
+
+                                    <Label Grid.Column="3"
+                                           Text="{Binding Horas}"
+                                           HorizontalTextAlignment="End"
+                                           TextColor="#2E3A34"/>
+
+                                    <Label Grid.Column="4"
+                                           Text="{Binding Tarifa}"
+                                           HorizontalTextAlignment="End"
+                                           TextColor="#9EC9B4"/>
+
+                                    <Label Grid.Column="5"
+                                           Text="{Binding Monto}"
+                                           HorizontalTextAlignment="End"
+                                           TextColor="#9EC9B4"/>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
