@@ -6,13 +6,15 @@
     BackgroundColor="#F6F5EF">
 
     <ScrollView>
-              <VerticalStackLayout Padding="{OnIdiom Phone='16,14', Desktop='24'}"
-                                                  Spacing="{OnIdiom Phone=16, Desktop=20}">
+                            <VerticalStackLayout Padding="{OnIdiom Phone='16,14', Desktop='24'}"
+                                                                                                   Spacing="{OnIdiom Phone=16, Desktop=20}">
 
             <!-- HEADER -->
-              <Grid BackgroundColor="#9EC9B4"
-                     Padding="{OnIdiom Phone=16, Desktop=20}"
-                  ColumnDefinitions="Auto,*,Auto">
+                                          <Grid BackgroundColor="#9EC9B4"
+                                                               Padding="{OnIdiom Phone=16, Desktop=20}"
+                                                               ColumnDefinitions="{OnIdiom Phone='Auto,*', Desktop='Auto,*,Auto'}"
+                                                               RowDefinitions="{OnIdiom Phone='Auto,Auto', Desktop='Auto'}"
+                                                               RowSpacing="{OnIdiom Phone=8, Desktop=0}">
 
                 <Frame WidthRequest="42"
                        HeightRequest="42"
@@ -40,12 +42,15 @@
                            TextColor="#F2F7F4"/>
                 </VerticalStackLayout>
 
-                <Button Grid.Column="2"
+              <Button Grid.Column="{OnIdiom Phone=0, Desktop=2}"
+                     Grid.Row="{OnIdiom Phone=1, Desktop=0}"
+                     Grid.ColumnSpan="{OnIdiom Phone=2, Desktop=1}"
                         Text="Cerrar Sesión"
                         TextColor="White"
                         BackgroundColor="Transparent"
                         FontSize="{OnIdiom Phone=11, Desktop=12}"
                         Padding="{OnIdiom Phone='8,4', Desktop='12,6'}"
+                     HorizontalOptions="{OnIdiom Phone=Start, Desktop=End}"
                         Clicked="OnLogoutClicked"/>
             </Grid>
 
@@ -58,12 +63,12 @@
 
                 <VerticalStackLayout Spacing="6">
                     <Label Text="Horas de esta semana"
-                           FontSize="14"
+                           FontSize="{OnIdiom Phone=13, Desktop=14}"
                            FontAttributes="Bold"
                            TextColor="#2E3A34"/>
                     <Label x:Name="WeeklyHoursLabel"
                            Text="0h"
-                           FontSize="24"
+                           FontSize="{OnIdiom Phone=22, Desktop=24}"
                            FontAttributes="Bold"
                            TextColor="#2E3A34"/>
                 </VerticalStackLayout>
@@ -77,11 +82,11 @@
 
                 <VerticalStackLayout Spacing="6">
                     <Label Text="Pago Neto Estimado"
-                           FontSize="14"
+                           FontSize="{OnIdiom Phone=13, Desktop=14}"
                            TextColor="White"/>
                     <Label x:Name="NetPayLabel"
                            Text="B/.0.00"
-                           FontSize="24"
+                           FontSize="{OnIdiom Phone=22, Desktop=24}"
                            FontAttributes="Bold"
                            TextColor="White"/>
                 </VerticalStackLayout>
