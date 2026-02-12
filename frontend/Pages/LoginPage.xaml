@@ -6,9 +6,12 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     NavigationPage.HasNavigationBar="False"
     BackgroundColor="#F7F7F3">
 
-    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+    <Grid VerticalOptions="Center"
+          HorizontalOptions="Fill"
+          Padding="{OnIdiom Phone='12,16', Desktop='0'}">
         <Border
-            WidthRequest="360"
+            HorizontalOptions="Fill"
+            MaximumWidthRequest="360"
             Stroke="#D6DAD7"
             StrokeThickness="1"
             BackgroundColor="White">
@@ -20,36 +23,36 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
             <VerticalStackLayout Spacing="0">
 
                 <!-- ENCABEZADO -->
-                <Grid BackgroundColor="#9EC9B4" Padding="24">
+                <Grid BackgroundColor="#9EC9B4" Padding="{OnIdiom Phone=16, Desktop=24}">
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
 
                         <Image
                             Source="logo_santa_cecilia.png"
-                            HeightRequest="64"
-                            WidthRequest="64"
+                            HeightRequest="{OnIdiom Phone=52, Desktop=64}"
+                            WidthRequest="{OnIdiom Phone=52, Desktop=64}"
                             Aspect="AspectFit" />
 
                         <Label
                             Text="FINCA BANANERA SANTA CECILIA"
-                            FontSize="14"
+                            FontSize="{OnIdiom Phone=13, Desktop=14}"
                             FontAttributes="Bold"
                             TextColor="White"
                             HorizontalTextAlignment="Center" />
 
                         <Label
                             Text="Sistema de Gestión de Nómina"
-                            FontSize="11"
+                            FontSize="{OnIdiom Phone=10, Desktop=11}"
                             TextColor="#F2F7F4"
                             HorizontalTextAlignment="Center" />
                     </VerticalStackLayout>
                 </Grid>
 
                 <!-- FORMULARIO -->
-                <VerticalStackLayout Padding="24" Spacing="16">
+                <VerticalStackLayout Padding="{OnIdiom Phone=16, Desktop=24}" Spacing="{OnIdiom Phone=12, Desktop=16}">
 
                     <Label
                         Text="Iniciar Sesión"
-                        FontSize="16"
+                        FontSize="{OnIdiom Phone=15, Desktop=16}"
                         FontAttributes="Bold"
                         TextColor="#2E3A34" />
 
@@ -57,7 +60,7 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     <VerticalStackLayout Spacing="6">
                         <Label
                             Text="Correo"
-                            FontSize="12"
+                            FontSize="{OnIdiom Phone=11, Desktop=12}"
                             FontAttributes="Bold"
                             TextColor="#2E3A34" />
 
@@ -65,7 +68,7 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                             Placeholder="Ingrese su correo"
                             Keyboard="Email"
                             Text="{Binding Email}"
-                            FontSize="13"
+                            FontSize="{OnIdiom Phone=12, Desktop=13}"
                             TextColor="#2E3A34"
                             BackgroundColor="White" />
                     </VerticalStackLayout>
@@ -74,7 +77,7 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     <VerticalStackLayout Spacing="6">
                         <Label
                             Text="Contraseña"
-                            FontSize="12"
+                            FontSize="{OnIdiom Phone=11, Desktop=12}"
                             FontAttributes="Bold"
                             TextColor="#2E3A34" />
 
@@ -86,7 +89,7 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                                 Placeholder="Ingrese su contraseña"
                                 IsPassword="True"
                                 Text="{Binding Password}"
-                                FontSize="13"
+                                FontSize="{OnIdiom Phone=12, Desktop=13}"
                                 TextColor="#2E3A34"
                                 BackgroundColor="White"
                                 VerticalOptions="Center" />
@@ -95,11 +98,11 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                                 x:Name="PasswordToggleButton"
                                 Grid.Column="1"
                                 Text="Mostrar"
-                                FontSize="12"
+                                FontSize="{OnIdiom Phone=11, Desktop=12}"
                                 FontAttributes="Bold"
                                 TextColor="#9EC9B4"
                                 HeightRequest="30"
-                                MinimumWidthRequest="70"
+                                MinimumWidthRequest="{OnIdiom Phone=64, Desktop=70}"
                                 Margin="8,0,0,0"
                                 BackgroundColor="Transparent"
                                 Padding="0"
@@ -109,7 +112,7 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 
                         <Label
                             Text="¿Olvidaste tu contraseña?"
-                            FontSize="12"
+                            FontSize="{OnIdiom Phone=11, Desktop=12}"
                             TextColor="#9EC9B4"
                             HorizontalTextAlignment="Center">           
                             <Label.GestureRecognizers>
@@ -122,7 +125,8 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     <!-- BOTÓN INGRESAR -->
                     <Button
                         Text="Iniciar Sesión"
-                        HeightRequest="44"
+                        HeightRequest="{OnIdiom Phone=40, Desktop=44}"
+                        FontSize="{OnIdiom Phone=12, Desktop=13}"
                         BackgroundColor="#9EC9B4"
                         TextColor="White"
                         FontAttributes="Bold"
@@ -133,12 +137,12 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     <HorizontalStackLayout HorizontalOptions="Center" Spacing="4">
                         <Label
                             Text="¿Eres nuevo?"
-                            FontSize="12"
+                            FontSize="{OnIdiom Phone=11, Desktop=12}"
                             TextColor="#2E3A34" />
 
                         <Label
                             Text="Registrate"
-                            FontSize="12"
+                            FontSize="{OnIdiom Phone=11, Desktop=12}"
                             FontAttributes="Bold"
                             TextColor="#9EC9B4">
                             <Label.GestureRecognizers>
