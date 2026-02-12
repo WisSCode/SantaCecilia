@@ -25,6 +25,8 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("edituser", typeof(EditUserPage));
 
         ConfigureShellForAuthState(false);
+
+        UpdateNextPaymentDate();
     }
 
     public void ConfigureShellForAuthState(bool isLoggedIn)
@@ -42,5 +44,35 @@ public partial class AppShell : Shell
         await _sessionService.LogoutAsync();
         if (Application.Current is App app)
             await app.GoToLoginAsync();
+    }
+
+    private async void OnEditProfileClicked(object sender, EventArgs e)
+    {
+        await DisplayAlertAsync("Perfil", "Funcionalidad en desarrollo", "OK");
+    }
+
+    private void UpdateNextPaymentDate()
+    {
+        var now = DateTime.Now;
+
+        // Calculate next Saturday
+        int daysUntilSaturday = ((int)DayOfWeek.Saturday - (int)now.DayOfWeek + 7) % 7;
+        var nextSaturday = now.Date.AddDays(daysUntilSaturday);
+
+        // Set payment time at 3:00 PM
+        var paymentTime = nextSaturday.AddHours(15);
+
+        // If today is Saturday and it's already past 3 PM, move to next Saturday
+        if (now >= paymentTime)
+        {
+            nextSaturday = nextSaturday.AddDays(7);
+            paymentTime = nextSaturday.AddHours(15);
+        }
+
+        // Format date in Spanish locale
+        var culture = new System.Globalization.CultureInfo("es-ES");
+        var formattedDate = paymentTime.ToString("ddd dd 'de' MMM", culture);
+
+        NextPaymentLabel.Text = char.ToUpper(formattedDate[0]) + formattedDate.Substring(1);
     }
 }
