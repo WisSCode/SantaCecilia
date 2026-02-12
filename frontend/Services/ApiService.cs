@@ -45,6 +45,11 @@ public class ApiService
         await _http.PutAsJsonAsync($"api/batches/{id}", dto);
     }
 
+    public async Task DeleteBatchAsync(string id)
+    {
+        await _http.DeleteAsync($"api/batches/{id}");
+    }
+
     // Work Types
     public async Task<List<WorkTypeDto>> GetWorkTypesAsync()
     {
@@ -62,6 +67,11 @@ public class ApiService
         await _http.PutAsJsonAsync($"api/workTypes/{id}", dto);
     }
 
+    public async Task DeleteWorkTypeAsync(string id)
+    {
+        await _http.DeleteAsync($"api/workTypes/{id}");
+    }
+
     // Worked Times
     public async Task<List<WorkedTimeDto>> GetWorkedTimesAsync()
     {
@@ -72,6 +82,16 @@ public class ApiService
     public async Task CreateWorkedTimeAsync(string id, WorkedTimeDto dto)
     {
         await _http.PostAsJsonAsync($"api/workTimes/{id}", dto);
+    }
+
+    public async Task UpdateWorkedTimeAsync(string id, WorkedTimeDto dto)
+    {
+        await _http.PutAsJsonAsync($"api/workTimes/{id}", dto);
+    }
+
+    public async Task DeleteWorkedTimeAsync(string id)
+    {
+        await _http.DeleteAsync($"api/workTimes/{id}");
     }
 
     // Payrolls
@@ -91,6 +111,20 @@ public class ApiService
         await _http.PutAsJsonAsync($"api/payrolls/{id}", dto);
     }
 
+    public async Task<int> ProcessPayrollAsync(DateTime weekStart)
+    {
+        var payload = new PayrollProcessRequest
+        {
+            WeekStart = weekStart.Date
+        };
+
+        var response = await _http.PostAsJsonAsync("api/payrolls/process", payload);
+        response.EnsureSuccessStatusCode();
+
+        var result = await response.Content.ReadFromJsonAsync<PayrollProcessResponse>();
+        return result?.Count ?? 0;
+    }
+
     // Users
     public async Task<List<UserDto>> GetUsersAsync()
     {
@@ -102,4 +136,21 @@ public class ApiService
     {
         await _http.PutAsync($"api/users/{id}/validate", null);
     }
+
+    // Audit Logs
+    public async Task<List<AuditLogDto>> GetAuditLogsAsync(int limit = 200)
+    {
+        var result = await _http.GetFromJsonAsync<List<AuditLogDto>>($"api/auditLogs?limit={limit}");
+        return result ?? [];
+    }
+}
+
+public class PayrollProcessRequest
+{
+    public DateTime WeekStart { get; set; }
+}
+
+public class PayrollProcessResponse
+{
+    public int Count { get; set; }
 }

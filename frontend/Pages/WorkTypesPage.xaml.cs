@@ -105,4 +105,27 @@ public partial class WorkTypesPage : ContentPage
             await Shell.Current.GoToAsync("/editworktype", parameters);
         }
     }
+
+    private async void OnDeleteClicked(object sender, EventArgs e)
+    {
+        if (sender is Button btn && btn.CommandParameter is WorkTypeDto workType)
+        {
+            bool confirm = await DisplayAlertAsync("Confirmar eliminacion",
+                $"¿Está seguro que desea eliminar el tipo de trabajo '{workType.Name}'?\n\nEsta acción no se puede deshacer.",
+                "Eliminar", "Cancelar");
+
+            if (!confirm) return;
+
+            try
+            {
+                await _api.DeleteWorkTypeAsync(workType.Id);
+                await DisplayAlertAsync("Eliminado", $"El tipo de trabajo '{workType.Name}' fue eliminado exitosamente.", "OK");
+                await LoadWorkTypesAsync();
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlertAsync("Error", $"No se pudo eliminar el tipo de trabajo: {ex.Message}", "OK");
+            }
+        }
+    }
 }

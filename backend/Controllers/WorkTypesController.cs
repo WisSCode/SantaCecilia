@@ -2,6 +2,7 @@
 using backend.DTOs;
 using backend.Models;
 using backend.Services;
+using Google.Cloud.Firestore;
 namespace backend.Controllers;
 
 [Route("api/workTypes")]
@@ -9,10 +10,12 @@ namespace backend.Controllers;
 public class WorkTypesController : ControllerBase
 {
     private readonly WorkTypeService _service;
+    private readonly AuditLogService _audit;
 
-    public WorkTypesController(WorkTypeService service)
+    public WorkTypesController(WorkTypeService service, AuditLogService audit)
     {
         _service = service;
+        _audit = audit;
     }
     //POST api/WorkTypes/{id}
     [HttpPost("{id}")]
@@ -25,6 +28,7 @@ public class WorkTypesController : ControllerBase
         };
 
         await _service.CreateAsync(id, workTypes);
+        await LogAsync("create", "workType", id, $"Creado tipo de trabajo {dto.Name}");
         return CreatedAtAction(nameof(Get), new { id }, dto);
     }
     //GET api/WorkTypes/{id}
@@ -69,6 +73,41 @@ public class WorkTypesController : ControllerBase
         workTypes.DefaultRate = dto.DefaultRate;
 
         await _service.UpdateAsync(id, workTypes);
+        await LogAsync("update", "workType", id, $"Actualizado tipo de trabajo {dto.Name}");
         return NoContent();
+    }
+
+    // DELETE api/workTypes/{id}
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var workTypes = await _service.GetAsync(id);
+        if (workTypes == null)
+            return NotFound();
+
+        await _service.DeleteAsync(id);
+        await LogAsync("delete", "workType", id, $"Eliminado tipo de trabajo {workTypes.Name}");
+        return NoContent();
+    }
+
+    private string GetActorId()
+    {
+        if (Request.Headers.TryGetValue("X-User-Id", out var actorId))
+            return actorId.ToString();
+
+        return "system";
+    }
+
+    private Task LogAsync(string action, string entity, string entityId, string message)
+    {
+        return _audit.CreateAsync(new AuditLog
+        {
+            Action = action,
+            Entity = entity,
+            EntityId = entityId,
+            ActorId = GetActorId(),
+            Message = message,
+            CreatedAt = Timestamp.GetCurrentTimestamp()
+        });
     }
 }

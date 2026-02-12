@@ -12,11 +12,13 @@ namespace backend.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly UserService _userService;
+    private readonly AuditLogService _audit;
     private readonly ILogger<AuthController> _logger;
 
-    public AuthController(UserService userService, ILogger<AuthController> logger)
+    public AuthController(UserService userService, AuditLogService audit, ILogger<AuthController> logger)
     {
         _userService = userService;
+        _audit = audit;
         _logger = logger;
     }
 
@@ -51,6 +53,7 @@ public class AuthController : ControllerBase
             };
 
             await _userService.CreateAsync(userRecord.Uid, user);
+            await LogAsync("register", "user", userRecord.Uid, $"Registro de usuario {dto.Email}");
 
             _logger.LogInformation($"Usuario registrado exitosamente: {dto.Email}");
 
@@ -124,6 +127,7 @@ public class AuthController : ControllerBase
             }
 
             _logger.LogInformation($"Login exitoso: {user.Email}");
+            await LogAsync("login", "user", uid, $"Login exitoso {user.Email}");
 
             //Login exitoso
             return Ok(new
@@ -143,5 +147,18 @@ public class AuthController : ControllerBase
             _logger.LogError($"Error inesperado en login: {ex.Message}");
             return StatusCode(500, new { Message = "Error interno del servidor" });
         }
+    }
+
+    private Task LogAsync(string action, string entity, string entityId, string message)
+    {
+        return _audit.CreateAsync(new AuditLog
+        {
+            Action = action,
+            Entity = entity,
+            EntityId = entityId,
+            ActorId = entityId,
+            Message = message,
+            CreatedAt = Timestamp.GetCurrentTimestamp()
+        });
     }
 }

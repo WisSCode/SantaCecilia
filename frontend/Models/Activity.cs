@@ -2,6 +2,7 @@ namespace frontend.Models;
 
 public class TimeEntry
 {
+    public string Id { get; set; } = string.Empty;
     public string WorkerId { get; set; } = string.Empty;
     public string WorkerName { get; set; } = string.Empty;
     public string ActivityName { get; set; } = string.Empty;

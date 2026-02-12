@@ -50,6 +50,8 @@ public class Payroll
         _ => "Desconocido"
     };
 
+    public bool IsPending => Status == PayrollStatus.Pending;
+
     public Microsoft.Maui.Graphics.Color StatusBgColor => Status switch
     {
         PayrollStatus.Pending => Microsoft.Maui.Graphics.Color.FromArgb("#FFF4E1"),

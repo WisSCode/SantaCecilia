@@ -9,7 +9,7 @@ builder.WebHost.UseUrls("http://0.0.0.0:5191");
 
 
 //Cargar credenciales de Firebase
-var credential = GoogleCredential.FromFile("firebase-key.json");
+    var credential = GoogleCredential.FromFile("firebase-key.json");
 
 //Inicializar Firebase Admin
 FirebaseApp.Create(new AppOptions
@@ -54,6 +54,7 @@ builder.Services.AddScoped<WorkTypeService>();
 builder.Services.AddScoped<BatchService>();
 builder.Services.AddScoped<WorkedTimeService>();
 builder.Services.AddScoped<PayrollService>();
+builder.Services.AddScoped<AuditLogService>();
 
 
 

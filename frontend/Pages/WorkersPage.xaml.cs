@@ -106,6 +106,17 @@ public partial class WorkersPage : ContentPage
         await Shell.Current.GoToAsync("newworker");
     }
 
+    private async void OnEditWorkerTapped(object sender, TappedEventArgs e)
+    {
+        if (e.Parameter is Worker worker)
+        {
+            await Shell.Current.GoToAsync("editworker", new Dictionary<string, object>
+            {
+                { "worker", worker }
+            });
+        }
+    }
+
     private async void OnToggleActiveTapped(object sender, TappedEventArgs e)
     {
         if (e.Parameter is Worker worker)

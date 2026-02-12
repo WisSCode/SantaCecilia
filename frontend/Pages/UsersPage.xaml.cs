@@ -86,58 +86,12 @@ public partial class UsersPage : ContentPage
     {
         if (sender is Button btn && btn.CommandParameter is UserItem user)
         {
-            try
+            var parameters = new Dictionary<string, object>
             {
-                var allWorkers = await _api.GetWorkersAsync();
-                var unassigned = allWorkers
-                    .Where(w => string.IsNullOrEmpty(w.UserId))
-                    .ToList();
-
-                if (unassigned.Count == 0)
-                {
-                    await DisplayAlertAsync("Sin trabajadores", "No hay trabajadores disponibles sin usuario asignado.", "OK");
-                    return;
-                }
-
-                var options = unassigned
-                    .Select(w => $"{w.Name} {w.LastName} - {w.Identification}")
-                    .ToArray();
-
-                var selected = await DisplayActionSheet(
-                    $"Asignar trabajador a {user.Mail}",
-                    "Cancelar",
-                    null,
-                    options);
-
-                if (selected is null || selected == "Cancelar") return;
-
-                var selectedIndex = Array.IndexOf(options, selected);
-                if (selectedIndex < 0) return;
-
-                var worker = unassigned[selectedIndex];
-
-                var workerDto = new WorkerDto
-                {
-                    Id = worker.Id,
-                    UserId = user.Id,
-                    Name = worker.Name,
-                    LastName = worker.LastName,
-                    Identification = worker.Identification,
-                    Active = worker.Active
-                };
-                await _api.UpdateWorkerAsync(worker.Id, workerDto);
-
-                await _api.ValidateUserAsync(user.Id);
-
-                await LoadUsersAsync();
-
-                await DisplayAlertAsync("Usuario Validado",
-                    $"{user.Mail} fue validado y asignado a {worker.Name} {worker.LastName}.", "OK");
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlertAsync("Error", $"No se pudo validar: {ex.Message}", "OK");
-            }
+                { "userId", user.Id },
+                { "userEmail", user.Mail }
+            };
+            await Shell.Current.GoToAsync("/validateuser", parameters);
         }
     }
 

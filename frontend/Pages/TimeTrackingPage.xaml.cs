@@ -49,6 +49,7 @@ public partial class TimeTrackingPage : ContentPage
                 .OrderByDescending(wt => wt.Date)
                 .Select(wt => new TimeEntry
                 {
+                    Id = wt.Id,
                     WorkerId = wt.WorkerId,
                     WorkerName = workerMap.GetValueOrDefault(wt.WorkerId, wt.WorkerId),
                     ActivityName = workTypeMap.GetValueOrDefault(wt.WorkTypeId, wt.WorkTypeId),
@@ -74,10 +75,22 @@ public partial class TimeTrackingPage : ContentPage
         await Shell.Current.GoToAsync("/newtimeentry");
     }
 
+    private async void OnEditEntryTapped(object sender, TappedEventArgs e)
+    {
+        if (e.Parameter is TimeEntry entry && !string.IsNullOrEmpty(entry.Id))
+        {
+            await Shell.Current.GoToAsync("edittimeentry", new Dictionary<string, object>
+            {
+                { "entryId", entry.Id }
+            });
+        }
+    }
+
     private void OnNewEntrySaved(WorkedTimeDto dto)
     {
         var entry = new TimeEntry
         {
+            Id = dto.Id,
             WorkerId = dto.WorkerId,
             WorkerName = workerMap.GetValueOrDefault(dto.WorkerId, dto.WorkerId),
             ActivityName = workTypeMap.GetValueOrDefault(dto.WorkTypeId, dto.WorkTypeId),
