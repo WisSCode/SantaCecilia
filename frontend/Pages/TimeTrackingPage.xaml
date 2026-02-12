@@ -7,44 +7,52 @@
 
     <Grid RowDefinitions="*" ColumnDefinitions="*" Background="{StaticResource AppBackgroundBrush}">
         <ScrollView Grid.Row="0" Grid.Column="0">
-            <VerticalStackLayout Padding="20" Spacing="16">
+            <VerticalStackLayout Padding="{OnIdiom Phone=12, Desktop=20}" Spacing="{OnIdiom Phone=12, Desktop=16}">
 
                 <!-- Header con boton -->
-                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,Auto'}"
+                      RowDefinitions="{OnIdiom Phone='Auto,Auto', Desktop='Auto'}"
+                      RowSpacing="{OnIdiom Phone=10, Desktop=0}">
                     <VerticalStackLayout Spacing="2" VerticalOptions="Center">
                         <Label Text="Registro Diario"
-                                   FontSize="20"
+                               FontSize="{OnIdiom Phone=18, Desktop=20}"
                                    FontAttributes="Bold"
                                    TextColor="{StaticResource TextPrimary}" />
-                            <Label Text="Control de horas por actividad y lote"
-                                   FontSize="11"
-                            TextColor="{StaticResource TextSecondary}" />
+                        <Label Text="Control de horas por actividad y lote"
+                               FontSize="{OnIdiom Phone=10, Desktop=11}"
+                               TextColor="{StaticResource TextSecondary}" />
                     </VerticalStackLayout>
-                    <Button Grid.Column="1"
+                    <Button Grid.Column="{OnIdiom Phone=0, Desktop=1}"
+                            Grid.Row="{OnIdiom Phone=1, Desktop=0}"
                             Text="+ Nueva Actividad"
                             Clicked="OnAddClicked"
                             BackgroundColor="#9EC9B4"
                             TextColor="White"
                             FontAttributes="Bold"
-                            FontSize="12"
-                            HeightRequest="40"
-                            Padding="16,0"
+                            FontSize="{OnIdiom Phone=11, Desktop=12}"
+                            HeightRequest="{OnIdiom Phone=36, Desktop=40}"
+                            Padding="{OnIdiom Phone='12,0', Desktop='16,0'}"
+                            HorizontalOptions="{OnIdiom Phone=Start, Desktop=End}"
                             VerticalOptions="Center" />
                 </Grid>
 
                 <!-- 3 Stat Cards -->
-                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
+                <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,*,*'}"
+                      RowDefinitions="{OnIdiom Phone='Auto,Auto,Auto', Desktop='Auto'}"
+                      ColumnSpacing="12"
+                      RowSpacing="{OnIdiom Phone=10, Desktop=0}">
 
                     <!-- Hoy -->
                     <Border Grid.Column="0"
+                            Grid.Row="{OnIdiom Phone=0, Desktop=0}"
                             Stroke="#D6DAD7" StrokeThickness="1"
-                            BackgroundColor="White" Padding="14">
+                            BackgroundColor="White" Padding="{OnIdiom Phone=12, Desktop=14}">
                         <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="6">
                             <Label Text="Hoy"
-                                       FontSize="12"
-                                       FontAttributes="Bold"
-                                       TextColor="{StaticResource TextSecondary}" />
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource TextSecondary}" />
                             <Label x:Name="TodayCount"
                                    Text="0"
                                    FontSize="24"
@@ -57,15 +65,16 @@
                     </Border>
 
                     <!-- Total Hoy -->
-                    <Border Grid.Column="1"
+                    <Border Grid.Column="{OnIdiom Phone=0, Desktop=1}"
+                            Grid.Row="{OnIdiom Phone=1, Desktop=0}"
                             Stroke="#D6DAD7" StrokeThickness="1"
-                            BackgroundColor="White" Padding="14">
+                            BackgroundColor="White" Padding="{OnIdiom Phone=12, Desktop=14}">
                         <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="6">
                             <Label Text="Total Hoy"
-                                       FontSize="12"
-                                       FontAttributes="Bold"
-                                       TextColor="{StaticResource TextSecondary}" />
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource TextSecondary}" />
                             <Label x:Name="TotalHours"
                                    Text="0h"
                                    FontSize="24"
@@ -78,15 +87,16 @@
                     </Border>
 
                     <!-- Esta Semana -->
-                    <Border Grid.Column="2"
+                    <Border Grid.Column="{OnIdiom Phone=0, Desktop=2}"
+                            Grid.Row="{OnIdiom Phone=2, Desktop=0}"
                             Stroke="Transparent" StrokeThickness="0"
-                            BackgroundColor="#9EC9B4" Padding="14">
+                            BackgroundColor="#9EC9B4" Padding="{OnIdiom Phone=12, Desktop=14}">
                         <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="6">
                             <Label Text="Esta Semana"
-                                       FontSize="12"
-                                       FontAttributes="Bold"
-                                       TextColor="White" />
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="White" />
                             <Label x:Name="WeekCount"
                                    Text="0"
                                    FontSize="24"
@@ -129,105 +139,109 @@
                                    TextChanged="OnSearchChanged" />
                         </Border>
 
-                        <!-- Encabezados de columna -->
-                        <Grid Padding="16,10"
-                              ColumnDefinitions="1.1*,1.8*,2.5*,1.5*,1.2*,1.2*,0.8*"
-                              BackgroundColor="#FAFAF7">
-                            <Label Text="FECHA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                            <Label Grid.Column="1" Text="TRABAJADOR" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                            <Label Grid.Column="2" Text="ACTIVIDAD" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                            <Label Grid.Column="3" Text="LOTE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                            <Label Grid.Column="4" Text="TARIFA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                            <Label Grid.Column="5" Text="TIEMPO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                            <Label Grid.Column="6" Text="ACCION" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                        </Grid>
+                        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                            <VerticalStackLayout Spacing="0">
+                                <!-- Encabezados de columna -->
+                                <Grid Padding="16,10"
+                                      ColumnDefinitions="{OnIdiom Phone='90,170,180,120,90,90,70', Desktop='1.1*,1.8*,2.5*,1.5*,1.2*,1.2*,0.8*'}"
+                                      BackgroundColor="#FAFAF7">
+                                    <Label Text="FECHA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="1" Text="TRABAJADOR" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="2" Text="ACTIVIDAD" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="3" Text="LOTE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="4" Text="TARIFA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="5" Text="TIEMPO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="6" Text="ACCION" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                </Grid>
 
-                        <!-- Filas -->
-                        <CollectionView x:Name="EntriesView" SelectionMode="None">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1"
-                                            Padding="16,10" BackgroundColor="White">
-                                        <Grid ColumnDefinitions="1.1*,1.8*,2.5*,1.5*,1.2*,1.2*,0.8*"
-                                              ColumnSpacing="6">
+                                <!-- Filas -->
+                                <CollectionView x:Name="EntriesView" SelectionMode="None">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1"
+                                                    Padding="16,10" BackgroundColor="White">
+                                                <Grid ColumnDefinitions="{OnIdiom Phone='90,170,180,120,90,90,70', Desktop='1.1*,1.8*,2.5*,1.5*,1.2*,1.2*,0.8*'}"
+                                                      ColumnSpacing="6">
 
-                                            <!-- FECHA -->
-                                            <Label Text="{Binding DateShort}"
-                                                   FontSize="11"
-                                                   TextColor="{StaticResource TextSecondary}"
-                                                   VerticalOptions="Center" />
-
-                                            <!-- TRABAJADOR con inicial -->
-                                            <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
-                                                <Border BackgroundColor="{Binding InitialColor}"
-                                                        WidthRequest="28" HeightRequest="28"
-                                                        StrokeThickness="0"
-                                                        StrokeShape="RoundRectangle 14">
-                                                    <Label Text="{Binding Initial}"
-                                                           FontSize="12"
-                                                           FontAttributes="Bold"
-                                                           TextColor="White"
-                                                           HorizontalOptions="Center"
-                                                           VerticalOptions="Center" />
-                                                </Border>
-                                                <Label Text="{Binding WorkerName}"
+                                                   <!-- FECHA -->
+                                                   <Label Text="{Binding DateShort}"
                                                        FontSize="11"
-                                                       FontAttributes="Bold"
+                                                       TextColor="{StaticResource TextSecondary}"
+                                                       VerticalOptions="Center" />
+
+                                                   <!-- TRABAJADOR con inicial -->
+                                                   <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                                                    <Border BackgroundColor="{Binding InitialColor}"
+                                                         WidthRequest="28" HeightRequest="28"
+                                                         StrokeThickness="0"
+                                                         StrokeShape="RoundRectangle 14">
+                                                        <Label Text="{Binding Initial}"
+                                                            FontSize="12"
+                                                            FontAttributes="Bold"
+                                                            TextColor="White"
+                                                            HorizontalOptions="Center"
+                                                            VerticalOptions="Center" />
+                                                    </Border>
+                                                    <Label Text="{Binding WorkerName}"
+                                                        FontSize="11"
+                                                        FontAttributes="Bold"
+                                                        TextColor="{StaticResource TextPrimary}"
+                                                        VerticalOptions="Center"
+                                                        LineBreakMode="TailTruncation" />
+                                                   </HorizontalStackLayout>
+
+                                                   <!-- ACTIVIDAD -->
+                                                   <Label Grid.Column="2"
+                                                       Text="{Binding ActivityName}"
+                                                       FontSize="11"
                                                        TextColor="{StaticResource TextPrimary}"
                                                        VerticalOptions="Center"
                                                        LineBreakMode="TailTruncation" />
-                                            </HorizontalStackLayout>
 
-                                            <!-- ACTIVIDAD -->
-                                            <Label Grid.Column="2"
-                                                   Text="{Binding ActivityName}"
-                                                   FontSize="11"
-                                                   TextColor="{StaticResource TextPrimary}"
-                                                   VerticalOptions="Center"
-                                                   LineBreakMode="TailTruncation" />
+                                                   <!-- LOTE -->
+                                                   <Label Grid.Column="3"
+                                                       Text="{Binding Lote}"
+                                                       FontSize="11"
+                                                       TextColor="{StaticResource TextSecondary}"
+                                                       VerticalOptions="Center"
+                                                       LineBreakMode="TailTruncation" />
 
-                                            <!-- LOTE -->
-                                            <Label Grid.Column="3"
-                                                   Text="{Binding Lote}"
-                                                   FontSize="11"
-                                                   TextColor="{StaticResource TextSecondary}"
-                                                   VerticalOptions="Center"
-                                                   LineBreakMode="TailTruncation" />
+                                                   <!-- TARIFA -->
+                                                   <Label Grid.Column="4"
+                                                       Text="{Binding RateDisplay}"
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{StaticResource TextPrimary}"
+                                                       VerticalOptions="Center" />
 
-                                            <!-- TARIFA -->
-                                            <Label Grid.Column="4"
-                                                   Text="{Binding RateDisplay}"
-                                                   FontSize="11"
-                                                   FontAttributes="Bold"
-                                                   TextColor="{StaticResource TextPrimary}"
-                                                   VerticalOptions="Center" />
+                                                   <!-- TIEMPO -->
+                                                   <Label Grid.Column="5"
+                                                       Text="{Binding TimeDisplay}"
+                                                       FontSize="11"
+                                                       TextColor="{StaticResource TextPrimary}"
+                                                       VerticalOptions="Center" />
 
-                                            <!-- TIEMPO -->
-                                            <Label Grid.Column="5"
-                                                   Text="{Binding TimeDisplay}"
-                                                   FontSize="11"
-                                                   TextColor="{StaticResource TextPrimary}"
-                                                   VerticalOptions="Center" />
+                                                    <!-- ACCION -->
+                                                    <Label Grid.Column="6"
+                                                           Text="Editar"
+                                                           TextColor="#2E7D5B"
+                                                           FontSize="11"
+                                                           TextDecorations="None"
+                                                           VerticalOptions="Center">
+                                                        <Label.GestureRecognizers>
+                                                            <TapGestureRecognizer
+                                                                Tapped="OnEditEntryTapped"
+                                                                CommandParameter="{Binding .}" />
+                                                        </Label.GestureRecognizers>
+                                                    </Label>
 
-                                            <!-- ACCION -->
-                                            <Label Grid.Column="6"
-                                                   Text="Editar"
-                                                   TextColor="#2E7D5B"
-                                                   FontSize="11"
-                                                   TextDecorations="None"
-                                                   VerticalOptions="Center">
-                                                <Label.GestureRecognizers>
-                                                    <TapGestureRecognizer
-                                                        Tapped="OnEditEntryTapped"
-                                                        CommandParameter="{Binding .}" />
-                                                </Label.GestureRecognizers>
-                                            </Label>
-
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </ScrollView>
                     </VerticalStackLayout>
                 </Border>
 

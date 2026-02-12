@@ -139,15 +139,8 @@ public partial class PayrollPage : ContentPage
         if (e.Parameter is Payroll payroll)
         {
             var html = BuildReceiptHtml(payroll);
-            var workerName = workerNameMap.GetValueOrDefault(payroll.WorkerId, "Desconocido");
-            await Navigation.PushModalAsync(new PayrollReceiptPage(
-                html,
-                payroll.Id,
-                payroll.WorkerId,
-                workerName,
-                payroll.WeekStart,
-                payroll.GrossAmount
-            ));
+            var entries = BuildActivityEntries(payroll);
+            await Navigation.PushModalAsync(new PayrollReceiptPage(html, payroll, entries));
         }
     }
 
@@ -156,15 +149,8 @@ public partial class PayrollPage : ContentPage
         if (e.Parameter is Payroll payroll)
         {
             var html = BuildReceiptHtml(payroll);
-            var workerName = workerNameMap.GetValueOrDefault(payroll.WorkerId, "Desconocido");
-            await Navigation.PushModalAsync(new PayrollReceiptPage(
-                html,
-                payroll.Id,
-                payroll.WorkerId,
-                workerName,
-                payroll.WeekStart,
-                payroll.GrossAmount
-            ));
+            var entries = BuildActivityEntries(payroll);
+            await Navigation.PushModalAsync(new PayrollReceiptPage(html, payroll, entries));
         }
     }
 
@@ -238,6 +224,36 @@ public partial class PayrollPage : ContentPage
         }
     }
 
+    private List<PayrollActivityEntry> BuildActivityEntries(Payroll payroll)
+    {
+        var weekStart = payroll.WeekStart.Date;
+        var weekEnd = payroll.WeekEnd.Date;
+        var entries = workedTimesCache
+            .Where(wt => wt.WorkerId == payroll.WorkerId && wt.Date.Date >= weekStart && wt.Date.Date <= weekEnd)
+            .OrderBy(wt => wt.Date)
+            .ToList();
+
+        return entries.Select(entry =>
+        {
+            var hours = entry.MinutesWorked / 60m;
+            var workType = workTypeMap.GetValueOrDefault(entry.WorkTypeId);
+            var activityName = workType?.Name ?? entry.WorkTypeId;
+            var rate = (decimal)(workType?.DefaultRate ?? 0);
+            var gross = hours * rate;
+            var lote = batchMap.GetValueOrDefault(entry.BatchId, entry.BatchId);
+
+            return new PayrollActivityEntry
+            {
+                Date = entry.Date,
+                ActivityName = activityName,
+                BatchName = lote,
+                Hours = hours,
+                Rate = rate,
+                Amount = gross
+            };
+        }).ToList();
+    }
+
     private string BuildReceiptHtml(Payroll payroll)
     {
         var week = $"{payroll.WeekStart:dd MMM} - {payroll.WeekEnd:dd MMM yyyy}";
@@ -253,12 +269,21 @@ public partial class PayrollPage : ContentPage
         sb.Append("<!doctype html><html><head><meta charset='utf-8'>");
         sb.Append("<style>");
         sb.Append("@page{size:5.5in 8.5in;margin:0.35in;}");
-        sb.Append("body{font-family:Segoe UI,Arial;padding:0;margin:0;color:#1f2c27;background:#fff;}");
-        sb.Append(".page{width:5.2in;margin:0 auto;border:1px solid #1f2c27;padding:10px;box-sizing:border-box;}");
+        sb.Append("*{box-sizing:border-box;}");
+        sb.Append("body{font-family:'Segoe UI',Arial,sans-serif;margin:0;padding:0;color:#1f2c27;background:#fff;}");
+        sb.Append(".page{width:100%;padding:10px;}");
+        sb.Append("@media screen{");
+        sb.Append("  body{background:#e8e5de;padding:20px;}");
+        sb.Append("  .page{max-width:5.2in;margin:0 auto;border:1px solid #1f2c27;background:#fff;}");
+        sb.Append("}");
+        sb.Append("@media print{");
+        sb.Append("  body{background:#fff;margin:0;padding:0;}");
+        sb.Append("  .page{max-width:none;border:none;margin:0;padding:0;}");
+        sb.Append("}");
         sb.Append(".header{display:flex;align-items:center;gap:8px;margin-bottom:6px;}");
         sb.Append(".logo{width:34px;height:34px;border:1px solid #1f2c27;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;}");
-        sb.Append(".title{font-size:12px;font-weight:700;text-align:center;flex:1;}");
-        sb.Append(".subtitle{font-size:9px;text-align:center;color:#3c4b45;}");
+        sb.Append(".title{font-size:12px;font-weight:700;}");
+        sb.Append(".subtitle{font-size:9px;color:#3c4b45;}");
         sb.Append(".divider{border-top:1px solid #1f2c27;margin:6px 0;}");
         sb.Append(".section-title{font-size:9px;font-weight:700;text-transform:uppercase;margin:6px 0 4px 0;}");
         sb.Append(".info{border:1px solid #1f2c27;border-collapse:collapse;width:100%;font-size:9px;margin-bottom:6px;}");
@@ -271,7 +296,7 @@ public partial class PayrollPage : ContentPage
         sb.Append(".summary td{border:1px solid #1f2c27;padding:4px;}");
         sb.Append(".neg{color:#c05858;font-weight:700;}");
         sb.Append(".total-row td{font-weight:700;}");
-        sb.Append(".sign{margin-top:10px;display:flex;gap:10px;font-size:9px;}");
+        sb.Append(".sign{margin-top:14px;display:flex;gap:20px;font-size:9px;}");
         sb.Append(".sign .line{flex:1;border-top:1px solid #1f2c27;text-align:center;padding-top:3px;}");
         sb.Append(".footer{margin-top:6px;font-size:8px;color:#5b6a64;text-align:center;}");
         sb.Append("</style></head><body>");

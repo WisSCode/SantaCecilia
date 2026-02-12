@@ -28,17 +28,21 @@ public partial class App : Application
         var sessionService = _services.GetRequiredService<SessionService>();
         var shell = new AppShell(sessionService);
         shell.ConfigureShellForAuthState(true);
-        MainPage = shell;
+        var window = Windows.FirstOrDefault();
+        if (window is not null)
+            window.Page = shell;
 
         if (sessionService.HasRole("admin"))
-            await Shell.Current.GoToAsync("//dashboard");
+            await shell.GoToAsync("//dashboard");
         else
-            await Shell.Current.GoToAsync("//workershome");
+            await shell.GoToAsync("//workershome");
     }
 
     public async Task GoToLoginAsync()
     {
-        MainPage = new NavigationPage(ResolveLoginPage());
+        var window = Windows.FirstOrDefault();
+        if (window is not null)
+            window.Page = new NavigationPage(ResolveLoginPage());
         await Task.CompletedTask;
     }
 }

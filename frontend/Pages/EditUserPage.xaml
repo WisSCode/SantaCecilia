@@ -5,8 +5,9 @@
              Shell.NavBarIsVisible="False"
              BackgroundColor="#80000000">
 
-    <Grid VerticalOptions="Center" HorizontalOptions="Center" Padding="20">
-        <Border WidthRequest="440"
+    <Grid VerticalOptions="Center" HorizontalOptions="Fill" Padding="{OnIdiom Phone=12, Desktop=20}">
+        <Border HorizontalOptions="Fill"
+                MaximumWidthRequest="440"
                 Stroke="#D6DAD7"
                 StrokeThickness="1"
                 BackgroundColor="White">
@@ -18,20 +19,20 @@
             <VerticalStackLayout Spacing="0">
 
                 <!-- ENCABEZADO -->
-                <Grid BackgroundColor="#9EC9B4" Padding="20" ColumnDefinitions="*,Auto">
-                    <VerticalStackLayout Spacing="4">
+                <Grid BackgroundColor="#9EC9B4" Padding="{OnIdiom Phone=14, Desktop=20}" ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Spacing="{OnIdiom Phone=2, Desktop=4}">
                         <Label Text="Editar Usuario"
-                               FontSize="16"
+                               FontSize="{OnIdiom Phone=15, Desktop=16}"
                                FontAttributes="Bold"
                                TextColor="White" />
                         <Label x:Name="SubtitleLabel"
                                Text="Asigne un trabajador al usuario"
-                               FontSize="11"
+                               FontSize="{OnIdiom Phone=10, Desktop=11}"
                                TextColor="#F2F7F4" />
                     </VerticalStackLayout>
                     <Button Grid.Column="1"
                             Text="X"
-                            FontSize="16"
+                            FontSize="{OnIdiom Phone=14, Desktop=16}"
                             TextColor="White"
                             BackgroundColor="Transparent"
                             Padding="4"
@@ -40,12 +41,12 @@
                 </Grid>
 
                 <!-- FORMULARIO -->
-                <VerticalStackLayout Padding="24" Spacing="16">
+                <VerticalStackLayout Padding="{OnIdiom Phone=14, Desktop=24}" Spacing="{OnIdiom Phone=12, Desktop=16}">
 
                     <!-- EMAIL (solo lectura) -->
                     <VerticalStackLayout Spacing="6">
                         <Label Text="Correo del usuario"
-                               FontSize="12"
+                               FontSize="{OnIdiom Phone=11, Desktop=12}"
                                FontAttributes="Bold"
                                TextColor="#2E3A34" />
                         <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
@@ -54,7 +55,7 @@
                                 <RoundRectangle CornerRadius="0" />
                             </Border.StrokeShape>
                             <Label x:Name="EmailLabel"
-                                   FontSize="13"
+                                FontSize="{OnIdiom Phone=12, Desktop=13}"
                                    TextColor="#6b7f78"
                                    VerticalOptions="Center"
                                    HeightRequest="30" />
@@ -64,13 +65,13 @@
                     <!-- TRABAJADOR ASIGNADO -->
                     <VerticalStackLayout Spacing="6">
                         <Label Text="Trabajador asignado"
-                               FontSize="12"
+                               FontSize="{OnIdiom Phone=11, Desktop=12}"
                                FontAttributes="Bold"
                                TextColor="#2E3A34" />
 
                         <!-- Lista de trabajadores disponibles -->
                         <Border Stroke="#D6DAD7" StrokeThickness="1" BackgroundColor="White"
-                                HeightRequest="180">
+                                HeightRequest="{OnIdiom Phone=160, Desktop=180}">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="0" />
                             </Border.StrokeShape>
@@ -86,16 +87,16 @@
                                             <Grid ColumnDefinitions="*,Auto">
                                                 <VerticalStackLayout Spacing="2">
                                                     <Label Text="{Binding FullName}"
-                                                           FontSize="13"
+                                                           FontSize="{OnIdiom Phone=12, Desktop=13}"
                                                            FontAttributes="Bold"
                                                            TextColor="#2E3A34" />
                                                     <Label Text="{Binding Identification}"
-                                                           FontSize="11"
+                                                           FontSize="{OnIdiom Phone=10, Desktop=11}"
                                                            TextColor="#6b7f78" />
                                                 </VerticalStackLayout>
                                                 <Label Grid.Column="1"
                                                        Text="?"
-                                                       FontSize="16"
+                                                          FontSize="{OnIdiom Phone=14, Desktop=16}"
                                                        FontAttributes="Bold"
                                                        TextColor="#9EC9B4"
                                                        IsVisible="{Binding IsSelected}"
@@ -109,16 +110,20 @@
 
                         <Label x:Name="NoWorkersLabel"
                                Text="No hay trabajadores disponibles sin usuario asignado."
-                               FontSize="11"
+                               FontSize="{OnIdiom Phone=10, Desktop=11}"
                                TextColor="#E07A5F"
                                IsVisible="False" />
                     </VerticalStackLayout>
 
                     <!-- BOTONES -->
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
+                        <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,*'}"
+                          RowDefinitions="{OnIdiom Phone='Auto,Auto', Desktop='Auto'}"
+                          ColumnSpacing="12"
+                          RowSpacing="{OnIdiom Phone=10, Desktop=0}"
+                          Margin="0,8,0,0">
                         <Button Grid.Column="0"
                                 Text="Cancelar"
-                                HeightRequest="44"
+                            HeightRequest="{OnIdiom Phone=42, Desktop=44}"
                                 BackgroundColor="Transparent"
                                 TextColor="#2E3A34"
                                 FontAttributes="Bold"
@@ -126,9 +131,10 @@
                                 BorderWidth="1"
                                 Clicked="OnCancelClicked" />
                         <Button x:Name="SaveButton"
-                                Grid.Column="1"
+                            Grid.Column="{OnIdiom Phone=0, Desktop=1}"
+                            Grid.Row="{OnIdiom Phone=1, Desktop=0}"
                                 Text="Guardar Cambios"
-                                HeightRequest="44"
+                            HeightRequest="{OnIdiom Phone=42, Desktop=44}"
                                 BackgroundColor="#9EC9B4"
                                 TextColor="White"
                                 FontAttributes="Bold"

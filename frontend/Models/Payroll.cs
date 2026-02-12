@@ -87,3 +87,13 @@ public enum PayrollStatus
     Paid = 1,
     Cancelled = 2
 }
+
+public class PayrollActivityEntry
+{
+    public DateTime Date { get; set; }
+    public string ActivityName { get; set; } = string.Empty;
+    public string BatchName { get; set; } = string.Empty;
+    public decimal Hours { get; set; }
+    public decimal Rate { get; set; }
+    public decimal Amount { get; set; }
+}

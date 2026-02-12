@@ -5,12 +5,26 @@ namespace frontend.Pages;
 public partial class LoginPage : ContentPage
 {
     private readonly LoginViewModel _viewModel;
+    private bool _isPasswordVisible;
 
     public LoginPage(LoginViewModel viewModel)
     {
         InitializeComponent();
         _viewModel = viewModel;
         BindingContext = _viewModel;
+        UpdatePasswordVisibilityState();
+    }
+
+    private void OnTogglePasswordVisibilityClicked(object sender, EventArgs e)
+    {
+        _isPasswordVisible = !_isPasswordVisible;
+        UpdatePasswordVisibilityState();
+    }
+
+    private void UpdatePasswordVisibilityState()
+    {
+        PasswordEntry.IsPassword = !_isPasswordVisible;
+        PasswordToggleButton.Text = _isPasswordVisible ? "Ocultar" : "Mostrar";
     }
 
     private async void OnLoginClicked(object sender, EventArgs e)

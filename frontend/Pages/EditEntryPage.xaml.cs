@@ -34,8 +34,6 @@ public partial class EditEntryPage : ContentPage
     {
         InitializeComponent();
         _api = api;
-        MinutesPicker.ItemsSource = new List<int> { 0, 15, 30, 45 };
-        MinutesPicker.SelectedIndex = 0;
     }
 
     protected override async void OnAppearing()
@@ -134,11 +132,7 @@ public partial class EditEntryPage : ContentPage
         int minutes = totalMinutes % 60;
 
         HoursEntry.Text = hours.ToString();
-        
-        // Find closest minute value
-        var minuteOptions = new List<int> { 0, 15, 30, 45 };
-        int closestMinuteIndex = minuteOptions.IndexOf(minuteOptions.OrderBy(m => Math.Abs(m - minutes)).First());
-        MinutesPicker.SelectedIndex = closestMinuteIndex;
+        MinutesEntry.Text = minutes.ToString();
 
         UpdateSaveButtonState();
     }
@@ -213,17 +207,21 @@ public partial class EditEntryPage : ContentPage
 
         var worker = workerItems[WorkerPicker.SelectedIndex];
 
-        int hours = 0;
-        int minutes = 0;
-        if (!int.TryParse(HoursEntry.Text, out hours))
+        if (!int.TryParse(HoursEntry.Text, out int hours))
             hours = 0;
 
-        if (MinutesPicker.SelectedItem != null)
-            int.TryParse(MinutesPicker.SelectedItem.ToString(), out minutes);
+        if (!int.TryParse(MinutesEntry.Text, out int minutes))
+            minutes = 0;
 
         if (hours < 0 || hours > 24)
         {
             await DisplayAlertAsync("Validacion", "Horas debe estar entre 0 y 24.", "OK");
+            return;
+        }
+
+        if (minutes < 0 || minutes > 59)
+        {
+            await DisplayAlertAsync("Validacion", "Minutos debe estar entre 0 y 59.", "OK");
             return;
         }
 

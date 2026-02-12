@@ -7,7 +7,7 @@
 
     <Grid RowDefinitions="*" ColumnDefinitions="*" Background="{StaticResource AppBackgroundBrush}">
         <ScrollView Grid.Row="0" Grid.Column="0">
-            <VerticalStackLayout Padding="20" Spacing="16">
+            <VerticalStackLayout Padding="{OnIdiom Phone=12, Desktop=20}" Spacing="{OnIdiom Phone=12, Desktop=16}">
                 
                 <!-- Header -->
                 <VerticalStackLayout Spacing="4">
@@ -16,14 +16,19 @@
                 </VerticalStackLayout>
 
                 <!-- Summary Stats -->
-                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,*'}"
+                      RowDefinitions="{OnIdiom Phone='Auto,Auto', Desktop='Auto'}"
+                      ColumnSpacing="12"
+                      RowSpacing="{OnIdiom Phone=10, Desktop=0}">
                     <Border Grid.Column="0" Style="{StaticResource CardFrame}">
                         <VerticalStackLayout Spacing="6">
                             <Label x:Name="TotalUsersLabel" Text="0" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
                             <Label Text="Total Usuarios" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
                         </VerticalStackLayout>
                     </Border>
-                    <Border Grid.Column="1" Style="{StaticResource CardFrame}">
+                    <Border Grid.Column="{OnIdiom Phone=0, Desktop=1}"
+                            Grid.Row="{OnIdiom Phone=1, Desktop=0}"
+                            Style="{StaticResource CardFrame}">
                         <VerticalStackLayout Spacing="6">
                             <Label x:Name="ValidatedUsersLabel" Text="0" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
                             <Label Text="Validados" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
@@ -38,61 +43,67 @@
                             <Label Text="Listado de Usuarios" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
                         </Grid>
 
-                        <Grid Padding="10" ColumnDefinitions="2*,1.5*,1*,Auto" BackgroundColor="{StaticResource SurfaceSecondary}">
-                            <Label x:Name="HeaderEmail" Text="EMAIL &#x2191;" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnSortByEmail" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                            <Label x:Name="HeaderRole" Grid.Column="1" Text="ROL" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnSortByRole" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                            <Label x:Name="HeaderStatus" Grid.Column="2" Text="ESTADO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnSortByStatus" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                            <Label Grid.Column="3" Text="ACCIONES" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                        </Grid>
+                        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                            <VerticalStackLayout Spacing="0">
+                                <Grid Padding="10"
+                                      ColumnDefinitions="{OnIdiom Phone='220,130,100,170', Desktop='2*,1.5*,1*,Auto'}"
+                                      BackgroundColor="{StaticResource SurfaceSecondary}">
+                                    <Label x:Name="HeaderEmail" Text="EMAIL &#x2191;" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByEmail" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label x:Name="HeaderRole" Grid.Column="1" Text="ROL" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByRole" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label x:Name="HeaderStatus" Grid.Column="2" Text="ESTADO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByStatus" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label Grid.Column="3" Text="ACCIONES" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                </Grid>
 
-                        <CollectionView x:Name="UsersList" SelectionMode="None">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10">
-                                        <Grid ColumnDefinitions="2*,1.5*,1*,Auto" ColumnSpacing="8" RowDefinitions="Auto,Auto">
-                                            <Label Text="{Binding Mail}" FontAttributes="Bold" FontSize="11" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
-                                            <Label Grid.Column="1" Text="{Binding Role}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
-                                            <Border Grid.Column="2" 
-                                                    BackgroundColor="{Binding StatusColor}" 
-                                                    Padding="6,3" 
-                                                    HorizontalOptions="Start"
-                                                    VerticalOptions="Center">
-                                                <Label Text="{Binding StatusText}" FontSize="10" TextColor="White" FontAttributes="Bold" />
+                                <CollectionView x:Name="UsersList" SelectionMode="None">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10">
+                                                <Grid ColumnDefinitions="{OnIdiom Phone='220,130,100,170', Desktop='2*,1.5*,1*,Auto'}" ColumnSpacing="8" RowDefinitions="Auto,Auto">
+                                                    <Label Text="{Binding Mail}" FontAttributes="Bold" FontSize="11" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
+                                                    <Label Grid.Column="1" Text="{Binding Role}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
+                                                    <Border Grid.Column="2" 
+                                                            BackgroundColor="{Binding StatusColor}" 
+                                                            Padding="6,3" 
+                                                            HorizontalOptions="Start"
+                                                            VerticalOptions="Center">
+                                                        <Label Text="{Binding StatusText}" FontSize="10" TextColor="White" FontAttributes="Bold" />
+                                                    </Border>
+                                                    <HorizontalStackLayout Grid.Column="3" Spacing="6">
+                                                        <Button Text="Validar" 
+                                                                IsVisible="{Binding NeedsValidation}"
+                                                                Clicked="OnValidateClicked"
+                                                                CommandParameter="{Binding .}"
+                                                                Style="{StaticResource PrimaryButton}"
+                                                                FontSize="10"
+                                                                Padding="8,4"
+                                                                MinimumHeightRequest="28" />
+                                                        <Button Text="Editar" 
+                                                                Clicked="OnEditClicked"
+                                                                CommandParameter="{Binding .}"
+                                                                Style="{StaticResource OutlineButton}"
+                                                                FontSize="10"
+                                                                Padding="8,4"
+                                                                MinimumHeightRequest="28" />
+                                                    </HorizontalStackLayout>
+                                                </Grid>
                                             </Border>
-                                            <HorizontalStackLayout Grid.Column="3" Spacing="6">
-                                                <Button Text="Validar" 
-                                                        IsVisible="{Binding NeedsValidation}"
-                                                        Clicked="OnValidateClicked"
-                                                        CommandParameter="{Binding .}"
-                                                        Style="{StaticResource PrimaryButton}"
-                                                        FontSize="10"
-                                                        Padding="8,4"
-                                                        MinimumHeightRequest="28" />
-                                                <Button Text="Editar" 
-                                                        Clicked="OnEditClicked"
-                                                        CommandParameter="{Binding .}"
-                                                        Style="{StaticResource OutlineButton}"
-                                                        FontSize="10"
-                                                        Padding="8,4"
-                                                        MinimumHeightRequest="28" />
-                                            </HorizontalStackLayout>
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </ScrollView>
                     </VerticalStackLayout>
                 </Border>
 

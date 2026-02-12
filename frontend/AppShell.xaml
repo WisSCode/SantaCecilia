@@ -34,10 +34,14 @@
 
     <Shell.FlyoutHeader>
         <VerticalStackLayout Padding="16,20,16,16" BackgroundColor="White" Spacing="8">
-            <Grid ColumnDefinitions="36,*" ColumnSpacing="10">
-                <Border BackgroundColor="{StaticResource AccentBlue}" WidthRequest="36" HeightRequest="36">
-                    <Label Text="SC" FontAttributes="Bold" FontSize="12" TextColor="{StaticResource BrandSkyBlueDark}" HorizontalOptions="Center" VerticalOptions="Center" />
-                </Border>
+            <Grid ColumnDefinitions="48,*" ColumnSpacing="10">
+                <Image Grid.Column="0"
+                       Source="logo_santa_cecilia.png"
+                       HeightRequest="48"
+                       WidthRequest="48"
+                       Aspect="AspectFit"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center" />
                 <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                     <Label Text="Santa Cecilia" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
                     <Label Text="Gestión de Nómina" FontSize="10" TextColor="{StaticResource TextTertiary}" />
