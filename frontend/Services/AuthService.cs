@@ -61,14 +61,15 @@ public class AuthService
 
             var firebaseResponse = await _firebaseClient.PostAsJsonAsync(firebaseUrl, firebasePayload);
 
-            //if (!firebaseResponse.IsSuccessStatusCode)
-            //throw new Exception("Credenciales inválidas");
-
             if (!firebaseResponse.IsSuccessStatusCode)
+            throw new Exception("Credenciales inválidas");
+
+            //Log para saber error de inicio sesion
+            /*if (!firebaseResponse.IsSuccessStatusCode)
             {
                 var error = await firebaseResponse.Content.ReadAsStringAsync();
                 throw new Exception($"Firebase error: {error}");
-            }
+            }*/
 
 
             var firebaseData = await firebaseResponse.Content.ReadFromJsonAsync<FirebaseLoginResponse>();
