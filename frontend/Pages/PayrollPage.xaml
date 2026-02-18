@@ -160,10 +160,10 @@
                                 <CollectionView x:Name="PayrollList" SelectionMode="None">
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1"
+                                            <Border Stroke="#EEEBE5" StrokeThickness="0"
                                                     Padding="16,10" BackgroundColor="White">
                                                 <Grid ColumnDefinitions="{OnIdiom Phone='80,160,130,80,100,110,100,90,120', Desktop='0.8*,1.6*,1.8*,0.8*,1*,1.1*,1*,0.9*,0.7*'}"
-                                                      ColumnSpacing="4">
+                                                      ColumnSpacing="2">
 
                                                    <!-- CODIGO -->
                                                    <Label Text="{Binding DisplayId}"
@@ -286,10 +286,10 @@
                                 </CollectionView>
 
                                 <!-- Fila de TOTALES -->
-                                <Border Stroke="#EEEBE5" StrokeThickness="0,1,0,0"
+                                <Border Stroke="#EEEBE5" StrokeThickness="0"
                                         Padding="16,12" BackgroundColor="#FAFAF7">
                                     <Grid ColumnDefinitions="{OnIdiom Phone='80,160,130,80,100,110,100,90,120', Desktop='0.8*,1.6*,1.8*,0.8*,1*,1.1*,1*,0.9*,0.7*'}"
-                                          ColumnSpacing="4">
+                                          ColumnSpacing="3">
                                         <Label Text="TOTALES"
                                                FontSize="11" FontAttributes="Bold"
                                                TextColor="{StaticResource TextPrimary}"
