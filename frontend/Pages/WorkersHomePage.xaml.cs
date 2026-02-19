@@ -38,16 +38,24 @@ public partial class WorkersHomePage : ContentPage
             {
                 WorkerNameLabel.Text = "Trabajador no encontrado";
                 WorkerCodeLabel.Text = "";
+                WorkerCedulaLabel.Text = "";
                 AvatarLabel.Text = "?";
                 return;
             }
 
             var fullName = $"{currentWorker.Name} {currentWorker.LastName}";
-            AvatarLabel.Text = currentWorker.Name.Length > 0
-                ? currentWorker.Name[0].ToString().ToUpper()
-                : "?";
+
+            // Iniciales: primera letra del nombre + primera letra del apellido
+            var initials = "";
+            if (currentWorker.Name?.Length > 0)
+                initials += currentWorker.Name[0].ToString().ToUpper();
+            if (currentWorker.LastName?.Length > 0)
+                initials += currentWorker.LastName[0].ToString().ToUpper();
+            AvatarLabel.Text = initials.Length > 0 ? initials : "?";
+
             WorkerNameLabel.Text = fullName;
             WorkerCodeLabel.Text = $"TRB-{currentWorker.Id}";
+            WorkerCedulaLabel.Text = $"Cédula: {currentWorker.Identification}";
 
             var workedTimes = await _api.GetWorkedTimesAsync();
             var workTypes = await _api.GetWorkTypesAsync();
@@ -115,7 +123,7 @@ public partial class WorkersHomePage : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlertAsync("Error", $"No se pudieron cargar los datos: {ex.Message}", "OK");
+            await DisplayAlert("Error", $"No se pudieron cargar los datos: {ex.Message}", "OK");
         }
     }
 
