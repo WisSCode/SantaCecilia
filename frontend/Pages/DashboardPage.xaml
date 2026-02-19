@@ -56,7 +56,7 @@
                             BackgroundColor="White" Padding="{OnIdiom Phone=12, Desktop=14}">
                         <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                         <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="6">
-                            <Grid ColumnDefinitions="*,Auto">
+                           <!-- <Grid ColumnDefinitions="*,Auto">
                                 <Border Grid.Column="1"
                                         BackgroundColor="#E8F5EE"
                                         Padding="6,2" StrokeThickness="0"
@@ -67,8 +67,8 @@
                                            TextColor="#2E7D5B"
                                            HorizontalOptions="Center" />
                                 </Border>
-                            </Grid>
-                            <VerticalStackLayout Grid.Row="1" Spacing="2">
+                            </Grid>-->
+                            <VerticalStackLayout Spacing="2">
                                 <Label Text="Trabajadores Activos"
                                        FontSize="11"
                                        TextColor="{StaticResource TextSecondary}" />
@@ -88,19 +88,19 @@
                             BackgroundColor="White" Padding="{OnIdiom Phone=12, Desktop=14}">
                         <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                         <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="6">
-                            <Grid ColumnDefinitions="*,Auto">
+                            <!--<Grid ColumnDefinitions="*,Auto">
                                 <Border Grid.Column="1"
                                         BackgroundColor="#E9F4FE"
                                         Padding="6,2" StrokeThickness="0"
                                         StrokeShape="RoundRectangle 10"
                                         VerticalOptions="Start">
-                                    <Label x:Name="HoursDailyBadge" Text="0"
+                                   <Label x:Name="HoursDailyBadge" Text="0"
                                            FontSize="10" FontAttributes="Bold"
                                            TextColor="#2C6AA3"
                                            HorizontalOptions="Center" />
                                 </Border>
-                            </Grid>
-                            <VerticalStackLayout Grid.Row="1" Spacing="2">
+                            </Grid>-->
+                            <VerticalStackLayout Spacing="2">
                                 <Label Text="Horas Trabajadas"
                                        FontSize="11"
                                        TextColor="{StaticResource TextSecondary}" />
@@ -140,19 +140,8 @@
                             BackgroundColor="White" Padding="{OnIdiom Phone=12, Desktop=14}">
                         <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                         <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="6">
-                            <Grid ColumnDefinitions="*,Auto">
-                                <Border Grid.Column="1"
-                                        BackgroundColor="#E8F5EE"
-                                        Padding="6,2" StrokeThickness="0"
-                                        StrokeShape="RoundRectangle 10"
-                                        VerticalOptions="Start">
-                                    <Label x:Name="ActivitiesNewBadge" Text="+0"
-                                           FontSize="10" FontAttributes="Bold"
-                                           TextColor="#2E7D5B"
-                                           HorizontalOptions="Center" />
-                                </Border>
-                            </Grid>
-                            <VerticalStackLayout Grid.Row="1" Spacing="2">
+                            
+                            <VerticalStackLayout Spacing="2">
                                 <Label Text="Actividades"
                                        FontSize="11"
                                        TextColor="{StaticResource TextSecondary}" />

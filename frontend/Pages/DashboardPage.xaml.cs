@@ -48,8 +48,9 @@ public partial class DashboardPage : ContentPage
             WorkersCount.Text = activeWorkers.ToString();
 
             // New workers this week (approximate: all active as we can't track creation date)
-            // Just show total active for badge
-            WorkersNewBadge.Text = $"+{activeWorkers}";
+            // Just show total active for
+            // 
+            //WorkersNewBadge.Text = $"+{activeWorkers}";
 
             // Horas trabajadas (this week)
             var weekEntries = workedTimes.Where(wt => wt.Date.Date >= weekStart).ToList();
@@ -60,7 +61,7 @@ public partial class DashboardPage : ContentPage
             // Daily average
             var daysInWeek = Math.Max(1, (int)(today - weekStart).TotalDays + 1);
             var dailyAvg = totalMinutesWeek / 60m / daysInWeek;
-            HoursDailyBadge.Text = $"{dailyAvg:F0}";
+            //HoursDailyBadge.Text = $"{dailyAvg:F0}";
 
             // Nomina semanal
             var weekPayrolls = payrolls.Where(p => p.WeekStart >= weekStart).ToList();
@@ -72,7 +73,7 @@ public partial class DashboardPage : ContentPage
             var lastWeekEntries = workedTimes.Where(wt => wt.Date.Date >= lastWeekStart && wt.Date.Date < weekStart).ToList();
             var diff = thisWeekCount - lastWeekEntries.Count;
             ActivitiesCount.Text = thisWeekCount.ToString();
-            ActivitiesNewBadge.Text = diff >= 0 ? $"+{diff}" : $"{diff}";
+            //ActivitiesNewBadge.Text = diff >= 0 ? $"+{diff}" : $"{diff}";
 
             // --- Alerts ---
 
