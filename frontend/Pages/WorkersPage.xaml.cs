@@ -28,15 +28,14 @@ public partial class WorkersPage : ContentPage
         {
             var dtos = await _api.GetWorkersAsync();
 
-            allWorkers = dtos.Select((w, index) => new Worker
+            allWorkers = dtos.Select(w => new Worker
             {
                 Id = w.Id,
                 Name = w.Name,
                 LastName = w.LastName,
                 Identification = w.Identification,
                 UserId = w.UserId,
-                Active = w.Active,
-                SequentialId = index + 1
+                Active = w.Active
             }).ToList();
 
             ApplySort();
@@ -52,7 +51,7 @@ public partial class WorkersPage : ContentPage
     {
         IEnumerable<Worker> sorted = _sortColumn switch
         {
-            "Id" => _sortAscending ? allWorkers.OrderBy(w => w.SequentialId) : allWorkers.OrderByDescending(w => w.SequentialId),
+            "Id" => _sortAscending ? allWorkers.OrderBy(w => w.Id) : allWorkers.OrderByDescending(w => w.Id),
             "Name" => _sortAscending ? allWorkers.OrderBy(w => w.Name) : allWorkers.OrderByDescending(w => w.Name),
             "LastName" => _sortAscending ? allWorkers.OrderBy(w => w.LastName) : allWorkers.OrderByDescending(w => w.LastName),
             "Identification" => _sortAscending ? allWorkers.OrderBy(w => w.Identification) : allWorkers.OrderByDescending(w => w.Identification),

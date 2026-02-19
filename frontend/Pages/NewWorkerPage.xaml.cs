@@ -1,3 +1,4 @@
+using frontend.Helpers;
 using frontend.Services;
 
 namespace frontend.Pages;
@@ -10,6 +11,9 @@ public partial class NewWorkerPage : ContentPage
     {
         InitializeComponent();
         _api = api;
+        NameEntry.TextChanged += (s, e) => InputFilter.AllowLettersOnly((Entry)s!, e);
+        LastNameEntry.TextChanged += (s, e) => InputFilter.AllowLettersOnly((Entry)s!, e);
+        IdentificationEntry.TextChanged += (s, e) => InputFilter.AllowCedulaFormat((Entry)s!, e);
     }
 
     private void OnFieldChanged(object sender, TextChangedEventArgs e)
@@ -35,7 +39,20 @@ public partial class NewWorkerPage : ContentPage
         try
         {
             CreateButton.IsEnabled = false;
-            var id = Guid.NewGuid().ToString();
+
+            var workers = await _api.GetWorkersAsync();
+            int maxNumber = 0;
+            foreach (var w in workers)
+            {
+                if (w.Id.StartsWith("TRB-", StringComparison.OrdinalIgnoreCase)
+                    && int.TryParse(w.Id[4..], out var num)
+                    && num > maxNumber)
+                {
+                    maxNumber = num;
+                }
+            }
+            var id = $"TRB-{(maxNumber + 1):D4}";
+
             var dto = new WorkerDto
             {
                 Id = id,
@@ -47,7 +64,7 @@ public partial class NewWorkerPage : ContentPage
             };
 
             await _api.CreateWorkerAsync(id, dto);
-            await DisplayAlertAsync("Trabajador creado", $"{name} {lastName} fue registrado exitosamente.", "OK");
+            await DisplayAlertAsync("Trabajador creado", $"{name} {lastName} fue registrado exitosamente con ID {id}.", "OK");
             await Shell.Current.GoToAsync("..");
         }
         catch (Exception ex)

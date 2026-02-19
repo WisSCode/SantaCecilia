@@ -1,4 +1,5 @@
 using System.Globalization;
+using frontend.Helpers;
 using frontend.Services;
 
 namespace frontend.Pages;
@@ -61,9 +62,7 @@ public partial class WorkersHomePage : ContentPage
                 .OrderByDescending(wt => wt.Date)
                 .ToList();
 
-            var today = DateTime.Today;
-            var weekStart = today.AddDays(-(int)today.DayOfWeek);
-            var weekEnd = weekStart.AddDays(7);
+            var (weekStart, weekEnd) = WeekHelper.GetWeekRange(DateTime.Now);
 
             var thisWeekEntries = myWorkedTimes
                 .Where(wt => wt.Date.Date >= weekStart && wt.Date.Date < weekEnd)
@@ -93,7 +92,9 @@ public partial class WorkersHomePage : ContentPage
             NetPayLabel.Text = $"B/.{net:F2}";
             TotalNetLabel.Text = $"B/.{net:F2}";
 
-            var recentActivities = myWorkedTimes.Take(10).Select(wt =>
+            var recentActivities = thisWeekEntries
+                .OrderByDescending(wt => wt.Date)
+                .Take(10).Select(wt =>
             {
                 double hours = wt.MinutesWorked / 60.0;
                 var wtType = workTypeMap.TryGetValue(wt.WorkTypeId, out var t) ? t : null;

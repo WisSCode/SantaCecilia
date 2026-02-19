@@ -1,3 +1,4 @@
+using frontend.Helpers;
 using frontend.Services;
 
 namespace frontend.Pages;
@@ -10,6 +11,8 @@ public partial class NewBatchPage : ContentPage
     {
         InitializeComponent();
         _api = api;
+        NameEntry.TextChanged += (s, e) => InputFilter.AllowAlphanumeric((Entry)s!, e);
+        LocationEntry.TextChanged += (s, e) => InputFilter.AllowAlphanumeric((Entry)s!, e);
     }
 
     private void OnFieldChanged(object sender, TextChangedEventArgs e)

@@ -236,11 +236,6 @@ public partial class ReportsPage : ContentPage
         return date.Date.AddDays(-(int)date.DayOfWeek);
     }
 
-    private async void OnApplyClicked(object sender, EventArgs e)
-    {
-        await BuildReportAsync();
-    }
-
     private async void OnReportViewChanged(object sender, EventArgs e)
     {
         currentView = ReportViewPicker.SelectedIndex switch

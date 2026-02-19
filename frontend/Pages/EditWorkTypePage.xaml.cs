@@ -1,4 +1,5 @@
 using System.Globalization;
+using frontend.Helpers;
 using frontend.Services;
 
 namespace frontend.Pages;
@@ -35,6 +36,8 @@ public partial class EditWorkTypePage : ContentPage
     {
         InitializeComponent();
         _api = api;
+        NameEntry.TextChanged += (s, e) => InputFilter.AllowAlphanumeric((Entry)s!, e);
+        RateEntry.TextChanged += (s, e) => InputFilter.AllowDecimalOnly((Entry)s!, e);
     }
 
     protected override void OnAppearing()

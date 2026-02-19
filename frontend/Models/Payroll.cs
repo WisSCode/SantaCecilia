@@ -9,6 +9,7 @@ public class Payroll
     public string Id { get; set; } = string.Empty;
     public string WorkerId { get; set; } = string.Empty;
     public string WorkerName { get; set; } = string.Empty;
+    public string WorkerIdentification { get; set; } = string.Empty;
     public string WorkerType { get; set; } = string.Empty;
     public DateTime WeekStart { get; set; }
     public DateTime WeekEnd { get; set; }

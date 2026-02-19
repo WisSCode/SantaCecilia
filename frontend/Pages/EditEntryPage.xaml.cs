@@ -1,4 +1,5 @@
 using System.Globalization;
+using frontend.Helpers;
 using frontend.Services;
 using Microsoft.Maui.Graphics;
 
@@ -34,6 +35,8 @@ public partial class EditEntryPage : ContentPage
     {
         InitializeComponent();
         _api = api;
+        HoursEntry.TextChanged += (s, e) => InputFilter.AllowIntegerOnly((Entry)s!, e);
+        MinutesEntry.TextChanged += (s, e) => InputFilter.AllowIntegerOnly((Entry)s!, e);
     }
 
     protected override async void OnAppearing()
@@ -205,6 +208,12 @@ public partial class EditEntryPage : ContentPage
             return;
         }
 
+        if (LotePicker.SelectedIndex < 0)
+        {
+            await DisplayAlertAsync("Validacion", "Debe seleccionar un lote.", "OK");
+            return;
+        }
+
         var worker = workerItems[WorkerPicker.SelectedIndex];
 
         if (!int.TryParse(HoursEntry.Text, out int hours))
@@ -222,6 +231,12 @@ public partial class EditEntryPage : ContentPage
         if (minutes < 0 || minutes > 59)
         {
             await DisplayAlertAsync("Validacion", "Minutos debe estar entre 0 y 59.", "OK");
+            return;
+        }
+
+        if (hours == 0 && minutes == 0)
+        {
+            await DisplayAlertAsync("Validacion", "Debe registrar al menos 1 minuto de trabajo.", "OK");
             return;
         }
 
@@ -284,9 +299,12 @@ public partial class EditEntryPage : ContentPage
 
     void UpdateSaveButtonState()
     {
+        int.TryParse(HoursEntry.Text, out int hours);
+        int.TryParse(MinutesEntry.Text, out int minutes);
         var ok = WorkerPicker.SelectedIndex >= 0
               && selectedActivity != null
-              && LotePicker.SelectedIndex >= 0;
+              && LotePicker.SelectedIndex >= 0
+              && (hours > 0 || minutes > 0);
         if (UpdateButton != null)
             UpdateButton.IsEnabled = ok;
     }

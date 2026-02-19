@@ -7,7 +7,7 @@
              Shell.NavBarIsVisible="False">
 
     <Grid Padding="0" Background="{StaticResource AppBackgroundBrush}" RowDefinitions="Auto,*">
-        <Grid Padding="16,14" BackgroundColor="{StaticResource BrandSkyBlue}" ColumnDefinitions="*,Auto,Auto,Auto">
+        <Grid Padding="16,14" BackgroundColor="{StaticResource BrandSkyBlue}" ColumnDefinitions="*,Auto,Auto">
             <VerticalStackLayout Spacing="2">
                 <Label Text="Detalle de Boleta de Pago" FontSize="14" FontAttributes="Bold" TextColor="White" />
                 <Label Text="Resumen semanal" FontSize="11" TextColor="White" />
@@ -20,13 +20,6 @@
                     FontSize="12"
                     Padding="8,4" />
             <Button Grid.Column="2"
-                    Text="Imprimir"
-                    Clicked="OnPrintClicked"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    FontSize="12"
-                    Padding="8,4" />
-            <Button Grid.Column="3"
                     Text="Cerrar"
                     Clicked="OnCloseClicked"
                     BackgroundColor="Transparent"

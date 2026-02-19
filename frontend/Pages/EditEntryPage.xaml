@@ -49,13 +49,18 @@
                                    FontSize="{OnIdiom Phone=11, Desktop=12}"
                                    FontAttributes="Bold"
                                    TextColor="#2E3A34" />
-                            <Picker x:Name="WorkerPicker"
-                                    Title="-- Seleccionar --"
-                                    FontSize="{OnIdiom Phone=12, Desktop=13}"
-                                    TextColor="#2E3A34"
-                                    TitleColor="#8A9490"
-                                    HorizontalOptions="Fill"
-                                    SelectedIndexChanged="OnFieldChanged" />
+                            <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,4"
+                                    BackgroundColor="White">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                                <Picker x:Name="WorkerPicker"
+                                        Title="-- Seleccionar --"
+                                        FontSize="{OnIdiom Phone=12, Desktop=13}"
+                                        TextColor="#2E3A34"
+                                        TitleColor="#8A9490"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="Center"
+                                        SelectedIndexChanged="OnFieldChanged" />
+                            </Border>
                         </VerticalStackLayout>
 
                         <!-- ACTIVIDAD -->
@@ -115,13 +120,18 @@
                                    FontSize="{OnIdiom Phone=11, Desktop=12}"
                                    FontAttributes="Bold"
                                    TextColor="#2E3A34" />
-                            <Picker x:Name="LotePicker"
-                                    Title="-- Seleccionar --"
-                                    FontSize="{OnIdiom Phone=12, Desktop=13}"
-                                    TextColor="#2E3A34"
-                                    TitleColor="#8A9490"
-                                    HorizontalOptions="Fill"
-                                    SelectedIndexChanged="OnFieldChanged" />
+                            <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,4"
+                                    BackgroundColor="White">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                                <Picker x:Name="LotePicker"
+                                        Title="-- Seleccionar --"
+                                        FontSize="{OnIdiom Phone=12, Desktop=13}"
+                                        TextColor="#2E3A34"
+                                        TitleColor="#8A9490"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="Center"
+                                        SelectedIndexChanged="OnFieldChanged" />
+                            </Border>
                         </VerticalStackLayout>
 
                         <!-- FECHA -->

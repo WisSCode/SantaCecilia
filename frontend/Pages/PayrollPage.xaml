@@ -136,37 +136,41 @@
                             </VerticalStackLayout>
                             <Label Grid.Column="1" Text="Exportar"
                                    FontSize="11" TextColor="White"
-                                   VerticalOptions="Center" />
+                                   VerticalOptions="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnExportClicked" />
+                                </Label.GestureRecognizers>
+                            </Label>
                         </Grid>
 
                         <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                             <VerticalStackLayout Spacing="0">
                                 <!-- Encabezados -->
                                 <Grid Padding="16,10"
-                                      ColumnDefinitions="{OnIdiom Phone='80,160,130,80,100,110,100,90,120', Desktop='0.8*,1.6*,1.8*,0.8*,1*,1.1*,1*,0.9*,0.7*'}"
+                                      ColumnDefinitions="{OnIdiom Phone='80,160,80,100,110,100,90,120', Desktop='0.8*,1.8*,0.8*,1*,1.1*,1*,0.9*,0.7*'}"
                                       BackgroundColor="#FAFAF7">
-                                    <Label Text="CODIGO" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Text="ID" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
                                     <Label Grid.Column="1" Text="TRABAJADOR" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                                    <Label Grid.Column="2" Text="TIPO" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                                    <Label Grid.Column="3" Text="HORAS" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                                    <Label Grid.Column="4" Text="BRUTO" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                                    <Label Grid.Column="5" Text="DESCUENTOS" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                                    <Label Grid.Column="6" Text="NETO" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                                    <Label Grid.Column="7" Text="ESTADO" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                                    <Label Grid.Column="8" Text="ACCIONES" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="2" Text="HORAS" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="3" Text="BRUTO" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="4" Text="DESCUENTOS" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="5" Text="NETO" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="6" Text="ESTADO" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="7" Text="ACCIONES" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
                                 </Grid>
 
                                 <!-- Filas -->
                                 <CollectionView x:Name="PayrollList" SelectionMode="None">
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1"
-                                                    Padding="16,10" BackgroundColor="White">
-                                                <Grid ColumnDefinitions="{OnIdiom Phone='80,160,130,80,100,110,100,90,120', Desktop='0.8*,1.6*,1.8*,0.8*,1*,1.1*,1*,0.9*,0.7*'}"
+                                            <VerticalStackLayout Spacing="0">
+                                                <Border Stroke="Transparent" StrokeThickness="0"
+                                                        Padding="16,10" BackgroundColor="White">
+                                                <Grid ColumnDefinitions="{OnIdiom Phone='80,160,80,100,110,100,90,120', Desktop='0.8*,1.8*,0.8*,1*,1.1*,1*,0.9*,0.7*'}"
                                                       ColumnSpacing="4">
 
-                                                   <!-- CODIGO -->
-                                                   <Label Text="{Binding DisplayId}"
+                                                   <!-- ID -->
+                                                   <Label Text="{Binding WorkerId}"
                                                        FontSize="11"
                                                        TextColor="{StaticResource TextSecondary}"
                                                        VerticalOptions="Center" />
@@ -190,29 +194,15 @@
                                                                LineBreakMode="TailTruncation" />
                                                     </HorizontalStackLayout>
 
-                                                    <!-- TIPO -->
-                                                    <Border Grid.Column="2"
-                                                        BackgroundColor="#E8F5EE"
-                                                        Padding="6,3"
-                                                        HorizontalOptions="Start"
-                                                        VerticalOptions="Center"
-                                                        StrokeThickness="0">
-                                                    <Border.StrokeShape><RoundRectangle CornerRadius="4" /></Border.StrokeShape>
-                                                    <Label Text="{Binding WorkerType}"
-                                                           FontSize="10"
-                                                           TextColor="#2E7D5B"
-                                                           LineBreakMode="TailTruncation" />
-                                                    </Border>
-
                                                    <!-- HORAS -->
-                                                   <Label Grid.Column="3"
+                                                   <Label Grid.Column="2"
                                                        Text="{Binding HoursDisplay}"
                                                        FontSize="11"
                                                        TextColor="{StaticResource TextSecondary}"
                                                        VerticalOptions="Center" />
 
                                                    <!-- BRUTO -->
-                                                   <Label Grid.Column="4"
+                                                   <Label Grid.Column="3"
                                                        Text="{Binding GrossDisplay}"
                                                        FontSize="11"
                                                        FontAttributes="Bold"
@@ -220,14 +210,14 @@
                                                        VerticalOptions="Center" />
 
                                                    <!-- DESCUENTOS -->
-                                                   <Label Grid.Column="5"
+                                                   <Label Grid.Column="4"
                                                        Text="{Binding DeductionsDisplay}"
                                                        FontSize="11"
                                                        TextColor="#C05858"
                                                        VerticalOptions="Center" />
 
                                                    <!-- NETO -->
-                                                   <Label Grid.Column="6"
+                                                   <Label Grid.Column="5"
                                                        Text="{Binding NetDisplay}"
                                                        FontSize="11"
                                                        FontAttributes="Bold"
@@ -235,7 +225,7 @@
                                                        VerticalOptions="Center" />
 
                                                     <!-- ESTADO -->
-                                                    <Border Grid.Column="7"
+                                                    <Border Grid.Column="6"
                                                         BackgroundColor="{Binding StatusBgColor}"
                                                         Padding="6,3"
                                                         HorizontalOptions="Start"
@@ -248,7 +238,7 @@
                                                     </Border>
 
                                                     <!-- ACCIONES -->
-                                                    <HorizontalStackLayout Grid.Column="8" Spacing="6" VerticalOptions="Center">
+                                                    <HorizontalStackLayout Grid.Column="7" Spacing="6" VerticalOptions="Center">
                                                         <Label Text="Ver"
                                                                FontSize="11"
                                                                TextColor="{StaticResource TextSecondary}"
@@ -268,12 +258,12 @@
                                                                                       CommandParameter="{Binding .}" />
                                                             </Label.GestureRecognizers>
                                                         </Label>
-                                                        <Label Text="Imprimir"
+                                                        <Label Text="Descargar"
                                                                FontSize="11"
                                                                TextColor="{StaticResource TextSecondary}"
                                                                VerticalOptions="Center">
                                                             <Label.GestureRecognizers>
-                                                                <TapGestureRecognizer Tapped="OnPrintTapped"
+                                                                <TapGestureRecognizer Tapped="OnDownloadTapped"
                                                                                       CommandParameter="{Binding .}" />
                                                             </Label.GestureRecognizers>
                                                         </Label>
@@ -281,32 +271,35 @@
 
                                                 </Grid>
                                             </Border>
+                                                <BoxView HeightRequest="1" BackgroundColor="#EEEBE5" HorizontalOptions="Fill" />
+                                            </VerticalStackLayout>
                                         </DataTemplate>
                                     </CollectionView.ItemTemplate>
                                 </CollectionView>
 
                                 <!-- Fila de TOTALES -->
-                                <Border Stroke="#EEEBE5" StrokeThickness="0,1,0,0"
+                                <BoxView HeightRequest="1" BackgroundColor="#EEEBE5" HorizontalOptions="Fill" />
+                                <Border Stroke="Transparent" StrokeThickness="0"
                                         Padding="16,12" BackgroundColor="#FAFAF7">
-                                    <Grid ColumnDefinitions="{OnIdiom Phone='80,160,130,80,100,110,100,90,120', Desktop='0.8*,1.6*,1.8*,0.8*,1*,1.1*,1*,0.9*,0.7*'}"
+                                    <Grid ColumnDefinitions="{OnIdiom Phone='80,160,80,100,110,100,90,120', Desktop='0.8*,1.8*,0.8*,1*,1.1*,1*,0.9*,0.7*'}"
                                           ColumnSpacing="4">
                                         <Label Text="TOTALES"
                                                FontSize="11" FontAttributes="Bold"
                                                TextColor="{StaticResource TextPrimary}"
                                                VerticalOptions="Center" />
-                                        <Label Grid.Column="4"
+                                        <Label Grid.Column="3"
                                                x:Name="TotalGrossLabel"
                                                Text="B/.0.00"
                                                FontSize="11" FontAttributes="Bold"
                                                TextColor="{StaticResource TextPrimary}"
                                                VerticalOptions="Center" />
-                                        <Label Grid.Column="5"
+                                        <Label Grid.Column="4"
                                                x:Name="TotalDeductionsLabel"
                                                Text="-B/.0.00"
                                                FontSize="11" FontAttributes="Bold"
                                                TextColor="#C05858"
                                                VerticalOptions="Center" />
-                                        <Label Grid.Column="6"
+                                        <Label Grid.Column="5"
                                                x:Name="TotalNetLabel"
                                                Text="B/.0.00"
                                                FontSize="11" FontAttributes="Bold"

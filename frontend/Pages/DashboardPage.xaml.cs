@@ -1,4 +1,5 @@
 using System.Globalization;
+using frontend.Helpers;
 using frontend.Models;
 using frontend.Services;
 
@@ -37,8 +38,7 @@ public partial class DashboardPage : ContentPage
             var workTypeRateMap = workTypes.ToDictionary(wt => wt.Id, wt => wt.DefaultRate);
             var batchMap = batches.ToDictionary(b => b.Id, b => b.Name);
 
-            var today = DateTime.Today;
-            var weekStart = today.AddDays(-(int)today.DayOfWeek);
+            var (weekStart, weekEnd) = WeekHelper.GetWeekRange(DateTime.Now);
             var lastWeekStart = weekStart.AddDays(-7);
 
             // --- Stats ---
@@ -52,18 +52,19 @@ public partial class DashboardPage : ContentPage
             WorkersNewBadge.Text = $"+{activeWorkers}";
 
             // Horas trabajadas (this week)
-            var weekEntries = workedTimes.Where(wt => wt.Date.Date >= weekStart).ToList();
+            var weekEntries = workedTimes.Where(wt => wt.Date.Date >= weekStart && wt.Date.Date < weekEnd).ToList();
             var totalMinutesWeek = weekEntries.Sum(wt => wt.MinutesWorked);
             var totalHoursWeek = totalMinutesWeek / 60m;
             HoursCount.Text = $"{totalHoursWeek:N0}";
 
             // Daily average
-            var daysInWeek = Math.Max(1, (int)(today - weekStart).TotalDays + 1);
+            var today = DateTime.Today;
+            var daysInWeek = Math.Max(1, (int)(today < weekEnd ? (today - weekStart).TotalDays + 1 : 7));
             var dailyAvg = totalMinutesWeek / 60m / daysInWeek;
             HoursDailyBadge.Text = $"{dailyAvg:F0}";
 
             // Nomina semanal
-            var weekPayrolls = payrolls.Where(p => p.WeekStart >= weekStart).ToList();
+            var weekPayrolls = payrolls.Where(p => p.WeekStart >= weekStart && p.WeekStart < weekEnd).ToList();
             var totalPayroll = weekPayrolls.Sum(p => p.GrossAmount);
             PayrollAmount.Text = $"B/.{totalPayroll:N2}";
 
@@ -87,8 +88,8 @@ public partial class DashboardPage : ContentPage
             ValidationAlertLabel.Text = $"{pendingUsers} usuarios pendientes de validacion";
             ValidationAlertBorder.IsVisible = pendingUsers > 0;
 
-            // --- Recent activities (last 5) ---
-            var recent = workedTimes
+            // --- Recent activities (last 5 of current week) ---
+            var recent = weekEntries
                 .OrderByDescending(wt => wt.Date)
                 .Take(5)
                 .Select(wt => new TimeEntry
