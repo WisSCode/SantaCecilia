@@ -5,12 +5,16 @@ public class TimeEntry
     public string Id { get; set; } = string.Empty;
     public string WorkerId { get; set; } = string.Empty;
     public string WorkerName { get; set; } = string.Empty;
+    public string WorkerIdentification { get; set; } = string.Empty;
     public string ActivityName { get; set; } = string.Empty;
     public decimal Rate { get; set; }
     public string Lote { get; set; } = string.Empty;
     public DateTime Date { get; set; }
     public int Hours { get; set; }
     public int Minutes { get; set; }
+    public string WorkerDisplayName => string.IsNullOrWhiteSpace(WorkerIdentification)
+        ? WorkerName
+        : $"{WorkerName} · Cédula: {WorkerIdentification}";
 
     public string Initial => string.IsNullOrEmpty(WorkerName) ? "?" : WorkerName[..1].ToUpper();
     public string TimeDisplay => $"{Hours}h {Minutes}m";

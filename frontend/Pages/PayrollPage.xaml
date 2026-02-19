@@ -16,7 +16,7 @@
                                FontSize="{OnIdiom Phone=18, Desktop=20}"
                                FontAttributes="Bold"
                                TextColor="{StaticResource TextPrimary}" />
-                        <Label Text="Calculo y gestion de nomina semanal"
+                           <Label Text="Cálculo y gestión de nómina semanal"
                                FontSize="{OnIdiom Phone=10, Desktop=11}"
                                TextColor="{StaticResource TextSecondary}" />
                     </VerticalStackLayout>
@@ -48,7 +48,7 @@
                             </Border>
                             <Button Grid.Column="{OnIdiom Phone=0, Desktop=1}"
                                     Grid.Row="{OnIdiom Phone=1, Desktop=0}"
-                                    Text="Procesar Nomina Completa"
+                                    Text="Procesar Nómina Completa"
                                     BackgroundColor="#9EC9B4"
                                     TextColor="White"
                                     FontAttributes="Bold"
@@ -131,7 +131,7 @@
                                 <Label x:Name="PayrollWeekLabel"
                                        Text="Semana del ..."
                                        FontSize="15" FontAttributes="Bold" TextColor="White" />
-                                <Label Text="Fecha limite de pago: Sabado 3:00 PM"
+                                    <Label Text="Fecha límite de pago: Sábado 3:00 PM"
                                        FontSize="11" TextColor="#E8F5EE" />
                             </VerticalStackLayout>
                             <Label Grid.Column="1" Text="Exportar"
@@ -187,7 +187,7 @@
                                                                    HorizontalOptions="Center"
                                                                    VerticalOptions="Center" />
                                                         </Border>
-                                                        <Label Text="{Binding WorkerName}"
+                                                        <Label Text="{Binding WorkerDisplayName}"
                                                                FontSize="11" FontAttributes="Bold"
                                                                TextColor="{StaticResource TextPrimary}"
                                                                VerticalOptions="Center"

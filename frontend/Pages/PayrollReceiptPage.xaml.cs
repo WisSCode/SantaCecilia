@@ -157,7 +157,7 @@ public partial class PayrollReceiptPage : ContentPage
 
             headerTable.AddCell(new iTextCell()
                 .Add(new iTextParagraph("FINCA BANANERA SANTA CECILIA").SetBold().SetFontSize(10))
-                .Add(new iTextParagraph("Sistema de Gestion de Nomina").SetFontSize(7)
+                .Add(new iTextParagraph("Sistema de Gestión de Nómina").SetFontSize(7)
                     .SetFontColor(new DeviceRgb(60, 75, 69)))
                 .SetBorder(iTextBorder.NO_BORDER)
                 .SetVerticalAlignment(iTextVerticalAlignment.MIDDLE)

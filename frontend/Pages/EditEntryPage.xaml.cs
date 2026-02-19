@@ -9,6 +9,7 @@ namespace frontend.Pages;
 public partial class EditEntryPage : ContentPage
 {
     private readonly ApiService _api;
+    private List<WorkerDto> allWorkers = [];
     private List<WorkTypeDto> allWorkTypes = [];
     private List<ActivityDisplayItem> filteredActivities = [];
     private List<WorkerDto> workerItems = [];
@@ -60,6 +61,7 @@ public partial class EditEntryPage : ContentPage
             {
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
+                    RefreshWorkerItems();
                     PopulateFormWithEntry();
                 });
             }
@@ -74,11 +76,11 @@ public partial class EditEntryPage : ContentPage
     {
         try
         {
-            workerItems = await _api.GetWorkersAsync();
+            allWorkers = await _api.GetWorkersAsync();
+            RefreshWorkerItems();
             allWorkTypes = await _api.GetWorkTypesAsync();
             batchItems = await _api.GetBatchesAsync();
 
-            WorkerPicker.ItemsSource = workerItems.Select(w => $"{w.Name} {w.LastName}").ToList();
             LotePicker.ItemsSource = batchItems.Select(b => b.Name).ToList();
 
             RefreshActivityList(string.Empty);
@@ -92,6 +94,21 @@ public partial class EditEntryPage : ContentPage
         {
             await DisplayAlertAsync("Error", $"No se pudieron cargar los datos: {ex.Message}", "OK");
         }
+    }
+
+    private void RefreshWorkerItems()
+    {
+        workerItems = allWorkers
+            .Where(w => w.Active || (_currentEntry != null && w.Id == _currentEntry.WorkerId))
+            .OrderBy(w => w.Name)
+            .ThenBy(w => w.LastName)
+            .ToList();
+
+        WorkerPicker.ItemsSource = workerItems
+            .Select(w => string.IsNullOrWhiteSpace(w.Identification)
+                ? $"{w.Name} {w.LastName}"
+                : $"{w.Name} {w.LastName} · Cédula: {w.Identification}")
+            .ToList();
     }
 
     private void PopulateFormWithEntry()
@@ -204,13 +221,13 @@ public partial class EditEntryPage : ContentPage
 
         if (WorkerPicker.SelectedIndex < 0 || selectedActivity == null)
         {
-            await DisplayAlertAsync("Validacion", "Debe seleccionar trabajador y actividad.", "OK");
+            await DisplayAlertAsync("Validación", "Debe seleccionar trabajador y actividad.", "OK");
             return;
         }
 
         if (LotePicker.SelectedIndex < 0)
         {
-            await DisplayAlertAsync("Validacion", "Debe seleccionar un lote.", "OK");
+            await DisplayAlertAsync("Validación", "Debe seleccionar un lote.", "OK");
             return;
         }
 
@@ -224,19 +241,19 @@ public partial class EditEntryPage : ContentPage
 
         if (hours < 0 || hours > 24)
         {
-            await DisplayAlertAsync("Validacion", "Horas debe estar entre 0 y 24.", "OK");
+            await DisplayAlertAsync("Validación", "Horas debe estar entre 0 y 24.", "OK");
             return;
         }
 
         if (minutes < 0 || minutes > 59)
         {
-            await DisplayAlertAsync("Validacion", "Minutos debe estar entre 0 y 59.", "OK");
+            await DisplayAlertAsync("Validación", "Minutos debe estar entre 0 y 59.", "OK");
             return;
         }
 
         if (hours == 0 && minutes == 0)
         {
-            await DisplayAlertAsync("Validacion", "Debe registrar al menos 1 minuto de trabajo.", "OK");
+            await DisplayAlertAsync("Validación", "Debe registrar al menos 1 minuto de trabajo.", "OK");
             return;
         }
 
@@ -274,7 +291,7 @@ public partial class EditEntryPage : ContentPage
             return;
         }
 
-        bool confirm = await DisplayAlertAsync("Confirmar eliminacion", 
+        bool confirm = await DisplayAlertAsync("Confirmar eliminación", 
             "¿Está seguro que desea eliminar este registro de tiempo?", 
             "Eliminar", "Cancelar");
 

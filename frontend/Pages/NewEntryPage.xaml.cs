@@ -38,14 +38,18 @@ public partial class NewEntryPage : ContentPage
     {
         try
         {
-            workerItems = await _api.GetWorkersAsync();
+            workerItems = (await _api.GetWorkersAsync())
+                .Where(w => w.Active)
+                .OrderBy(w => w.Name)
+                .ThenBy(w => w.LastName)
+                .ToList();
             allWorkTypes = await _api.GetWorkTypesAsync();
             batchItems = await _api.GetBatchesAsync();
 
             WorkerPicker.ItemsSource = workerItems
                 .Select(w => string.IsNullOrWhiteSpace(w.Identification)
                     ? $"{w.Name} {w.LastName}"
-                    : $"{w.Name} {w.LastName} -> {w.Identification}")
+                    : $"{w.Name} {w.LastName} · Cédula: {w.Identification}")
                 .ToList();
             WorkerPicker.SelectedIndex = -1;
 
@@ -119,13 +123,13 @@ public partial class NewEntryPage : ContentPage
     {
         if (WorkerPicker.SelectedIndex < 0 || selectedActivity == null)
         {
-            await DisplayAlertAsync("Validacion", "Debe seleccionar trabajador y actividad.", "OK");
+            await DisplayAlertAsync("Validación", "Debe seleccionar trabajador y actividad.", "OK");
             return;
         }
 
         if (LotePicker.SelectedIndex < 0)
         {
-            await DisplayAlertAsync("Validacion", "Debe seleccionar un lote.", "OK");
+            await DisplayAlertAsync("Validación", "Debe seleccionar un lote.", "OK");
             return;
         }
 
@@ -139,19 +143,19 @@ public partial class NewEntryPage : ContentPage
 
         if (hours < 0 || hours > 24)
         {
-            await DisplayAlertAsync("Validacion", "Horas debe estar entre 0 y 24.", "OK");
+            await DisplayAlertAsync("Validación", "Horas debe estar entre 0 y 24.", "OK");
             return;
         }
 
         if (minutes < 0 || minutes > 59)
         {
-            await DisplayAlertAsync("Validacion", "Minutos debe estar entre 0 y 59.", "OK");
+            await DisplayAlertAsync("Validación", "Minutos debe estar entre 0 y 59.", "OK");
             return;
         }
 
         if (hours == 0 && minutes == 0)
         {
-            await DisplayAlertAsync("Validacion", "Debe registrar al menos 1 minuto de trabajo.", "OK");
+            await DisplayAlertAsync("Validación", "Debe registrar al menos 1 minuto de trabajo.", "OK");
             return;
         }
 

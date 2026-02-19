@@ -8,6 +8,7 @@ public partial class TimeTrackingPage : ContentPage
     private readonly ApiService _api;
     private List<TimeEntry> allEntries = new();
     private Dictionary<string, string> workerMap = new();
+    private Dictionary<string, string> workerIdentificationMap = new();
     private Dictionary<string, string> workTypeMap = new();
     private Dictionary<string, double> workTypeRateMap = new();
     private Dictionary<string, string> batchMap = new();
@@ -41,6 +42,7 @@ public partial class TimeTrackingPage : ContentPage
             var workedTimes = await _api.GetWorkedTimesAsync();
 
             workerMap = workers.ToDictionary(w => w.Id, w => $"{w.Name} {w.LastName}");
+            workerIdentificationMap = workers.ToDictionary(w => w.Id, w => w.Identification ?? string.Empty);
             workTypeMap = workTypes.ToDictionary(wt => wt.Id, wt => wt.Name);
             workTypeRateMap = workTypes.ToDictionary(wt => wt.Id, wt => wt.DefaultRate);
             batchMap = batches.ToDictionary(b => b.Id, b => b.Name);
@@ -52,6 +54,7 @@ public partial class TimeTrackingPage : ContentPage
                     Id = wt.Id,
                     WorkerId = wt.WorkerId,
                     WorkerName = workerMap.GetValueOrDefault(wt.WorkerId, wt.WorkerId),
+                    WorkerIdentification = workerIdentificationMap.GetValueOrDefault(wt.WorkerId, string.Empty),
                     ActivityName = workTypeMap.GetValueOrDefault(wt.WorkTypeId, wt.WorkTypeId),
                     Lote = batchMap.GetValueOrDefault(wt.BatchId, wt.BatchId),
                     Rate = (decimal)workTypeRateMap.GetValueOrDefault(wt.WorkTypeId, 0),
@@ -93,6 +96,7 @@ public partial class TimeTrackingPage : ContentPage
             Id = dto.Id,
             WorkerId = dto.WorkerId,
             WorkerName = workerMap.GetValueOrDefault(dto.WorkerId, dto.WorkerId),
+            WorkerIdentification = workerIdentificationMap.GetValueOrDefault(dto.WorkerId, string.Empty),
             ActivityName = workTypeMap.GetValueOrDefault(dto.WorkTypeId, dto.WorkTypeId),
             Lote = batchMap.GetValueOrDefault(dto.BatchId, dto.BatchId),
             Rate = (decimal)workTypeRateMap.GetValueOrDefault(dto.WorkTypeId, 0),
