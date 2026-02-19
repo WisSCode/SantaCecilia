@@ -56,7 +56,11 @@
             <BoxView HeightRequest="1" BackgroundColor="{StaticResource Border}" />
             <VerticalStackLayout Grid.Row="1" Spacing="2" Margin="0,12,0,10">
                 <Label Text="Próximo pago" FontSize="10" TextColor="{StaticResource TextTertiary}" />
-                <Label x:Name="NextPaymentLabel" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                <Label x:Name="NextPaymentLabel"
+       FontSize="12"
+       FontAttributes="Bold"
+       TextColor="{StaticResource TextPrimary}" />
+
             </VerticalStackLayout>
             <Grid Grid.Row="2" ColumnDefinitions="32,*" ColumnSpacing="8">
                 <Border BackgroundColor="{StaticResource BrandSkyBlue}" WidthRequest="28" HeightRequest="28">

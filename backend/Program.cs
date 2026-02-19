@@ -5,6 +5,9 @@ using Google.Cloud.Firestore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseUrls("http://0.0.0.0:5191");
+
+
 //Cargar credenciales de Firebase
     var credential = GoogleCredential.FromFile("firebase-key.json");
 
@@ -39,6 +42,11 @@ builder.Services.AddCors(options =>
 // Controllers
 builder.Services.AddControllers();
 
+//Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
 // Services
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<WorkerService>();
@@ -48,7 +56,18 @@ builder.Services.AddScoped<WorkedTimeService>();
 builder.Services.AddScoped<PayrollService>();
 builder.Services.AddScoped<AuditLogService>();
 
+
+
+
 var app = builder.Build();
+
+// 🔹 Swagger middleware
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 
 // Usar CORS
 app.UseCors("AllowMAUI");
