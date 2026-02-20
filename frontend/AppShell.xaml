@@ -5,25 +5,27 @@
     xmlns:pages="clr-namespace:frontend.Pages"
     x:Class="frontend.AppShell"
     Title="Santa Cecilia"
-    FlyoutBehavior="Flyout"
+    FlyoutBehavior="{OnIdiom Phone=Flyout, Tablet=Locked, Desktop=Locked}"
     FlyoutBackgroundColor="White"
     FlyoutWidth="240"
-    Shell.NavBarIsVisible="True">
+    Shell.NavBarIsVisible="{OnIdiom Phone=True, Tablet=True, Desktop=False}">
 
     <Shell.ItemTemplate>
         <DataTemplate>
             <Grid x:Name="ItemRoot" Padding="14,10">
                 <Label x:Name="ItemTitle" Text="{Binding Title}" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                <VisualStateManager.VisualStateGroups>
+                <VisualStateManager.VisualStateGroups>  
                     <VisualStateGroup Name="CommonStates">
-                        <VisualState Name="Normal">
+                        <VisualState Name="Normal"> 
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="Transparent" />
+                                <Setter TargetName="ItemRoot" Property="BackgroundColor" Value="Transparent" />
+                                <Setter TargetName="ItemTitle" Property="Label.TextColor" Value="{StaticResource TextSecondary}" />
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState Name="Selected">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="{StaticResource AccentGreen}" />
+                                <Setter TargetName="ItemRoot" Property="BackgroundColor" Value="{StaticResource AccentGreen}" />
+                                <Setter TargetName="ItemTitle" Property="Label.TextColor" Value="{StaticResource TextPrimary}" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -112,7 +114,7 @@
         <ShellContent Route="usersContent" ContentTemplate="{DataTemplate pages:UsersPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Logs" Route="logs">
+    <FlyoutItem x:Name="LogsItem" Title="Logs" Route="logs">
         <ShellContent Route="logsContent" ContentTemplate="{DataTemplate pages:LogsPage}" />
     </FlyoutItem>
 
