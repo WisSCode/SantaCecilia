@@ -72,6 +72,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="BouncyCastle.Cryptography" Version="2.6.2" />
 		<PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
 		<PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0" />
@@ -79,6 +80,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 		<PackageReference Include="ClosedXML" Version="0.102.1" />
 		<PackageReference Include="itext7" Version="8.0.2" />
+		<PackageReference Include="System.IO.Packaging" Version="10.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
