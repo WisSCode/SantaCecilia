@@ -16,6 +16,7 @@ public partial class AppShell : Shell
         "reports", "reportsContent",
         "batches", "batchesContent",
         "worktypes", "worktypesContent",
+        "logs", "logsContent",
         "users", "usersContent",
         "newtimeentry", "newworker", "newbatch", "newworktype",
         "editbatch", "editworktype", "edituser", "validateuser"
@@ -69,6 +70,7 @@ public partial class AppShell : Shell
         BatchesItem.IsVisible = isAdmin;
         WorkTypesItem.IsVisible = isAdmin;
         UsersItem.IsVisible = isAdmin;
+        LogsItem.IsVisible = isAdmin;
 
         // Worker items
         WorkerHomeItem.IsVisible = !isAdmin;
