@@ -25,7 +25,7 @@
                     <Border BackgroundColor="#FFF4E1" Stroke="#F1C27B" StrokeThickness="1"
                             Padding="{OnIdiom Phone=10, Desktop=12}" StrokeShape="RoundRectangle 0">
                         <Label x:Name="PayrollAlertLabel"
-                                   Text="Faltan 0 dias para el cierre de nomina semanal"
+                                   Text="Faltan 0 días para el cierre de nomina semanal"
                                    FontSize="{OnIdiom Phone=11, Desktop=12}"
                                    FontAttributes="Bold"
                                    TextColor="#7A5A26"
@@ -142,7 +142,7 @@
                         <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                         <Grid RowDefinitions="Auto,Auto" RowSpacing="6">
                             <VerticalStackLayout Spacing="2">
-                                <Label Text="Nomina Semanal"
+                                <Label Text="Nómina Semanal"
                                        FontSize="11"
                                        TextColor="{StaticResource TextSecondary}" />
                                 <Label x:Name="PayrollAmount" Text="B/.0"

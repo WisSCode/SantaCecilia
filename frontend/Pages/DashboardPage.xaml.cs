@@ -82,7 +82,7 @@ public partial class DashboardPage : ContentPage
             var daysOfWeek = (int)today.DayOfWeek;
             var daysUntilSaturday = ((int)DayOfWeek.Saturday - daysOfWeek + 7) % 7;
             if (daysUntilSaturday == 0) daysUntilSaturday = 0; // Today is Saturday
-            PayrollAlertLabel.Text = $"Faltan {daysUntilSaturday} dias para el cierre de nomina semanal";
+            PayrollAlertLabel.Text = $"Faltan {daysUntilSaturday} días para el cierre de nómina semanal";
 
             // Users pending validation
             var pendingUsers = users.Count(u => !u.Validated);

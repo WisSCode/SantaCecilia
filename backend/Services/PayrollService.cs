@@ -43,4 +43,10 @@ public class PayrollService
     {
         await _payrolls.Document(payrollId).SetAsync(payroll, SetOptions.MergeAll);
     }
+
+    // DELETE
+    public async Task DeleteAsync(string payrollId)
+    {
+        await _payrolls.Document(payrollId).DeleteAsync();
+    }
 }

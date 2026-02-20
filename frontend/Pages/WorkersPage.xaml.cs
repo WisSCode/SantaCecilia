@@ -80,7 +80,7 @@ public partial class WorkersPage : ContentPage
         HeaderId.Text = "ID" + (_sortColumn == "Id" ? arrow : "");
         HeaderName.Text = "NOMBRE" + (_sortColumn == "Name" ? arrow : "");
         HeaderLastName.Text = "APELLIDO" + (_sortColumn == "LastName" ? arrow : "");
-        HeaderId2.Text = "CEDULA" + (_sortColumn == "Identification" ? arrow : "");
+        HeaderId2.Text = "CÉDULA" + (_sortColumn == "Identification" ? arrow : "");
         HeaderStatus.Text = "ESTADO" + (_sortColumn == "Status" ? arrow : "");
     }
 

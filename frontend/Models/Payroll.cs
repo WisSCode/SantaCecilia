@@ -25,6 +25,9 @@ public class Payroll
     public int SequentialId { get; set; }
 
     public string DisplayId => $"TRB-{SequentialId:D3}";
+    public string WorkerDisplayName => string.IsNullOrWhiteSpace(WorkerIdentification)
+        ? WorkerName
+        : $"{WorkerName} · Cédula: {WorkerIdentification}";
     public string HoursDisplay => $"{TotalHours:F1}h";
     public string GrossDisplay => $"B/.{GrossAmount:F2}";
     public decimal DeductionsTotal => SocialSecurity + EducationalInsurance + UnionFee;

@@ -26,7 +26,7 @@
                                    FontSize="{OnIdiom Phone=15, Desktop=16}"
                                    FontAttributes="Bold"
                                    TextColor="White" />
-                            <Label Text="Modifique la informacion de la actividad realizada"
+                            <Label Text="Modifique la información de la actividad realizada"
                                    FontSize="{OnIdiom Phone=10, Desktop=11}"
                                    TextColor="#F2F7F4" />
                         </VerticalStackLayout>
@@ -70,7 +70,7 @@
                                    FontAttributes="Bold"
                                    TextColor="#2E3A34" />
 
-                            <!-- Barra de busqueda -->
+                            <!-- Barra de búsqueda -->
                             <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
                                     BackgroundColor="White" HeightRequest="{OnIdiom Phone=42, Desktop=44}">
                                 <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>

@@ -55,8 +55,10 @@ public partial class WorkersHomePage : ContentPage
             AvatarLabel.Text = initials.Length > 0 ? initials : "?";
 
             WorkerNameLabel.Text = fullName;
-            WorkerCodeLabel.Text = $"TRB-{currentWorker.Id}";
-            WorkerCedulaLabel.Text = $"Cédula: {currentWorker.Identification}";
+            WorkerCodeLabel.Text = $"{currentWorker.Id}";
+            WorkerCedulaLabel.Text = string.IsNullOrWhiteSpace(currentWorker.Identification)
+                ? "Cédula: —"
+                : $"Cédula: {currentWorker.Identification}";
 
             var workedTimes = await _api.GetWorkedTimesAsync();
             var workTypes = await _api.GetWorkTypesAsync();
@@ -124,7 +126,7 @@ public partial class WorkersHomePage : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"No se pudieron cargar los datos: {ex.Message}", "OK");
+            await DisplayAlertAsync("Error", $"No se pudieron cargar los datos: {ex.Message}", "OK");
         }
     }
 

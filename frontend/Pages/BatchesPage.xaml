@@ -12,7 +12,7 @@
                 <!-- Header -->
                 <VerticalStackLayout Spacing="4">
                     <Label Text="Lotes" Style="{StaticResource Heading2}" />
-                    <Label Text="Gestion de lotes y ubicaciones" Style="{StaticResource BodySecondary}" />
+                    <Label Text="Gestión de lotes y ubicaciones" Style="{StaticResource BodySecondary}" />
                 </VerticalStackLayout>
 
                 <!-- Summary Stats -->

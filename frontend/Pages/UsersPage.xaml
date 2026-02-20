@@ -12,7 +12,7 @@
                 <!-- Header -->
                 <VerticalStackLayout Spacing="4">
                     <Label Text="Usuarios" Style="{StaticResource Heading2}" />
-                    <Label Text="Gestion de accesos y roles" Style="{StaticResource BodySecondary}" />
+                    <Label Text="Gestión de accesos y roles" Style="{StaticResource BodySecondary}" />
                 </VerticalStackLayout>
 
                 <!-- Summary Stats -->

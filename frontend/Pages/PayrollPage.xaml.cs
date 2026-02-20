@@ -90,7 +90,7 @@ public partial class PayrollPage : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlertAsync("Error", $"No se pudo cargar la nomina: {ex.Message}", "OK");
+            await DisplayAlertAsync("Error", $"No se pudo cargar la nómina: {ex.Message}", "OK");
         }
     }
 
@@ -258,8 +258,8 @@ public partial class PayrollPage : ContentPage
     {
         var weekStart = _currentWeekStart;
         var confirm = await DisplayAlertAsync(
-            "Procesar nomina",
-            $"Se generara la nomina de la semana del {weekStart:dd MMM yyyy}. Continuar?",
+            "Procesar nómina",
+            $"Se generará la nómina de la semana del {weekStart:dd MMM yyyy}. ¿Continuar?",
             "Procesar",
             "Cancelar");
 
@@ -269,12 +269,12 @@ public partial class PayrollPage : ContentPage
         try
         {
             var count = await _api.ProcessPayrollAsync(weekStart);
-            await DisplayAlertAsync("Nomina", $"Nomina procesada. Registros: {count}", "OK");
+            await DisplayAlertAsync("Nómina", $"Nómina procesada. Registros: {count}", "OK");
             await LoadPayrollsAsync(weekStart);
         }
         catch (Exception ex)
         {
-            await DisplayAlertAsync("Error", $"No se pudo procesar la nomina: {ex.Message}", "OK");
+            await DisplayAlertAsync("Error", $"No se pudo procesar la nómina: {ex.Message}", "OK");
         }
     }
 
@@ -288,7 +288,7 @@ public partial class PayrollPage : ContentPage
 
         var confirm = await DisplayAlertAsync(
             "Marcar pagado",
-            $"Marcar como pagada la nomina de {payroll.WorkerName}?",
+            $"¿Marcar como pagada la nómina de {payroll.WorkerName}?",
             "Marcar",
             "Cancelar");
 
@@ -318,7 +318,7 @@ public partial class PayrollPage : ContentPage
         {
             payroll.Status = PayrollStatus.Pending;
             payroll.PaidAt = null;
-            await DisplayAlertAsync("Error", $"No se pudo actualizar la nomina: {ex.Message}", "OK");
+            await DisplayAlertAsync("Error", $"No se pudo actualizar la nómina: {ex.Message}", "OK");
         }
     }
 
@@ -416,10 +416,10 @@ public partial class PayrollPage : ContentPage
 
         sb.Append("<div>");
         sb.Append("<div class='title'>FINCA BANANERA SANTA CECILIA</div>");
-        sb.Append("<div class='subtitle'>Sistema de Gestion de Nomina</div>");
+        sb.Append("<div class='subtitle'>Sistema de Gestión de Nómina</div>");
         sb.Append("</div>");
         sb.Append("<div class='header-right'>");
-        sb.Append($"<div>Fecha de emision: {DateTime.Now:dd MMM yyyy}</div>");
+        sb.Append($"<div>Fecha de emisión: {DateTime.Now:dd MMM yyyy}</div>");
         sb.Append($"<div>ID: {payroll.Id}</div>");
         sb.Append("</div>");
         sb.Append("</div>");
@@ -473,7 +473,7 @@ public partial class PayrollPage : ContentPage
         sb.Append($"<td class='right'>B/.{payroll.GrossAmount:F2}</td></tr>");
         sb.Append($"<tr><td>&nbsp;&nbsp;Seguro Social (9.75%)</td><td class='right neg'>-B/.{payroll.SocialSecurity:F2}</td></tr>");
         sb.Append($"<tr><td>&nbsp;&nbsp;Seguro Educativo (1.25%)</td><td class='right neg'>-B/.{payroll.EducationalInsurance:F2}</td></tr>");
-        sb.Append($"<tr><td>&nbsp;&nbsp;Aporte Sindical (Sindicato Bananero de Chiriqui)</td><td class='right neg'>-B/.{payroll.UnionFee:F2}</td></tr>");
+        sb.Append($"<tr><td>&nbsp;&nbsp;Aporte Sindical (Sindicato Bananero de Chiriquí)</td><td class='right neg'>-B/.{payroll.UnionFee:F2}</td></tr>");
         sb.Append($"<tr class='total-row'><td>TOTAL NETO A PAGAR</td><td class='right'>B/.{payroll.NetAmount:F2}</td></tr>");
         sb.Append("</table>");
 
