@@ -187,7 +187,7 @@
                                                                    HorizontalOptions="Center"
                                                                    VerticalOptions="Center" />
                                                         </Border>
-                                                        <Label Text="{Binding WorkerDisplayName}"
+                                                        <Label Text="{Binding WorkerName}"
                                                                FontSize="11" FontAttributes="Bold"
                                                                TextColor="{StaticResource TextPrimary}"
                                                                VerticalOptions="Center"
