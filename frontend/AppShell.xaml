@@ -5,10 +5,10 @@
     xmlns:pages="clr-namespace:frontend.Pages"
     x:Class="frontend.AppShell"
     Title="Santa Cecilia"
-    FlyoutBehavior="Flyout"
+    FlyoutBehavior="{OnIdiom Phone=Flyout, Tablet=Locked, Desktop=Locked}"
     FlyoutBackgroundColor="White"
     FlyoutWidth="240"
-    Shell.NavBarIsVisible="True">
+    Shell.NavBarIsVisible="{OnIdiom Phone=True, Tablet=True, Desktop=False}">
 
     <Shell.ItemTemplate>
         <DataTemplate>
@@ -116,7 +116,7 @@
         <ShellContent Route="usersContent" ContentTemplate="{DataTemplate pages:UsersPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Logs" Route="logs">
+    <FlyoutItem x:Name="LogsItem" Title="Registros" Route="logs">
         <ShellContent Route="logsContent" ContentTemplate="{DataTemplate pages:LogsPage}" />
     </FlyoutItem>
 
