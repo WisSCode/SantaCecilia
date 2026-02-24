@@ -2,6 +2,7 @@
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
+using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +62,31 @@ builder.Services.AddScoped<AuditLogService>();
 
 
 var app = builder.Build();
+
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        var feature = context.Features.Get<IExceptionHandlerFeature>();
+        var exception = feature?.Error;
+
+        var statusCode = exception is FirestoreUnavailableException
+            ? StatusCodes.Status503ServiceUnavailable
+            : StatusCodes.Status500InternalServerError;
+
+        context.Response.StatusCode = statusCode;
+        context.Response.ContentType = "application/json";
+
+        await context.Response.WriteAsJsonAsync(new
+        {
+            title = statusCode == StatusCodes.Status503ServiceUnavailable
+                ? "Firestore unavailable"
+                : "Unexpected server error",
+            status = statusCode,
+            detail = app.Environment.IsDevelopment() ? exception?.Message : null
+        });
+    });
+});
 
 // 🔹 Swagger middleware
 if (app.Environment.IsDevelopment())
