@@ -1,4 +1,5 @@
 using frontend.ViewModels;
+using frontend.Configuration;
 
 namespace frontend.Pages;
 
@@ -6,6 +7,7 @@ public partial class LoginPage : ContentPage
 {
     private readonly LoginViewModel _viewModel;
     private bool _isPasswordVisible;
+    private bool _autoLoginAttempted;
 
     public LoginPage(LoginViewModel viewModel)
     {
@@ -13,6 +15,23 @@ public partial class LoginPage : ContentPage
         _viewModel = viewModel;
         BindingContext = _viewModel;
         UpdatePasswordVisibilityState();
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (_autoLoginAttempted || !AppSettings.DevAutoLogin.Enabled)
+            return;
+
+        _autoLoginAttempted = true;
+
+        _viewModel.Email = AppSettings.DevAutoLogin.Email;
+        _viewModel.Password = AppSettings.DevAutoLogin.Password;
+
+        var result = await _viewModel.ExecuteLoginAsync();
+        if (result != null && Application.Current is App app)
+            await app.GoToShellAsync();
     }
 
     private void OnTogglePasswordVisibilityClicked(object sender, EventArgs e)
@@ -33,14 +52,11 @@ public partial class LoginPage : ContentPage
 
         if (result == null)
         {
-            if (!string.IsNullOrEmpty(_viewModel.ErrorMessage))
-            {
-                await DisplayAlertAsync("Error", _viewModel.ErrorMessage, "OK");
-            }
-            else
-            {
-                await DisplayAlertAsync("Error", "Credenciales invalidas", "OK");
-            }
+            var errorMsg = string.IsNullOrEmpty(_viewModel.ErrorMessage) 
+                ? "Error de autenticación. Verifica tus credenciales." 
+                : _viewModel.ErrorMessage;
+            
+            await DisplayAlertAsync("Error de inicio de sesión", errorMsg, "OK");
             return;
         }
 
