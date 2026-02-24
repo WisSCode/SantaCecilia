@@ -116,7 +116,7 @@
         <ShellContent Route="usersContent" ContentTemplate="{DataTemplate pages:UsersPage}" />
     </FlyoutItem>
 
-    <FlyoutItem x:Name="LogsItem" Title="Registros" Route="logs">
+    <FlyoutItem x:Name="LogsItem" Title="Logs" Route="logs">
         <ShellContent Route="logsContent" ContentTemplate="{DataTemplate pages:LogsPage}" />
     </FlyoutItem>
 
