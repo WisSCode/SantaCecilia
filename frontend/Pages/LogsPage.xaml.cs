@@ -146,4 +146,22 @@ public partial class LogsPage : ContentPage
             }
         }
     }
+
+    private void OnSearchChanged(object sender, TextChangedEventArgs e)
+    {
+        var searchText = e.NewTextValue?.ToLower() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            LogsList.ItemsSource = _logs;
+        }
+        else
+        {
+            var filtered = _logs.Where(l => 
+                l.Entity.ToLower().Contains(searchText) || 
+                l.Message.ToLower().Contains(searchText) ||
+                l.Action.ToLower().Contains(searchText) ||
+                l.ActorId.ToLower().Contains(searchText)).ToList();
+            LogsList.ItemsSource = filtered;
+        }
+    }
 }
