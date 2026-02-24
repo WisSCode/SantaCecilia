@@ -16,7 +16,6 @@ public partial class AppShell : Shell
         "reports", "reportsContent",
         "batches", "batchesContent",
         "worktypes", "worktypesContent",
-        "logs", "logsContent",
         "users", "usersContent",
         "logs", "logsContent",
         "newtimeentry", "newworker", "newbatch", "newworktype",

@@ -14,18 +14,16 @@
         <DataTemplate>
             <Grid x:Name="ItemRoot" Padding="14,10">
                 <Label x:Name="ItemTitle" Text="{Binding Title}" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                <VisualStateManager.VisualStateGroups>  
+                <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup Name="CommonStates">
-                        <VisualState Name="Normal"> 
+                        <VisualState Name="Normal">
                             <VisualState.Setters>
-                                <Setter TargetName="ItemRoot" Property="BackgroundColor" Value="Transparent" />
-                                <Setter TargetName="ItemTitle" Property="Label.TextColor" Value="{StaticResource TextSecondary}" />
+                                <Setter Property="BackgroundColor" Value="Transparent" />
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState Name="Selected">
                             <VisualState.Setters>
-                                <Setter TargetName="ItemRoot" Property="BackgroundColor" Value="{StaticResource AccentGreen}" />
-                                <Setter TargetName="ItemTitle" Property="Label.TextColor" Value="{StaticResource TextPrimary}" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource AccentGreen}" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>

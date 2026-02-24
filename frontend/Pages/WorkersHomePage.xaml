@@ -179,13 +179,13 @@
                         <Grid ColumnDefinitions="*,Auto">
                             <Label Text="TOTAL A RECIBIR:"
                                    FontAttributes="Bold"
-                                   TextColor="{StaticResource TextPrimary}"/>
+                                   TextColor="White"/>
                             <Label x:Name="TotalNetLabel"
                                    Grid.Column="1"
                                    Text="B/.0.00"
                                    FontAttributes="Bold"
                                    HorizontalTextAlignment="End"
-                                   TextColor="{StaticResource TextPrimary}"/>
+                                   TextColor="White"/>
                         </Grid>
                     </Frame>
 
