@@ -13,13 +13,13 @@ public class WorkedTimeService
     // CREATE
     public async Task CreateAsync(string workedTimeId, WorkedTimes workedTimes)
     {
-        await _workedTimes.Document(workedTimeId).SetAsync(workedTimes);
+        await FirestoreOperationHelper.ExecuteAsync(() => _workedTimes.Document(workedTimeId).SetAsync(workedTimes));
     }
 
     // SELECT
     public async Task<WorkedTimes?> GetAsync(string workedTimesId)
     {
-        var snapshot = await _workedTimes.Document(workedTimesId).GetSnapshotAsync();
+        var snapshot = await FirestoreOperationHelper.ExecuteAsync(() => _workedTimes.Document(workedTimesId).GetSnapshotAsync());
         return snapshot.Exists ? snapshot.ConvertTo<WorkedTimes>() : null;
     }
 
@@ -27,7 +27,7 @@ public class WorkedTimeService
     public async Task<List<(string Id, WorkedTimes WorkedTime)>> GetAllAsync()
     {
         var list = new List<(string, WorkedTimes)>();
-        var snap = await _workedTimes.GetSnapshotAsync();
+        var snap = await FirestoreOperationHelper.ExecuteAsync(() => _workedTimes.GetSnapshotAsync());
         foreach (var doc in snap.Documents)
         {
             if (doc.Exists)
@@ -41,12 +41,12 @@ public class WorkedTimeService
     // UPDATE
     public async Task UpdateAsync(string workedTimesId, WorkedTimes workedTimes)
     {
-        await _workedTimes.Document(workedTimesId).SetAsync(workedTimes, SetOptions.MergeAll);
+        await FirestoreOperationHelper.ExecuteAsync(() => _workedTimes.Document(workedTimesId).SetAsync(workedTimes, SetOptions.MergeAll));
     }
 
     // DELETE
     public async Task DeleteAsync(string workedTimesId)
     {
-        await _workedTimes.Document(workedTimesId).DeleteAsync();
+        await FirestoreOperationHelper.ExecuteAsync(() => _workedTimes.Document(workedTimesId).DeleteAsync());
     }
 }
