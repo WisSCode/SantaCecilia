@@ -19,10 +19,16 @@ namespace frontend
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            // Configurar HttpClient para el backend
-            builder.Services.AddSingleton(sp => 
+            // Registrar SessionService primero (necesario para el handler)
+            builder.Services.AddSingleton<SessionService>();
+
+            // Configurar HttpClient principal para ApiService con autenticación
+            builder.Services.AddSingleton<HttpClient>(sp => 
             {
-                var httpClient = new HttpClient
+                var sessionService = sp.GetRequiredService<SessionService>();
+                var handler = new AuthenticatedHttpMessageHandler(sessionService);
+                
+                var httpClient = new HttpClient(handler)
                 {
                     BaseAddress = new Uri(AppSettings.BackendUrl)
                 };
@@ -30,9 +36,8 @@ namespace frontend
                 return httpClient;
             });
 
-            // Registrar servicios
+            // Registrar otros servicios
             builder.Services.AddSingleton<AuthService>();
-            builder.Services.AddSingleton<SessionService>();
             builder.Services.AddSingleton<ApiService>();
 
             // Registrar ViewModels
