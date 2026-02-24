@@ -61,30 +61,54 @@
 
                         <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                             <VerticalStackLayout Spacing="0">
+                                <!-- Cabecera de tabla -->
                                 <Grid Padding="10"
-                                      ColumnDefinitions="{OnIdiom Phone='190,140,200', Desktop='3*,2*,Auto'}"
-                                      BackgroundColor="{StaticResource SurfaceSecondary}">
-                                    <Label x:Name="HeaderName" Text="NOMBRE &#x2191;" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer Tapped="OnSortByName" />
-                                        </Label.GestureRecognizers>
-                                    </Label>
-                                    <Label x:Name="HeaderRate" Grid.Column="1" Text="TARIFA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer Tapped="OnSortByRate" />
-                                        </Label.GestureRecognizers>
-                                    </Label>
-                                    <Label Grid.Column="2" Text="ACCIONES" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                      ColumnDefinitions="{OnIdiom Phone='190,120,200', Desktop='3*,3*,Auto'}"
+                                      BackgroundColor="{StaticResource SurfaceSecondary}"
+                                      ColumnSpacing="8">
+                                    <Label x:Name="HeaderName" 
+                                           Text="NOMBRE &#x2191;" 
+                                           FontSize="10" 
+                                           FontAttributes="Bold" 
+                                           HorizontalTextAlignment="Start" 
+                                           TextColor="{StaticResource TextSecondary}" />
+                                    <Label x:Name="HeaderRate" 
+                                           Grid.Column="1" 
+                                           Text="TARIFA" 
+                                           FontSize="10" 
+                                           FontAttributes="Bold" 
+                                           HorizontalTextAlignment="Start" 
+                                           TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="2" 
+                                           Text="ACCIONES" 
+                                           FontSize="10" 
+                                           FontAttributes="Bold" 
+                                           HorizontalTextAlignment="Start" 
+                                           TextColor="{StaticResource TextSecondary}" />
                                 </Grid>
 
+                                <!-- Items -->
                                 <CollectionView x:Name="WorkTypesList" SelectionMode="None">
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10">
-                                                <Grid ColumnDefinitions="{OnIdiom Phone='190,140,200', Desktop='3*,2*,Auto'}" ColumnSpacing="8">
-                                                    <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="12" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
-                                                    <Label Grid.Column="1" Text="{Binding DefaultRate, StringFormat='B/.{0:F4}/hr'}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
-                                                    <HorizontalStackLayout Grid.Column="2" Spacing="6">
+                                            <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10" Margin="0">
+                                                <Grid ColumnDefinitions="{OnIdiom Phone='190,120,200', Desktop='3*,2.8*,Auto'}" ColumnSpacing="8">
+                                                    <!-- NOMBRE -->
+                                                    <Label Text="{Binding Name}" 
+                                                           FontAttributes="Bold" 
+                                                           FontSize="12" 
+                                                           TextColor="{StaticResource TextPrimary}" 
+                                                           VerticalOptions="Center" 
+                                                           HorizontalTextAlignment="Start" />
+                                                    <!-- TARIFA -->
+                                                    <Label Grid.Column="1" 
+                                                           Text="{Binding DefaultRate, StringFormat='B/.{0:F4}/hr'}" 
+                                                           FontSize="11" 
+                                                           TextColor="{StaticResource TextSecondary}" 
+                                                           VerticalOptions="Center" 
+                                                           HorizontalTextAlignment="Start" />
+                                                    <!-- ACCIONES -->
+                                                    <HorizontalStackLayout Grid.Column="2" Spacing="6" VerticalOptions="Center">
                                                         <Button Text="Editar" 
                                                                 Clicked="OnEditClicked"
                                                                 CommandParameter="{Binding .}"
