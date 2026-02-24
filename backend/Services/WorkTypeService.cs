@@ -13,13 +13,13 @@ public class WorkTypeService
     // CREATE
     public async Task CreateAsync(string workTypeId, WorkTypes workType)
     {
-        await _workTypes.Document(workTypeId).SetAsync(workType);
+        await FirestoreOperationHelper.ExecuteAsync(() => _workTypes.Document(workTypeId).SetAsync(workType));
     }
 
     // SELECT
     public async Task<WorkTypes?> GetAsync(string workTypeId)
     {
-        var snapshot = await _workTypes.Document(workTypeId).GetSnapshotAsync();
+        var snapshot = await FirestoreOperationHelper.ExecuteAsync(() => _workTypes.Document(workTypeId).GetSnapshotAsync());
         return snapshot.Exists ? snapshot.ConvertTo<WorkTypes>() : null;
     }
 
@@ -27,7 +27,7 @@ public class WorkTypeService
     public async Task<List<(string Id, WorkTypes WorkType)>> GetAllAsync()
     {
         var list = new List<(string, WorkTypes)>();
-        var snap = await _workTypes.GetSnapshotAsync();
+        var snap = await FirestoreOperationHelper.ExecuteAsync(() => _workTypes.GetSnapshotAsync());
         foreach (var doc in snap.Documents)
         {
             if (doc.Exists)
@@ -41,12 +41,12 @@ public class WorkTypeService
     // UPDATE
     public async Task UpdateAsync(string workTypeId, WorkTypes workType)
     {
-        await _workTypes.Document(workTypeId).SetAsync(workType, SetOptions.MergeAll);
+        await FirestoreOperationHelper.ExecuteAsync(() => _workTypes.Document(workTypeId).SetAsync(workType, SetOptions.MergeAll));
     }
 
     // DELETE
     public async Task DeleteAsync(string workTypeId)
     {
-        await _workTypes.Document(workTypeId).DeleteAsync();
+        await FirestoreOperationHelper.ExecuteAsync(() => _workTypes.Document(workTypeId).DeleteAsync());
     }
 }
