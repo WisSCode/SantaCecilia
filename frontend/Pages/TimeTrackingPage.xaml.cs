@@ -13,6 +13,12 @@ public partial class TimeTrackingPage : ContentPage
     private Dictionary<string, double> workTypeRateMap = new();
     private Dictionary<string, string> batchMap = new();
 
+    private enum SortDirection { Ascending, Descending }
+    private SortDirection _dateSortDirection = SortDirection.Descending;
+    private SortDirection _workerSortDirection = SortDirection.Ascending;
+    private SortDirection _activitySortDirection = SortDirection.Ascending;
+    private SortDirection _batchSortDirection = SortDirection.Ascending;
+
     public TimeTrackingPage(ApiService api)
     {
         InitializeComponent();
@@ -143,5 +149,85 @@ public partial class TimeTrackingPage : ContentPage
             .ToList();
 
         EntriesView.ItemsSource = filtered;
+    }
+
+    private void OnSortByDate(object sender, TappedEventArgs e)
+    {
+        _dateSortDirection = _dateSortDirection == SortDirection.Ascending 
+            ? SortDirection.Descending 
+            : SortDirection.Ascending;
+
+        var sorted = _dateSortDirection == SortDirection.Ascending
+            ? allEntries.OrderBy(x => x.Date).ToList()
+            : allEntries.OrderByDescending(x => x.Date).ToList();
+
+        allEntries = sorted;
+        EntriesView.ItemsSource = null;
+        EntriesView.ItemsSource = allEntries;
+
+        HeaderDate.Text = _dateSortDirection == SortDirection.Ascending ? "FECHA \u2191" : "FECHA \u2193";
+        HeaderWorker.Text = "TRABAJADOR";
+        HeaderActivity.Text = "ACTIVIDAD";
+        HeaderBatch.Text = "LOTE";
+    }
+
+    private void OnSortByWorker(object sender, TappedEventArgs e)
+    {
+        _workerSortDirection = _workerSortDirection == SortDirection.Ascending 
+            ? SortDirection.Descending 
+            : SortDirection.Ascending;
+
+        var sorted = _workerSortDirection == SortDirection.Ascending
+            ? allEntries.OrderBy(x => x.WorkerName).ToList()
+            : allEntries.OrderByDescending(x => x.WorkerName).ToList();
+
+        allEntries = sorted;
+        EntriesView.ItemsSource = null;
+        EntriesView.ItemsSource = allEntries;
+
+        HeaderWorker.Text = _workerSortDirection == SortDirection.Ascending ? "TRABAJADOR \u2191" : "TRABAJADOR \u2193";
+        HeaderDate.Text = "FECHA \u2191";
+        HeaderActivity.Text = "ACTIVIDAD";
+        HeaderBatch.Text = "LOTE";
+    }
+
+    private void OnSortByActivity(object sender, TappedEventArgs e)
+    {
+        _activitySortDirection = _activitySortDirection == SortDirection.Ascending 
+            ? SortDirection.Descending 
+            : SortDirection.Ascending;
+
+        var sorted = _activitySortDirection == SortDirection.Ascending
+            ? allEntries.OrderBy(x => x.ActivityName).ToList()
+            : allEntries.OrderByDescending(x => x.ActivityName).ToList();
+
+        allEntries = sorted;
+        EntriesView.ItemsSource = null;
+        EntriesView.ItemsSource = allEntries;
+
+        HeaderActivity.Text = _activitySortDirection == SortDirection.Ascending ? "ACTIVIDAD \u2191" : "ACTIVIDAD \u2193";
+        HeaderDate.Text = "FECHA \u2191";
+        HeaderWorker.Text = "TRABAJADOR";
+        HeaderBatch.Text = "LOTE";
+    }
+
+    private void OnSortByBatch(object sender, TappedEventArgs e)
+    {
+        _batchSortDirection = _batchSortDirection == SortDirection.Ascending 
+            ? SortDirection.Descending 
+            : SortDirection.Ascending;
+
+        var sorted = _batchSortDirection == SortDirection.Ascending
+            ? allEntries.OrderBy(x => x.Lote).ToList()
+            : allEntries.OrderByDescending(x => x.Lote).ToList();
+
+        allEntries = sorted;
+        EntriesView.ItemsSource = null;
+        EntriesView.ItemsSource = allEntries;
+
+        HeaderBatch.Text = _batchSortDirection == SortDirection.Ascending ? "LOTE \u2191" : "LOTE \u2193";
+        HeaderDate.Text = "FECHA \u2191";
+        HeaderWorker.Text = "TRABAJADOR";
+        HeaderActivity.Text = "ACTIVIDAD";
     }
 }
