@@ -13,13 +13,13 @@ public class BatchService
     // CREATE
     public async Task CreateAsync(string batchId, Batches batch)
     {
-        await _batches.Document(batchId).SetAsync(batch);
+        await FirestoreOperationHelper.ExecuteAsync(() => _batches.Document(batchId).SetAsync(batch));
     }
 
     // SELECT
     public async Task<Batches?> GetAsync(string batchId)
     {
-        var snapshot = await _batches.Document(batchId).GetSnapshotAsync();
+        var snapshot = await FirestoreOperationHelper.ExecuteAsync(() => _batches.Document(batchId).GetSnapshotAsync());
         return snapshot.Exists ? snapshot.ConvertTo<Batches>() : null;
     }
 
@@ -27,7 +27,7 @@ public class BatchService
     public async Task<List<(string Id, Batches Batch)>> GetAllAsync()
     {
         var list = new List<(string, Batches)>();
-        var snap = await _batches.GetSnapshotAsync();
+        var snap = await FirestoreOperationHelper.ExecuteAsync(() => _batches.GetSnapshotAsync());
         foreach (var doc in snap.Documents)
         {
             if (doc.Exists)
@@ -41,12 +41,12 @@ public class BatchService
     // UPDATE
     public async Task UpdateAsync(string batchId, Batches batch)
     {
-        await _batches.Document(batchId).SetAsync(batch, SetOptions.MergeAll);
+        await FirestoreOperationHelper.ExecuteAsync(() => _batches.Document(batchId).SetAsync(batch, SetOptions.MergeAll));
     }
 
     // DELETE
     public async Task DeleteAsync(string batchId)
     {
-        await _batches.Document(batchId).DeleteAsync();
+        await FirestoreOperationHelper.ExecuteAsync(() => _batches.Document(batchId).DeleteAsync());
     }
 }
