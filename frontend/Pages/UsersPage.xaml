@@ -10,24 +10,52 @@
             <VerticalStackLayout Padding="{OnIdiom Phone=12, Desktop=20}" Spacing="{OnIdiom Phone=12, Desktop=16}">
                 
                 <!-- Header -->
-                <VerticalStackLayout Spacing="4">
-                    <Label Text="Usuarios" Style="{StaticResource Heading2}" />
-                    <Label Text="Gestión de accesos y roles" Style="{StaticResource BodySecondary}" />
-                </VerticalStackLayout>
+                <Grid ColumnDefinitions="*,Auto"
+                    ColumnSpacing="12"
+                    VerticalOptions="Center"
+                    Padding="0">
+
+                    <!-- Text -->
+                    <VerticalStackLayout Spacing="2"
+                                        VerticalOptions="Center"
+                                        Grid.Column="0">
+
+                        <Label Text="Usuarios"
+                            FontSize="{OnIdiom Phone=18, Desktop=20}"
+                            FontAttributes="Bold"
+                            TextColor="{StaticResource TextPrimary}" />
+
+                        <Label Text="Gestión de accesos y roles"
+                            FontSize="{OnIdiom Phone=10, Desktop=11}"
+                            TextColor="{StaticResource TextSecondary}"
+                            LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+
+                    <!-- Button -->
+                    <Button Grid.Column="1"
+                            Text="+ Agregar"
+                            Clicked="OnAddClicked"
+                            BackgroundColor="#9EC9B4"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            FontSize="{OnIdiom Phone=11, Desktop=12}"
+                            HeightRequest="{OnIdiom Phone=36, Desktop=40}"
+                            Padding="{OnIdiom Phone='12,0', Desktop='16,0'}"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center" />
+                </Grid>
 
                 <!-- Summary Stats -->
-                <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,*'}"
-                      RowDefinitions="{OnIdiom Phone='Auto,Auto', Desktop='Auto'}"
-                      ColumnSpacing="12"
-                      RowSpacing="{OnIdiom Phone=10, Desktop=0}">
+                    <Grid ColumnDefinitions="{OnIdiom Phone='*,*', Desktop='*,*'}"
+                        RowDefinitions="Auto"
+                        ColumnSpacing="{OnIdiom Phone=8, Desktop=12}">
                     <Border Grid.Column="0" Style="{StaticResource CardFrame}">
                         <VerticalStackLayout Spacing="6">
                             <Label x:Name="TotalUsersLabel" Text="0" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
                             <Label Text="Total Usuarios" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
                         </VerticalStackLayout>
                     </Border>
-                    <Border Grid.Column="{OnIdiom Phone=0, Desktop=1}"
-                            Grid.Row="{OnIdiom Phone=1, Desktop=0}"
+                        <Border Grid.Column="1"
                             Style="{StaticResource CardFrame}">
                         <VerticalStackLayout Spacing="6">
                             <Label x:Name="ValidatedUsersLabel" Text="0" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
@@ -36,19 +64,51 @@
                     </Border>
                 </Grid>
 
-                <!-- Users List -->
-                <Border Style="{StaticResource CardFrame}" Padding="0">
+                <!-- Users Table Card (with search and list) -->
+                <Border Stroke="Transparent"
+                        StrokeThickness="0"
+                        BackgroundColor="White"
+                        Padding="0">
+
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="0" />
+                    </Border.StrokeShape>
+
                     <VerticalStackLayout Spacing="0">
-                        <Grid Padding="14" ColumnDefinitions="*,Auto">
-                            <Label Text="Listado de Usuarios" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                        <!-- Header -->
+                        <Grid BackgroundColor="#9EC9B4" Padding="16,12">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Listado de Usuarios"
+                                       FontSize="15"
+                                       FontAttributes="Bold"
+                                       TextColor="White" />
+                                <Label Text="Gestión de accesos y roles"
+                                       FontSize="11"
+                                       TextColor="#E8F5EE" />
+                            </VerticalStackLayout>
                         </Grid>
+
+                        <!-- Buscador -->
+                        <Border Stroke="#EEEBE5"
+                                StrokeThickness="0,0,0,1"
+                                Padding="12,8"
+                                BackgroundColor="White">
+                            <Entry x:Name="SearchEntry"
+                                   Placeholder="Buscar usuario..."
+                                   FontSize="12"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{StaticResource TextPrimary}"
+                                   TextChanged="OnSearchChanged" />
+                        </Border>
 
                         <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                             <VerticalStackLayout Spacing="0">
-                                <Grid Padding="10"
-                                      ColumnDefinitions="{OnIdiom Phone='220,130,100,170', Desktop='2*,1.5*,1*,Auto'}"
-                                      BackgroundColor="{StaticResource SurfaceSecondary}">
-                                    <Label x:Name="HeaderEmail" Text="EMAIL &#x2191;" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                <!-- Cabecera -->
+                                <Grid Padding="16,10"
+                                      ColumnDefinitions="{OnIdiom Phone='180,80,80,80', Desktop='3*,2*,2*,Auto'}"
+                                      ColumnSpacing="6"
+                                      BackgroundColor="#FAFAF7">
+                                    <Label x:Name="HeaderEmail" Text="EMAIL ↑" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
                                         <Label.GestureRecognizers>
                                             <TapGestureRecognizer Tapped="OnSortByEmail" />
                                         </Label.GestureRecognizers>
@@ -63,14 +123,15 @@
                                             <TapGestureRecognizer Tapped="OnSortByStatus" />
                                         </Label.GestureRecognizers>
                                     </Label>
-                                    <Label Grid.Column="3" Text="ACCIONES" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="3" Text="ACCIONES" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="End" />
                                 </Grid>
 
+                                <!-- Filas -->
                                 <CollectionView x:Name="UsersList" SelectionMode="None">
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10">
-                                                <Grid ColumnDefinitions="{OnIdiom Phone='220,130,100,170', Desktop='2*,1.5*,1*,Auto'}" ColumnSpacing="8" RowDefinitions="Auto,Auto">
+                                            <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1" Padding="16,10" BackgroundColor="White">
+                                                <Grid ColumnDefinitions="{OnIdiom Phone='180,80,80,80', Desktop='3*,2*,2*,Auto'}" ColumnSpacing="6">
                                                     <Label Text="{Binding Mail}" FontAttributes="Bold" FontSize="11" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
                                                     <Label Grid.Column="1" Text="{Binding Role}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
                                                     <Border Grid.Column="2" 
@@ -80,22 +141,25 @@
                                                             VerticalOptions="Center">
                                                         <Label Text="{Binding StatusText}" FontSize="10" TextColor="White" FontAttributes="Bold" />
                                                     </Border>
-                                                    <HorizontalStackLayout Grid.Column="3" Spacing="6">
-                                                        <Button Text="Validar" 
-                                                                IsVisible="{Binding NeedsValidation}"
-                                                                Clicked="OnValidateClicked"
-                                                                CommandParameter="{Binding .}"
-                                                                Style="{StaticResource PrimaryButton}"
-                                                                FontSize="10"
-                                                                Padding="8,4"
-                                                                MinimumHeightRequest="28" />
-                                                        <Button Text="Editar" 
-                                                                Clicked="OnEditClicked"
-                                                                CommandParameter="{Binding .}"
-                                                                Style="{StaticResource OutlineButton}"
-                                                                FontSize="10"
-                                                                Padding="8,4"
-                                                                MinimumHeightRequest="28" />
+                                                    <HorizontalStackLayout Grid.Column="3" Spacing="10" HorizontalOptions="End" VerticalOptions="Center">
+                                                        <Label Text="Editar"
+                                                               FontSize="11"
+                                                               TextColor="#2E7D5B">
+                                                            <Label.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                    Tapped="OnEditTapped"
+                                                                    CommandParameter="{Binding .}" />
+                                                            </Label.GestureRecognizers>
+                                                        </Label>
+                                                        <Label Text="Eliminar"
+                                                               FontSize="11"
+                                                               TextColor="#E07A5F">
+                                                            <Label.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                    Tapped="OnDeleteTapped"
+                                                                    CommandParameter="{Binding .}" />
+                                                            </Label.GestureRecognizers>
+                                                        </Label>
                                                     </HorizontalStackLayout>
                                                 </Grid>
                                             </Border>
