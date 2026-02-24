@@ -92,7 +92,21 @@ public partial class BatchesPage : ContentPage
 
     private async void OnEditClicked(object sender, EventArgs e)
     {
-        if (sender is Button btn && btn.CommandParameter is BatchDto batch)
+        if (TryGetBatch(sender, null, out var batch))
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "batchId", batch.Id },
+                { "batchName", batch.Name },
+                { "batchLocation", batch.Location }
+            };
+            await Shell.Current.GoToAsync("/editbatch", parameters);
+        }
+    }
+
+    private async void OnEditTapped(object sender, TappedEventArgs e)
+    {
+        if (TryGetBatch(sender, e.Parameter, out var batch))
         {
             var parameters = new Dictionary<string, object>
             {
@@ -106,7 +120,7 @@ public partial class BatchesPage : ContentPage
 
     private async void OnDeleteClicked(object sender, EventArgs e)
     {
-        if (sender is Button btn && btn.CommandParameter is BatchDto batch)
+        if (TryGetBatch(sender, null, out var batch))
         {
             bool confirm = await DisplayAlertAsync("Confirmar eliminacion",
                 $"¿Está seguro que desea eliminar el lote '{batch.Name}'?\n\nEsta acción no se puede deshacer.",
@@ -125,5 +139,52 @@ public partial class BatchesPage : ContentPage
                 await DisplayAlertAsync("Error", $"No se pudo eliminar el lote: {ex.Message}", "OK");
             }
         }
+    }
+
+    private async void OnDeleteTapped(object sender, TappedEventArgs e)
+    {
+        if (TryGetBatch(sender, e.Parameter, out var batch))
+        {
+            bool confirm = await DisplayAlertAsync("Confirmar eliminacion",
+                $"¿Está seguro que desea eliminar el lote '{batch.Name}'?\n\nEsta acción no se puede deshacer.",
+                "Eliminar", "Cancelar");
+
+            if (!confirm) return;
+
+            try
+            {
+                await _api.DeleteBatchAsync(batch.Id);
+                await DisplayAlertAsync("Eliminado", $"El lote '{batch.Name}' fue eliminado exitosamente.", "OK");
+                await LoadBatchesAsync();
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlertAsync("Error", $"No se pudo eliminar el lote: {ex.Message}", "OK");
+            }
+        }
+    }
+
+    private static bool TryGetBatch(object sender, object? parameter, out BatchDto batch)
+    {
+        if (sender is Button btn && btn.CommandParameter is BatchDto buttonBatch)
+        {
+            batch = buttonBatch;
+            return true;
+        }
+
+        if (sender is TapGestureRecognizer tap && tap.CommandParameter is BatchDto tapBatch)
+        {
+            batch = tapBatch;
+            return true;
+        }
+
+        if (parameter is BatchDto parameterBatch)
+        {
+            batch = parameterBatch;
+            return true;
+        }
+
+        batch = null!;
+        return false;
     }
 }
