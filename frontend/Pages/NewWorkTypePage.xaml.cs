@@ -1,4 +1,5 @@
 using System.Globalization;
+using frontend.Helpers;
 using frontend.Services;
 
 namespace frontend.Pages;
@@ -11,6 +12,8 @@ public partial class NewWorkTypePage : ContentPage
     {
         InitializeComponent();
         _api = api;
+        NameEntry.TextChanged += (s, e) => InputFilter.AllowAlphanumeric((Entry)s!, e);
+        RateEntry.TextChanged += (s, e) => InputFilter.AllowDecimalOnly((Entry)s!, e);
     }
 
     private void OnFieldChanged(object sender, TextChangedEventArgs e)

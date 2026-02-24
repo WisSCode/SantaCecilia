@@ -1,3 +1,4 @@
+using frontend.Helpers;
 using frontend.Services;
 
 namespace frontend.Pages;
@@ -34,6 +35,8 @@ public partial class EditBatchPage : ContentPage
     {
         InitializeComponent();
         _api = api;
+        NameEntry.TextChanged += (s, e) => InputFilter.AllowAlphanumeric((Entry)s!, e);
+        LocationEntry.TextChanged += (s, e) => InputFilter.AllowAlphanumeric((Entry)s!, e);
     }
 
     protected override void OnAppearing()

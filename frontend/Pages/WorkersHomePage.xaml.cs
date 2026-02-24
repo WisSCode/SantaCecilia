@@ -1,4 +1,5 @@
 using System.Globalization;
+using frontend.Helpers;
 using frontend.Services;
 
 namespace frontend.Pages;
@@ -38,16 +39,26 @@ public partial class WorkersHomePage : ContentPage
             {
                 WorkerNameLabel.Text = "Trabajador no encontrado";
                 WorkerCodeLabel.Text = "";
+                WorkerCedulaLabel.Text = "";
                 AvatarLabel.Text = "?";
                 return;
             }
 
             var fullName = $"{currentWorker.Name} {currentWorker.LastName}";
-            AvatarLabel.Text = currentWorker.Name.Length > 0
-                ? currentWorker.Name[0].ToString().ToUpper()
-                : "?";
+
+            // Iniciales: primera letra del nombre + primera letra del apellido
+            var initials = "";
+            if (currentWorker.Name?.Length > 0)
+                initials += currentWorker.Name[0].ToString().ToUpper();
+            if (currentWorker.LastName?.Length > 0)
+                initials += currentWorker.LastName[0].ToString().ToUpper();
+            AvatarLabel.Text = initials.Length > 0 ? initials : "?";
+
             WorkerNameLabel.Text = fullName;
-            WorkerCodeLabel.Text = $"TRB-{currentWorker.Id}";
+            WorkerCodeLabel.Text = $"{currentWorker.Id}";
+            WorkerCedulaLabel.Text = string.IsNullOrWhiteSpace(currentWorker.Identification)
+                ? "Cédula: —"
+                : $"Cédula: {currentWorker.Identification}";
 
             var workedTimes = await _api.GetWorkedTimesAsync();
             var workTypes = await _api.GetWorkTypesAsync();
@@ -61,9 +72,7 @@ public partial class WorkersHomePage : ContentPage
                 .OrderByDescending(wt => wt.Date)
                 .ToList();
 
-            var today = DateTime.Today;
-            var weekStart = today.AddDays(-(int)today.DayOfWeek);
-            var weekEnd = weekStart.AddDays(7);
+            var (weekStart, weekEnd) = WeekHelper.GetWeekRange(DateTime.Now);
 
             var thisWeekEntries = myWorkedTimes
                 .Where(wt => wt.Date.Date >= weekStart && wt.Date.Date < weekEnd)
@@ -93,7 +102,9 @@ public partial class WorkersHomePage : ContentPage
             NetPayLabel.Text = $"B/.{net:F2}";
             TotalNetLabel.Text = $"B/.{net:F2}";
 
-            var recentActivities = myWorkedTimes.Take(10).Select(wt =>
+            var recentActivities = thisWeekEntries
+                .OrderByDescending(wt => wt.Date)
+                .Take(10).Select(wt =>
             {
                 double hours = wt.MinutesWorked / 60.0;
                 var wtType = workTypeMap.TryGetValue(wt.WorkTypeId, out var t) ? t : null;

@@ -18,7 +18,7 @@
                                FontSize="{OnIdiom Phone=18, Desktop=20}"
                                    FontAttributes="Bold"
                                    TextColor="{StaticResource TextPrimary}" />
-                        <Label Text="Control de horas por actividad y lote"
+                           <Label Text="Control de horas por actividad y lote"
                                FontSize="{OnIdiom Phone=10, Desktop=11}"
                                TextColor="{StaticResource TextSecondary}" />
                     </VerticalStackLayout>
@@ -122,13 +122,13 @@
                                        FontSize="15"
                                        FontAttributes="Bold"
                                        TextColor="White" />
-                                <Label Text="Actividades registradas por fecha"
+                                    <Label Text="Actividades registradas por fecha"
                                        FontSize="11"
                                        TextColor="#E8F5EE" />
                             </VerticalStackLayout>
                         </Grid>
 
-                        <!-- Busqueda -->
+                               <!-- Búsqueda -->
                         <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1" Padding="12,8"
                                 BackgroundColor="White">
                             <Entry x:Name="SearchEntry"
@@ -145,13 +145,29 @@
                                 <Grid Padding="16,10"
                                       ColumnDefinitions="{OnIdiom Phone='90,170,180,120,90,90,70', Desktop='1.1*,1.8*,2.5*,1.5*,1.2*,1.2*,0.8*'}"
                                       BackgroundColor="#FAFAF7">
-                                    <Label Text="FECHA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                                    <Label Grid.Column="1" Text="TRABAJADOR" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                                    <Label Grid.Column="2" Text="ACTIVIDAD" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                                    <Label Grid.Column="3" Text="LOTE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label x:Name="HeaderDate" Text="FECHA ↑" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByDate" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label x:Name="HeaderWorker" Grid.Column="1" Text="TRABAJADOR" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByWorker" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label x:Name="HeaderActivity" Grid.Column="2" Text="ACTIVIDAD" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByActivity" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label x:Name="HeaderBatch" Grid.Column="3" Text="LOTE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByBatch" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
                                     <Label Grid.Column="4" Text="TARIFA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
                                     <Label Grid.Column="5" Text="TIEMPO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                                    <Label Grid.Column="6" Text="ACCION" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="6" Text="ACCIÓN" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
                                 </Grid>
 
                                 <!-- Filas -->

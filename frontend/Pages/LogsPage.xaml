@@ -49,28 +49,63 @@
                                       ColumnDefinitions="{OnIdiom Phone='130,90,100,220,100', Desktop='1.4*,1*,1*,2.2*,1*'}"
                                       BackgroundColor="{StaticResource SurfaceSecondary}">
                                     <Label Text="FECHA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                                    <Label Grid.Column="1" Text="ACCION" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                                    <Label Grid.Column="2" Text="ENTIDAD" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                                    <Label Grid.Column="3" Text="DETALLE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
-                                    <Label Grid.Column="4" Text="USUARIO" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="1" Text="ACCION" FontSize="10" FontAttributes="Bold" HorizontalTextAlignment="Start" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="2" Text="ENTIDAD" FontSize="10" FontAttributes="Bold" HorizontalTextAlignment="Start" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="3" Text="DETALLE" FontSize="10" FontAttributes="Bold" HorizontalTextAlignment="Start" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="4" Text="USUARIO" FontSize="10" FontAttributes="Bold" HorizontalTextAlignment="Start" TextColor="{StaticResource TextSecondary}" />
                                 </Grid>
 
                                 <CollectionView x:Name="LogsList" SelectionMode="None">
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10">
+                                            <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10" Margin="0,1">
                                                 <Grid ColumnDefinitions="{OnIdiom Phone='130,90,100,220,100', Desktop='1.4*,1*,1*,2.2*,1*'}" ColumnSpacing="8">
-                                                    <Label Text="{Binding DateDisplay}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
-                                                    <Border Grid.Column="1"
-                                                            BackgroundColor="{Binding ActionBgColor}"
-                                                            Padding="6,3"
-                                                            HorizontalOptions="Start"
-                                                            VerticalOptions="Center">
-                                                        <Label Text="{Binding ActionText}" FontSize="10" TextColor="{Binding ActionTextColor}" FontAttributes="Bold" />
-                                                    </Border>
-                                                    <Label Grid.Column="2" Text="{Binding Entity}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
-                                                    <Label Grid.Column="3" Text="{Binding Message}" FontSize="11" TextColor="{StaticResource TextPrimary}" LineBreakMode="TailTruncation" />
-                                                    <Label Grid.Column="4" Text="{Binding ActorId}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
+                                                    
+                                                    <!-- Columna 0: Fecha -->
+                                                    <Label Text="{Binding DateDisplay}" 
+                                                        FontSize="11" 
+                                                        TextColor="{StaticResource TextPrimary}" 
+                                                        VerticalOptions="Center" 
+                                                        HorizontalTextAlignment="Start" />
+
+                                                    <!-- Columna 1: Acción (Dentro de un Frame) -->
+                                                    <Frame Grid.Column="1"
+                                                        BackgroundColor="{Binding ActionBgColor}"
+                                                        Padding="6,3"
+                                                        CornerRadius="4"
+                                                        HasShadow="False"
+                                                        BorderColor="Transparent"
+                                                        HorizontalOptions="Start"
+                                                        VerticalOptions="Center">
+                                                        <Label Text="{Binding ActionText}" 
+                                                            FontSize="10" 
+                                                            TextColor="{Binding ActionTextColor}" 
+                                                            FontAttributes="Bold" />
+                                                    </Frame>
+
+                                                    <!-- Columna 2: Entidad -->
+                                                    <Label Grid.Column="2" 
+                                                        Text="{Binding Entity}" 
+                                                        FontSize="11"
+                                                        HorizontalTextAlignment="Start" 
+                                                        TextColor="{StaticResource TextPrimary}" 
+                                                        VerticalOptions="Center" />
+
+                                                    <!-- Columna 3: Detalle -->
+                                                    <Label Grid.Column="3" 
+                                                        Text="{Binding Message}" 
+                                                        FontSize="11" 
+                                                        HorizontalTextAlignment="Start"
+                                                        TextColor="{StaticResource TextPrimary}" 
+                                                        LineBreakMode="TailTruncation" />
+
+                                                    <!-- Columna 4: Usuario -->
+                                                    <Label Grid.Column="4" 
+                                                        Text="{Binding ActorId}" 
+                                                        FontSize="11"
+                                                        HorizontalTextAlignment="Start" 
+                                                        TextColor="{StaticResource TextPrimary}" 
+                                                        VerticalOptions="Center" />
                                                 </Grid>
                                             </Border>
                                         </DataTemplate>

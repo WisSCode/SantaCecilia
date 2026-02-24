@@ -59,15 +59,45 @@ public class AuthService
                 returnSecureToken = true
             };
 
+            Console.WriteLine($"[AuthService] Intentando login con Firebase para: {email}");
             var firebaseResponse = await _firebaseClient.PostAsJsonAsync(firebaseUrl, firebasePayload);
-            
+
             if (!firebaseResponse.IsSuccessStatusCode)
-                throw new Exception("Credenciales inválidas");
+            {
+                var error = await firebaseResponse.Content.ReadAsStringAsync();
+                Console.WriteLine($"[AuthService] Error de Firebase: {error}");
+                
+                // Parsear el error de Firebase para un mensaje más amigable
+                if (error.Contains("INVALID_LOGIN_CREDENTIALS") || error.Contains("INVALID_PASSWORD"))
+                {
+                    throw new Exception("Email o contraseña incorrectos");
+                }
+                else if (error.Contains("USER_DISABLED"))
+                {
+                    throw new Exception("Esta cuenta ha sido deshabilitada");
+                }
+                else if (error.Contains("EMAIL_NOT_FOUND"))
+                {
+                    throw new Exception("No existe una cuenta con este email");
+                }
+                else if (error.Contains("TOO_MANY_ATTEMPTS"))
+                {
+                    throw new Exception("Demasiados intentos fallidos. Intenta más tarde");
+                }
+                
+                throw new Exception($"Error de autenticación: {error}");
+            }
+
 
             var firebaseData = await firebaseResponse.Content.ReadFromJsonAsync<FirebaseLoginResponse>();
             
             if (firebaseData == null || string.IsNullOrEmpty(firebaseData.IdToken))
+            {
+                Console.WriteLine("[AuthService] No se pudo obtener el token de Firebase");
                 throw new Exception("No se pudo obtener el token de Firebase");
+            }
+
+            Console.WriteLine("[AuthService] Token de Firebase obtenido exitosamente");
 
             // 2. Validar token con backend
             var backendPayload = new { idToken = firebaseData.IdToken };
@@ -78,6 +108,7 @@ public class AuthService
             {
                 var errorContent = await backendResponse.Content.ReadAsStringAsync();
                 var errorObj = TryParseError(errorContent);
+                Console.WriteLine($"[AuthService] Error del backend: {errorObj}");
                 throw new Exception(errorObj);
             }
 
@@ -86,10 +117,12 @@ public class AuthService
             if (authResponse != null)
                 authResponse.Token = firebaseData.IdToken;
 
+            Console.WriteLine($"[AuthService] Login exitoso para: {email}");
             return authResponse;
         }
         catch (HttpRequestException ex)
         {
+            Console.WriteLine($"[AuthService] Error de conexión: {ex.Message}");
             throw new Exception($"No se pudo conectar al servidor: {ex.Message}");
         }
     }

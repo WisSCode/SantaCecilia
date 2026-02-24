@@ -55,6 +55,7 @@
                             </Border.StrokeShape>
                             <Entry x:Name="NameEntry"
                                    Placeholder="Ej: Juan"
+                                   Keyboard="Text"
                                 FontSize="{OnIdiom Phone=12, Desktop=13}"
                                    TextColor="#2E3A34"
                                    BackgroundColor="White"
@@ -75,6 +76,7 @@
                             </Border.StrokeShape>
                             <Entry x:Name="LastNameEntry"
                                    Placeholder="Ej: Perez Gomez"
+                                   Keyboard="Text"
                                 FontSize="{OnIdiom Phone=12, Desktop=13}"
                                    TextColor="#2E3A34"
                                    BackgroundColor="White"

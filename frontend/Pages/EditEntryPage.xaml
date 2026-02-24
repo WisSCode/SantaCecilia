@@ -26,7 +26,7 @@
                                    FontSize="{OnIdiom Phone=15, Desktop=16}"
                                    FontAttributes="Bold"
                                    TextColor="White" />
-                            <Label Text="Modifique la informacion de la actividad realizada"
+                            <Label Text="Modifique la información de la actividad realizada"
                                    FontSize="{OnIdiom Phone=10, Desktop=11}"
                                    TextColor="#F2F7F4" />
                         </VerticalStackLayout>
@@ -49,13 +49,18 @@
                                    FontSize="{OnIdiom Phone=11, Desktop=12}"
                                    FontAttributes="Bold"
                                    TextColor="#2E3A34" />
-                            <Picker x:Name="WorkerPicker"
-                                    Title="-- Seleccionar --"
-                                    FontSize="{OnIdiom Phone=12, Desktop=13}"
-                                    TextColor="#2E3A34"
-                                    TitleColor="#8A9490"
-                                    HorizontalOptions="Fill"
-                                    SelectedIndexChanged="OnFieldChanged" />
+                            <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,4"
+                                    BackgroundColor="White">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                                <Picker x:Name="WorkerPicker"
+                                        Title="-- Seleccionar --"
+                                        FontSize="{OnIdiom Phone=12, Desktop=13}"
+                                        TextColor="#2E3A34"
+                                        TitleColor="#8A9490"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="Center"
+                                        SelectedIndexChanged="OnFieldChanged" />
+                            </Border>
                         </VerticalStackLayout>
 
                         <!-- ACTIVIDAD -->
@@ -65,7 +70,7 @@
                                    FontAttributes="Bold"
                                    TextColor="#2E3A34" />
 
-                            <!-- Barra de busqueda -->
+                            <!-- Barra de búsqueda -->
                             <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,0"
                                     BackgroundColor="White" HeightRequest="{OnIdiom Phone=42, Desktop=44}">
                                 <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
@@ -115,13 +120,18 @@
                                    FontSize="{OnIdiom Phone=11, Desktop=12}"
                                    FontAttributes="Bold"
                                    TextColor="#2E3A34" />
-                            <Picker x:Name="LotePicker"
-                                    Title="-- Seleccionar --"
-                                    FontSize="{OnIdiom Phone=12, Desktop=13}"
-                                    TextColor="#2E3A34"
-                                    TitleColor="#8A9490"
-                                    HorizontalOptions="Fill"
-                                    SelectedIndexChanged="OnFieldChanged" />
+                            <Border Stroke="#D6DAD7" StrokeThickness="1" Padding="10,4"
+                                    BackgroundColor="White">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
+                                <Picker x:Name="LotePicker"
+                                        Title="-- Seleccionar --"
+                                        FontSize="{OnIdiom Phone=12, Desktop=13}"
+                                        TextColor="#2E3A34"
+                                        TitleColor="#8A9490"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="Center"
+                                        SelectedIndexChanged="OnFieldChanged" />
+                            </Border>
                         </VerticalStackLayout>
 
                         <!-- FECHA -->
@@ -216,7 +226,7 @@
                             <Button x:Name="UpdateButton"
                                 Grid.Column="{OnIdiom Phone=0, Desktop=2}"
                                 Grid.Row="{OnIdiom Phone=2, Desktop=0}"
-                                    Text="Guardar Cambios"
+                                    Text="Guardar"
                                 HeightRequest="{OnIdiom Phone=42, Desktop=44}"
                                     BackgroundColor="#9EC9B4"
                                     TextColor="White"

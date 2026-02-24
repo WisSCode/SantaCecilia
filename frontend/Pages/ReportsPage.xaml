@@ -13,13 +13,15 @@
                     <Label x:Name="ReportPeriodLabel" Style="{StaticResource BodySecondary}" />
                 </VerticalStackLayout>
 
-                <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,Auto,Auto'}"
-                      RowDefinitions="{OnIdiom Phone='Auto,Auto,Auto', Desktop='Auto'}"
+                <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,Auto'}"
+                      RowDefinitions="{OnIdiom Phone='Auto,Auto', Desktop='Auto'}"
                       ColumnSpacing="10"
                       RowSpacing="{OnIdiom Phone=10, Desktop=0}">
                     <Border Grid.Column="0" Style="{StaticResource CardFrame}" Padding="10">
                         <Picker x:Name="ReportViewPicker"
                                 Title="Vista"
+                                TextColor="{StaticResource TextPrimary}"
+                                TitleColor="{StaticResource TextTertiary}"
                                 SelectedIndexChanged="OnReportViewChanged">
                             <Picker.Items>
                                 <x:String>Por actividad</x:String>
@@ -30,11 +32,6 @@
                     </Border>
                     <Button Grid.Column="{OnIdiom Phone=0, Desktop=1}"
                             Grid.Row="{OnIdiom Phone=1, Desktop=0}"
-                            Text="Aplicar"
-                            Style="{StaticResource PrimaryButton}"
-                            Clicked="OnApplyClicked" />
-                    <Button Grid.Column="{OnIdiom Phone=0, Desktop=2}"
-                            Grid.Row="{OnIdiom Phone=2, Desktop=0}"
                             Text="Descargar"
                             Style="{StaticResource PrimaryButton}"
                             Clicked="OnDownloadClicked" />
@@ -47,7 +44,9 @@
                     <Border Grid.Column="0" Style="{StaticResource CardFrame}" Padding="10">
                         <VerticalStackLayout Spacing="4">
                             <Label Text="Desde" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
-                            <DatePicker x:Name="StartDatePicker" DateSelected="OnDateRangeChanged" />
+                            <DatePicker x:Name="StartDatePicker"
+                                        TextColor="{StaticResource TextPrimary}"
+                                        DateSelected="OnDateRangeChanged" />
                         </VerticalStackLayout>
                     </Border>
                     <Border Grid.Column="{OnIdiom Phone=0, Desktop=1}"
@@ -55,7 +54,9 @@
                             Style="{StaticResource CardFrame}" Padding="10">
                         <VerticalStackLayout Spacing="4">
                             <Label Text="Hasta" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
-                            <DatePicker x:Name="EndDatePicker" DateSelected="OnDateRangeChanged" />
+                            <DatePicker x:Name="EndDatePicker"
+                                        TextColor="{StaticResource TextPrimary}"
+                                        DateSelected="OnDateRangeChanged" />
                         </VerticalStackLayout>
                     </Border>
                 </Grid>

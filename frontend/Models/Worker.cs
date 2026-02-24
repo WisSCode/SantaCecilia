@@ -8,9 +8,7 @@ public class Worker
     public string Identification { get; set; } = string.Empty;
     public string? UserId { get; set; }
     public bool Active { get; set; } = true;
-    public int SequentialId { get; set; }
-
-    public string DisplayId => $"TRB-{SequentialId:D3}";
+    public string DisplayId => Id;
     public string StatusText => Active ? "Activo" : "Inactivo";
     public Microsoft.Maui.Graphics.Color StatusTextColor => Active
         ? Microsoft.Maui.Graphics.Color.FromArgb("#2E7D5B")

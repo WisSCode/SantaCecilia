@@ -1,3 +1,4 @@
+using frontend.Helpers;
 using frontend.Services;
 using frontend.Models;
 
@@ -26,6 +27,9 @@ public partial class EditWorkerPage : ContentPage
     {
         InitializeComponent();
         _api = api;
+        NameEntry.TextChanged += (s, e) => InputFilter.AllowLettersOnly((Entry)s!, e);
+        LastNameEntry.TextChanged += (s, e) => InputFilter.AllowLettersOnly((Entry)s!, e);
+        IdentificationEntry.TextChanged += (s, e) => InputFilter.AllowCedulaFormat((Entry)s!, e);
     }
 
     private void LoadWorkerData()

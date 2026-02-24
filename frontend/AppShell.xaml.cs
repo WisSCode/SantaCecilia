@@ -1,4 +1,4 @@
-using frontend.Pages;
+﻿using frontend.Pages;
 using frontend.Services;
 
 namespace frontend;
@@ -18,6 +18,7 @@ public partial class AppShell : Shell
         "worktypes", "worktypesContent",
         "logs", "logsContent",
         "users", "usersContent",
+        "logs", "logsContent",
         "newtimeentry", "newworker", "newbatch", "newworktype",
         "editbatch", "editworktype", "edituser", "validateuser"
     };
@@ -71,7 +72,6 @@ public partial class AppShell : Shell
         WorkTypesItem.IsVisible = isAdmin;
         UsersItem.IsVisible = isAdmin;
         LogsItem.IsVisible = isAdmin;
-
         // Worker items
         WorkerHomeItem.IsVisible = !isAdmin;
     }

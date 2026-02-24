@@ -228,17 +228,13 @@ public partial class ReportsPage : ContentPage
     {
         var start = StartDatePicker.Date ?? DateTime.Today;
         var end = EndDatePicker.Date ?? DateTime.Today;
-        ReportPeriodLabel.Text = $"{start:dd 'de' MMMM 'de' yyyy} - {end:dd 'de' MMMM 'de' yyyy}";
+        var culture = new System.Globalization.CultureInfo("es-ES");
+        ReportPeriodLabel.Text = $"{start.ToString("dd 'de' MMMM 'de' yyyy", culture)} - {end.ToString("dd 'de' MMMM 'de' yyyy", culture)}";
     }
 
     private DateTime GetWeekStart(DateTime date)
     {
         return date.Date.AddDays(-(int)date.DayOfWeek);
-    }
-
-    private async void OnApplyClicked(object sender, EventArgs e)
-    {
-        await BuildReportAsync();
     }
 
     private async void OnReportViewChanged(object sender, EventArgs e)

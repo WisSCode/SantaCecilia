@@ -7,5 +7,7 @@ obj/
 .platform/
 platforms/*/bin/
 platforms/*/obj/
-backend/firebase-key.json
-Cecilia's Bill Maker.slnLaunch.user
+backend/firebase-key.json 
+SantaCecilia.slnLaunch.user
+frontend/frontend.csproj.user
+frontend/frontend.csproj.Backup.tmp

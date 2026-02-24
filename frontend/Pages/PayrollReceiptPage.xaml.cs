@@ -11,6 +11,8 @@ using iTextBorder = iText.Layout.Borders.Border;
 using iTextColor = iText.Kernel.Colors.Color;
 using iTextVerticalAlignment = iText.Layout.Properties.VerticalAlignment;
 using iText.Layout.Properties;
+using iText.IO.Image;
+using iTextImage = iText.Layout.Element.Image;
 using frontend.Models;
 
 namespace frontend.Pages;
@@ -75,7 +77,7 @@ public partial class PayrollReceiptPage : ContentPage
             }
 
             var filePath = BuildPdfFilePath();
-            GenerateReceiptPdf(filePath);
+            GenerateReceiptPdf(filePath, payroll, activityEntries);
 
             if (!File.Exists(filePath))
             {
@@ -110,22 +112,7 @@ public partial class PayrollReceiptPage : ContentPage
         }
     }
 
-    private async void OnPrintClicked(object sender, EventArgs e)
-    {
-        try
-        {
-            await ReceiptWebView.EvaluateJavaScriptAsync("window.print()");
-        }
-        catch (Exception ex)
-        {
-            var detail = ex.InnerException != null
-                ? $"{ex.Message}\nCausa: {ex.InnerException.Message}"
-                : ex.Message;
-            await DisplayAlertAsync("Error", $"No se pudo imprimir: {detail}", "OK");
-        }
-    }
-
-    private void GenerateReceiptPdf(string filePath)
+    public static void GenerateReceiptPdf(string filePath, Payroll payroll, List<PayrollActivityEntry>? activityEntries)
     {
         PdfWriter? writer = null;
         PdfDocument? pdf = null;
@@ -135,9 +122,9 @@ public partial class PayrollReceiptPage : ContentPage
         {
             writer = new PdfWriter(filePath);
             pdf = new PdfDocument(writer);
-            pdf.SetDefaultPageSize(new iText.Kernel.Geom.PageSize(396f, 612f));
+            pdf.SetDefaultPageSize(new iText.Kernel.Geom.PageSize(612f, 792f));
             document = new iTextDocument(pdf);
-            document.SetMargins(25, 25, 25, 25);
+            document.SetMargins(36, 36, 36, 36);
 
             var borderColor = new DeviceRgb(31, 44, 39);
             var headerBgColor = new DeviceRgb(244, 242, 237);
@@ -146,48 +133,68 @@ public partial class PayrollReceiptPage : ContentPage
             var thinBorder = new SolidBorder(borderColor, 0.5f);
 
             // ── Header ──
-            var headerTable = new iTextTable(UnitValue.CreatePointArray([34, 312]))
+            var headerTable = new iTextTable(UnitValue.CreatePointArray([36, 200, 116]))
                 .UseAllAvailableWidth()
                 .SetBorder(iTextBorder.NO_BORDER);
 
-            headerTable.AddCell(new iTextCell()
-                .Add(new iTextParagraph("SC").SetBold().SetFontSize(12).SetTextAlignment(iTextTextAlignment.CENTER))
-                .SetBorder(new SolidBorder(borderColor, 1))
-                .SetVerticalAlignment(iTextVerticalAlignment.MIDDLE)
-                .SetTextAlignment(iTextTextAlignment.CENTER));
+            var logoPath = FindLogoPath();
+
+            var logoCell = new iTextCell()
+                .SetBorder(iTextBorder.NO_BORDER)
+                .SetVerticalAlignment(iTextVerticalAlignment.MIDDLE);
+            if (logoPath != null)
+            {
+                var logoData = ImageDataFactory.Create(logoPath);
+                var logoImg = new iTextImage(logoData).ScaleToFit(30, 30);
+                logoCell.Add(logoImg);
+            }
+            else
+            {
+                logoCell.Add(new iTextParagraph("SC").SetBold().SetFontSize(10).SetTextAlignment(iTextTextAlignment.CENTER));
+                logoCell.SetBorder(new SolidBorder(borderColor, 1));
+            }
+            headerTable.AddCell(logoCell);
 
             headerTable.AddCell(new iTextCell()
-                .Add(new iTextParagraph("FINCA BANANERA SANTA CECILIA").SetBold().SetFontSize(12))
-                .Add(new iTextParagraph("Sistema de Gestion de Nomina").SetFontSize(9)
+                .Add(new iTextParagraph("FINCA BANANERA SANTA CECILIA").SetBold().SetFontSize(10))
+                .Add(new iTextParagraph("Sistema de Gestión de Nómina").SetFontSize(7)
                     .SetFontColor(new DeviceRgb(60, 75, 69)))
                 .SetBorder(iTextBorder.NO_BORDER)
                 .SetVerticalAlignment(iTextVerticalAlignment.MIDDLE)
                 .SetPaddingLeft(8));
+
+            headerTable.AddCell(new iTextCell()
+                .Add(new iTextParagraph($"Fecha de emision: {DateTime.Now:dd MMM yyyy}").SetFontSize(7)
+                    .SetFontColor(footerColor))
+                .Add(new iTextParagraph($"ID: {payroll.Id}").SetFontSize(7)
+                    .SetFontColor(footerColor))
+                .SetBorder(iTextBorder.NO_BORDER)
+                .SetVerticalAlignment(iTextVerticalAlignment.MIDDLE)
+                .SetTextAlignment(iTextTextAlignment.RIGHT));
 
             document.Add(headerTable);
 
             // ── Divider + Title ──
             AddDivider(document, thinBorder);
             document.Add(new iTextParagraph("BOLETA DE PAGO SEMANAL")
-                .SetBold().SetFontSize(10).SetTextAlignment(iTextTextAlignment.CENTER));
+                .SetBold().SetFontSize(9).SetTextAlignment(iTextTextAlignment.CENTER));
             AddDivider(document, thinBorder);
 
             // ── Worker Info Table ──
-            var week = $"{payroll!.WeekStart:dd MMM} - {payroll.WeekEnd:dd MMM yyyy}";
+            var week = $"{payroll.WeekStart:dd MMM} - {payroll.WeekEnd:dd MMM yyyy}";
 
             var infoTable = new iTextTable(UnitValue.CreatePercentArray([35f, 65f]))
                 .UseAllAvailableWidth();
 
             AddInfoRow(infoTable, "TRABAJADOR", payroll.WorkerName, thinBorder);
-            AddInfoRow(infoTable, "CODIGO", payroll.DisplayId, thinBorder);
-            AddInfoRow(infoTable, "TIPO DE LABOR", payroll.WorkerType, thinBorder);
+            AddInfoRow(infoTable, "DOCUMENTO", payroll.WorkerIdentification, thinBorder);
             AddInfoRow(infoTable, "PERIODO", week, thinBorder);
 
             document.Add(infoTable);
 
             // ── Activity Detail ──
             document.Add(new iTextParagraph("DETALLE DE ACTIVIDADES SEMANALES")
-                .SetBold().SetFontSize(9).SetMarginTop(8).SetMarginBottom(4));
+                .SetBold().SetFontSize(8).SetMarginTop(6).SetMarginBottom(3));
 
             var actTable = new iTextTable(UnitValue.CreatePercentArray([14f, 24f, 14f, 12f, 18f, 18f]))
                 .UseAllAvailableWidth();
@@ -197,10 +204,10 @@ public partial class PayrollReceiptPage : ContentPage
             {
                 var isRight = h is "HORAS" or "TARIFA" or "MONTO";
                 var cell = new iTextCell()
-                    .Add(new iTextParagraph(h).SetBold().SetFontSize(8))
+                    .Add(new iTextParagraph(h).SetBold().SetFontSize(7))
                     .SetBackgroundColor(headerBgColor)
                     .SetBorder(new SolidBorder(borderColor, 0.5f))
-                    .SetPadding(3);
+                    .SetPaddingLeft(3).SetPaddingRight(3).SetPaddingTop(4).SetPaddingBottom(4);
                 if (isRight) cell.SetTextAlignment(iTextTextAlignment.RIGHT);
                 actTable.AddHeaderCell(cell);
             }
@@ -208,7 +215,7 @@ public partial class PayrollReceiptPage : ContentPage
             if (activityEntries == null || activityEntries.Count == 0)
             {
                 actTable.AddCell(new iTextCell(1, 6)
-                    .Add(new iTextParagraph("Sin registros").SetFontSize(9)
+                    .Add(new iTextParagraph("Sin registros").SetFontSize(8)
                         .SetTextAlignment(iTextTextAlignment.CENTER))
                     .SetBorder(new SolidBorder(borderColor, 0.5f)));
             }
@@ -216,12 +223,12 @@ public partial class PayrollReceiptPage : ContentPage
             {
                 foreach (var entry in activityEntries)
                 {
-                    actTable.AddCell(MakeCell($"{entry.Date:dd MMM}", 9, thinBorder));
-                    actTable.AddCell(MakeCell(entry.ActivityName, 9, thinBorder));
-                    actTable.AddCell(MakeCell(entry.BatchName, 9, thinBorder));
-                    actTable.AddCell(MakeCell($"{entry.Hours:F2}", 9, thinBorder, iTextTextAlignment.RIGHT));
-                    actTable.AddCell(MakeCell($"B/.{entry.Rate:F4}", 9, thinBorder, iTextTextAlignment.RIGHT));
-                    actTable.AddCell(MakeCell($"B/.{entry.Amount:F2}", 9, thinBorder, iTextTextAlignment.RIGHT));
+                    actTable.AddCell(MakeCell($"{entry.Date:dd MMM}", 8, thinBorder));
+                    actTable.AddCell(MakeCell(entry.ActivityName, 8, thinBorder));
+                    actTable.AddCell(MakeCell(entry.BatchName, 8, thinBorder));
+                    actTable.AddCell(MakeCell($"{entry.Hours:F2}", 8, thinBorder, iTextTextAlignment.RIGHT));
+                    actTable.AddCell(MakeCell($"B/.{entry.Rate:F4}", 8, thinBorder, iTextTextAlignment.RIGHT));
+                    actTable.AddCell(MakeCell($"B/.{entry.Amount:F2}", 8, thinBorder, iTextTextAlignment.RIGHT));
                 }
             }
 
@@ -230,67 +237,57 @@ public partial class PayrollReceiptPage : ContentPage
             // ── Summary ──
             var summary = new iTextTable(UnitValue.CreatePercentArray([70f, 30f]))
                 .UseAllAvailableWidth()
-                .SetMarginTop(6);
+                .SetMarginTop(5);
 
             summary.AddCell(new iTextCell()
-                .Add(new iTextParagraph("DEVENGADO BRUTO").SetBold().SetFontSize(9))
-                .SetBorder(thinBorder).SetPadding(4));
+                .Add(new iTextParagraph("DEVENGADO BRUTO").SetBold().SetFontSize(8))
+                .SetBorder(thinBorder).SetPaddingLeft(4).SetPaddingRight(4).SetPaddingTop(5).SetPaddingBottom(5));
             summary.AddCell(new iTextCell()
-                .Add(new iTextParagraph($"B/.{payroll.GrossAmount:F2}").SetFontSize(9))
+                .Add(new iTextParagraph($"B/.{payroll.GrossAmount:F2}").SetFontSize(8))
                 .SetTextAlignment(iTextTextAlignment.RIGHT)
-                .SetBorder(thinBorder).SetPadding(4));
-
-            summary.AddCell(new iTextCell()
-                .Add(new iTextParagraph("DESCUENTOS DE LEY").SetBold().SetFontSize(9))
-                .SetBorder(thinBorder).SetPadding(4));
-            summary.AddCell(new iTextCell()
-                .Add(new iTextParagraph(""))
-                .SetBorder(thinBorder).SetPadding(4));
+                .SetBorder(thinBorder).SetPaddingLeft(4).SetPaddingRight(4).SetPaddingTop(5).SetPaddingBottom(5));
 
             AddDeductionRow(summary, "   Seguro Social (9.75%)", payroll.SocialSecurity, thinBorder, negativeColor);
             AddDeductionRow(summary, "   Seguro Educativo (1.25%)", payroll.EducationalInsurance, thinBorder, negativeColor);
             AddDeductionRow(summary, "   Aporte Sindical (Sindicato Bananero de Chiriqui)", payroll.UnionFee, thinBorder, negativeColor);
 
             summary.AddCell(new iTextCell()
-                .Add(new iTextParagraph("TOTAL NETO A PAGAR").SetBold().SetFontSize(9))
-                .SetBorder(thinBorder).SetPadding(4));
+                .Add(new iTextParagraph("TOTAL NETO A PAGAR").SetBold().SetFontSize(8))
+                .SetBorder(thinBorder).SetPaddingLeft(4).SetPaddingRight(4).SetPaddingTop(5).SetPaddingBottom(5));
             summary.AddCell(new iTextCell()
-                .Add(new iTextParagraph($"B/.{payroll.NetAmount:F2}").SetBold().SetFontSize(9))
+                .Add(new iTextParagraph($"B/.{payroll.NetAmount:F2}").SetBold().SetFontSize(8))
                 .SetTextAlignment(iTextTextAlignment.RIGHT)
-                .SetBorder(thinBorder).SetPadding(4));
+                .SetBorder(thinBorder).SetPaddingLeft(4).SetPaddingRight(4).SetPaddingTop(5).SetPaddingBottom(5));
 
             document.Add(summary);
 
             // ── Signature Lines ──
             document.Add(new iTextParagraph("\n"));
-            var signTable = new iTextTable(UnitValue.CreatePercentArray([50f, 50f]))
+            var signTable = new iTextTable(UnitValue.CreatePercentArray([45f, 10f, 45f]))
                 .UseAllAvailableWidth();
 
             signTable.AddCell(new iTextCell()
-                .Add(new iTextParagraph("Firma del Trabajador").SetFontSize(9)
+                .Add(new iTextParagraph("Firma del Trabajador").SetFontSize(8)
                     .SetTextAlignment(iTextTextAlignment.CENTER))
                 .SetBorderTop(new SolidBorder(borderColor, 0.5f))
                 .SetBorderBottom(iTextBorder.NO_BORDER)
                 .SetBorderLeft(iTextBorder.NO_BORDER)
                 .SetBorderRight(iTextBorder.NO_BORDER)
-                .SetPaddingTop(4));
+                .SetPaddingTop(3));
 
             signTable.AddCell(new iTextCell()
-                .Add(new iTextParagraph("Firma Autorizada").SetFontSize(9)
+                .SetBorder(iTextBorder.NO_BORDER));
+
+            signTable.AddCell(new iTextCell()
+                .Add(new iTextParagraph("Firma Autorizada").SetFontSize(8)
                     .SetTextAlignment(iTextTextAlignment.CENTER))
                 .SetBorderTop(new SolidBorder(borderColor, 0.5f))
                 .SetBorderBottom(iTextBorder.NO_BORDER)
                 .SetBorderLeft(iTextBorder.NO_BORDER)
                 .SetBorderRight(iTextBorder.NO_BORDER)
-                .SetPaddingTop(4));
+                .SetPaddingTop(3));
 
             document.Add(signTable);
-
-            // ── Footer ──
-            document.Add(new iTextParagraph("Documento generado electronicamente - Finca Bananera Santa Cecilia")
-                .SetFontSize(8).SetFontColor(footerColor).SetTextAlignment(iTextTextAlignment.CENTER).SetMarginTop(6));
-            document.Add(new iTextParagraph($"Fecha de emision: {DateTime.Now:dd MMM yyyy}")
-                .SetFontSize(8).SetFontColor(footerColor).SetTextAlignment(iTextTextAlignment.CENTER));
 
             // Explicit close on success — nullify so finally won't re-close
             document.Close();
@@ -316,22 +313,22 @@ public partial class PayrollReceiptPage : ContentPage
     private static void AddInfoRow(iTextTable table, string label, string value, iTextBorder border)
     {
         table.AddCell(new iTextCell()
-            .Add(new iTextParagraph(label).SetBold().SetFontSize(9))
-            .SetBorder(border).SetPadding(4));
+            .Add(new iTextParagraph(label).SetBold().SetFontSize(8))
+            .SetBorder(border).SetPaddingLeft(4).SetPaddingRight(4).SetPaddingTop(5).SetPaddingBottom(5));
         table.AddCell(new iTextCell()
-            .Add(new iTextParagraph(value).SetFontSize(9))
-            .SetBorder(border).SetPadding(4));
+            .Add(new iTextParagraph(value).SetFontSize(8))
+            .SetBorder(border).SetPaddingLeft(4).SetPaddingRight(4).SetPaddingTop(5).SetPaddingBottom(5));
     }
 
     private static void AddDeductionRow(iTextTable table, string label, decimal amount, iTextBorder border, iTextColor color)
     {
         table.AddCell(new iTextCell()
-            .Add(new iTextParagraph(label).SetFontSize(9))
-            .SetBorder(border).SetPadding(4));
+            .Add(new iTextParagraph(label).SetFontSize(8))
+            .SetBorder(border).SetPaddingLeft(4).SetPaddingRight(4).SetPaddingTop(5).SetPaddingBottom(5));
         table.AddCell(new iTextCell()
-            .Add(new iTextParagraph($"-B/.{amount:F2}").SetBold().SetFontSize(9).SetFontColor(color))
+            .Add(new iTextParagraph($"-B/.{amount:F2}").SetBold().SetFontSize(8).SetFontColor(color))
             .SetTextAlignment(iTextTextAlignment.RIGHT)
-            .SetBorder(border).SetPadding(4));
+            .SetBorder(border).SetPaddingLeft(4).SetPaddingRight(4).SetPaddingTop(5).SetPaddingBottom(5));
     }
 
     private static iTextCell MakeCell(string text, float fontSize, iTextBorder border,
@@ -341,6 +338,24 @@ public partial class PayrollReceiptPage : ContentPage
             .Add(new iTextParagraph(text).SetFontSize(fontSize))
             .SetBorder(border)
             .SetTextAlignment(alignment)
-            .SetPadding(3);
+            .SetPaddingLeft(3).SetPaddingRight(3).SetPaddingTop(5).SetPaddingBottom(5);
+    }
+
+    public static string? FindLogoPath()
+    {
+        string[] candidates =
+        [
+            Path.Combine(AppContext.BaseDirectory, "logo_santa_cecilia.png"),
+            Path.Combine(AppContext.BaseDirectory, "logo_santa_cecilia.scale-100.png"),
+            Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "logo_santa_cecilia.png"),
+        ];
+
+        foreach (var path in candidates)
+        {
+            if (File.Exists(path))
+                return path;
+        }
+
+        return null;
     }
 }

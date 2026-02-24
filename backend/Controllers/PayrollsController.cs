@@ -38,7 +38,7 @@ public class PayrollsController : ControllerBase
         };
 
         await _service.CreateAsync(id, payroll);
-        await LogAsync("create", "payroll", id, $"Creada nomina para trabajador {dto.WorkerId}");
+        await LogAsync("create", "payroll", id, $"Creada nómina para trabajador {dto.WorkerId}");
         return CreatedAtAction(nameof(Get), new { id }, dto);
     }
     //GET api/payrolls/{id}
@@ -98,7 +98,7 @@ public class PayrollsController : ControllerBase
         payroll.PaidAt = dto.PaidAt != null? Timestamp.FromDateTime(dto.PaidAt.Value.ToUniversalTime()) : null;
 
         await _service.UpdateAsync(id, payroll);
-        await LogAsync("update", "payroll", id, $"Actualizada nomina para trabajador {dto.WorkerId}");
+        await LogAsync("update", "payroll", id, $"Actualizada nómina para trabajador {dto.WorkerId}");
         return NoContent();
     }
 
@@ -108,6 +108,18 @@ public class PayrollsController : ControllerBase
     {
         var weekStart = request.WeekStart.Date;
         var weekEnd = weekStart.AddDays(6);
+
+        var existingPayrolls = await _service.GetAllAsync();
+        var existingForWeek = existingPayrolls
+            .Where(p =>
+                p.Payroll.WeekStart.ToDateTime().Date == weekStart &&
+                p.Payroll.WeekEnd.ToDateTime().Date == weekEnd)
+            .ToList();
+
+        foreach (var payroll in existingForWeek)
+        {
+            await _service.DeleteAsync(payroll.Id);
+        }
 
         var workTypes = await _workTypeService.GetAllAsync();
         var workTypeRateMap = workTypes.ToDictionary(wt => wt.Id, wt => wt.WorkType.DefaultRate);
@@ -144,7 +156,7 @@ public class PayrollsController : ControllerBase
             payrollCount++;
         }
 
-        await LogAsync("process", "payroll", weekStart.ToString("yyyy-MM-dd"), $"Procesada nomina semanal. Registros: {payrollCount}");
+        await LogAsync("process", "payroll", weekStart.ToString("yyyy-MM-dd"), $"Procesada nómina semanal. Registros: {payrollCount}");
         return Ok(new { Count = payrollCount });
     }
 
