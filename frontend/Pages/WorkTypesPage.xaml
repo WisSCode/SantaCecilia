@@ -90,7 +90,7 @@
 
                         <!-- Buscador -->
                         <Border Stroke="#EEEBE5"
-                                StrokeThickness="0,0,0,1"
+                                StrokeThickness="1"
                                 Padding="12,8"
                                 BackgroundColor="White">
                             <Entry x:Name="SearchEntry"
@@ -141,7 +141,7 @@
                                 <CollectionView x:Name="WorkTypesList" SelectionMode="None">
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1" Padding="16,10" BackgroundColor="White">
+                                            <Border Stroke="#EEEBE5" StrokeThickness="1" Padding="16,10" BackgroundColor="White">
                                                 <Grid ColumnDefinitions="{OnIdiom Phone='180,100,80', Desktop='3*,2*,2*'}" ColumnSpacing="6">
                                                     <!-- NOMBRE -->
                                                     <Label Text="{Binding Name}" 
