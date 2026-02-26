@@ -1,13 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-	<application 
-		android:allowBackup="true" 
-		android:icon="@mipmap/appicon" 
-		android:roundIcon="@mipmap/appicon_round" 
+	<application
+		android:allowBackup="true"
+		android:icon="@mipmap/logo_appicon"
+		android:roundIcon="@mipmap/logo_appicon"
+		android:label="Santa Cecilia"
+		android:theme="@style/Maui.SplashTheme"
 		android:supportsRtl="true"
-		android:usesCleartextTraffic="true"
-
-		></application>
+		android:usesCleartextTraffic="true">
+	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
 </manifest>
