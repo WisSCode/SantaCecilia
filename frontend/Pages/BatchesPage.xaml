@@ -62,7 +62,7 @@
                         <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                             <VerticalStackLayout Spacing="0">
                                 <Grid Padding="10"
-                                      ColumnDefinitions="{OnIdiom Phone='180,160,200', Desktop='2*,2*,Auto'}"
+                                      ColumnDefinitions="{OnIdiom Phone='190,120,200', Desktop='3*,3*,Auto'}"
                                       BackgroundColor="{StaticResource SurfaceSecondary}">
                                     <Label x:Name="HeaderName" Text="NOMBRE &#x2191;" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
                                         <Label.GestureRecognizers>
@@ -74,14 +74,14 @@
                                             <TapGestureRecognizer Tapped="OnSortByLocation" />
                                         </Label.GestureRecognizers>
                                     </Label>
-                                    <Label Grid.Column="2" Text="ACCIONES" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                    <Label Grid.Column="2" Text="ACCIONES" FontSize="10" FontAttributes="Bold" HorizontalTextAlignment="End" TextColor="{StaticResource TextSecondary}" />
                                 </Grid>
 
                                 <CollectionView x:Name="BatchesList" SelectionMode="None">
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
                                             <Border Stroke="{StaticResource Border}" StrokeThickness="1" Padding="10">
-                                                <Grid ColumnDefinitions="{OnIdiom Phone='180,160,200', Desktop='2*,2*,Auto'}" ColumnSpacing="8">
+                                                <Grid ColumnDefinitions="{OnIdiom Phone='190,120,200', Desktop='3*,2.7*,Auto'}" ColumnSpacing="8">
                                                     <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="12" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
                                                     <Label Grid.Column="1" Text="{Binding Location}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
                                                     <HorizontalStackLayout Grid.Column="2" Spacing="6">

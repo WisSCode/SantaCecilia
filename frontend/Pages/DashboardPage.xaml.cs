@@ -7,7 +7,16 @@ namespace frontend.Pages;
 
 public partial class DashboardPage : ContentPage
 {
+    private enum SortDirection { Ascending, Descending }
+
     private readonly ApiService _api;
+    private List<TimeEntry> _recentActivities = new();
+    private SortDirection _workerSortDirection = SortDirection.Descending;
+    private SortDirection _activitySortDirection = SortDirection.Ascending;
+    private SortDirection _batchSortDirection = SortDirection.Ascending;
+    private SortDirection _rateSortDirection = SortDirection.Ascending;
+    private SortDirection _hoursSortDirection = SortDirection.Ascending;
+    private SortDirection _dateSortDirection = SortDirection.Ascending;
 
     public DashboardPage(ApiService api)
     {
@@ -106,12 +115,160 @@ public partial class DashboardPage : ContentPage
                 })
                 .ToList();
 
-            RecentActivitiesCollection.ItemsSource = recent;
+            _recentActivities = recent;
+            RecentActivitiesCollection.ItemsSource = _recentActivities;
+            
+            // Reset sort directions and headers
+            _workerSortDirection = SortDirection.Descending;
+            _activitySortDirection = SortDirection.Ascending;
+            _batchSortDirection = SortDirection.Ascending;
+            _rateSortDirection = SortDirection.Ascending;
+            _hoursSortDirection = SortDirection.Ascending;
+            _dateSortDirection = SortDirection.Ascending;
+            
+            HeaderWorker.Text = "TRABAJADOR \u2193";
+            HeaderActivity.Text = "ACTIVIDAD";
+            HeaderBatch.Text = "LOTE";
+            HeaderRate.Text = "TARIFA";
+            HeaderHours.Text = "HORAS";
+            HeaderDate.Text = "FECHA";
         }
         catch (Exception ex)
         {
             await DisplayAlertAsync("Error", $"No se pudieron cargar los datos: {ex.Message}", "OK");
         }
+    }
+
+    private void OnSortByWorker(object sender, TappedEventArgs e)
+    {
+        _workerSortDirection = _workerSortDirection == SortDirection.Ascending
+            ? SortDirection.Descending
+            : SortDirection.Ascending;
+
+        var sorted = _workerSortDirection == SortDirection.Ascending
+            ? _recentActivities.OrderBy(x => x.WorkerName).ToList()
+            : _recentActivities.OrderByDescending(x => x.WorkerName).ToList();
+
+        _recentActivities = sorted;
+        RecentActivitiesCollection.ItemsSource = null;
+        RecentActivitiesCollection.ItemsSource = _recentActivities;
+
+        HeaderWorker.Text = _workerSortDirection == SortDirection.Ascending ? "TRABAJADOR \u2191" : "TRABAJADOR \u2193";
+        HeaderActivity.Text = "ACTIVIDAD";
+        HeaderBatch.Text = "LOTE";
+        HeaderRate.Text = "TARIFA";
+        HeaderHours.Text = "HORAS";
+        HeaderDate.Text = "FECHA";
+    }
+
+    private void OnSortByActivity(object sender, TappedEventArgs e)
+    {
+        _activitySortDirection = _activitySortDirection == SortDirection.Ascending
+            ? SortDirection.Descending
+            : SortDirection.Ascending;
+
+        var sorted = _activitySortDirection == SortDirection.Ascending
+            ? _recentActivities.OrderBy(x => x.ActivityName).ToList()
+            : _recentActivities.OrderByDescending(x => x.ActivityName).ToList();
+
+        _recentActivities = sorted;
+        RecentActivitiesCollection.ItemsSource = null;
+        RecentActivitiesCollection.ItemsSource = _recentActivities;
+
+        HeaderWorker.Text = "TRABAJADOR";
+        HeaderActivity.Text = _activitySortDirection == SortDirection.Ascending ? "ACTIVIDAD \u2191" : "ACTIVIDAD \u2193";
+        HeaderBatch.Text = "LOTE";
+        HeaderRate.Text = "TARIFA";
+        HeaderHours.Text = "HORAS";
+        HeaderDate.Text = "FECHA";
+    }
+
+    private void OnSortByBatch(object sender, TappedEventArgs e)
+    {
+        _batchSortDirection = _batchSortDirection == SortDirection.Ascending
+            ? SortDirection.Descending
+            : SortDirection.Ascending;
+
+        var sorted = _batchSortDirection == SortDirection.Ascending
+            ? _recentActivities.OrderBy(x => x.Lote).ToList()
+            : _recentActivities.OrderByDescending(x => x.Lote).ToList();
+
+        _recentActivities = sorted;
+        RecentActivitiesCollection.ItemsSource = null;
+        RecentActivitiesCollection.ItemsSource = _recentActivities;
+
+        HeaderWorker.Text = "TRABAJADOR";
+        HeaderActivity.Text = "ACTIVIDAD";
+        HeaderBatch.Text = _batchSortDirection == SortDirection.Ascending ? "LOTE \u2191" : "LOTE \u2193";
+        HeaderRate.Text = "TARIFA";
+        HeaderHours.Text = "HORAS";
+        HeaderDate.Text = "FECHA";
+    }
+
+    private void OnSortByRate(object sender, TappedEventArgs e)
+    {
+        _rateSortDirection = _rateSortDirection == SortDirection.Ascending
+            ? SortDirection.Descending
+            : SortDirection.Ascending;
+
+        var sorted = _rateSortDirection == SortDirection.Ascending
+            ? _recentActivities.OrderBy(x => x.Rate).ToList()
+            : _recentActivities.OrderByDescending(x => x.Rate).ToList();
+
+        _recentActivities = sorted;
+        RecentActivitiesCollection.ItemsSource = null;
+        RecentActivitiesCollection.ItemsSource = _recentActivities;
+
+        HeaderWorker.Text = "TRABAJADOR";
+        HeaderActivity.Text = "ACTIVIDAD";
+        HeaderBatch.Text = "LOTE";
+        HeaderRate.Text = _rateSortDirection == SortDirection.Ascending ? "TARIFA \u2191" : "TARIFA \u2193";
+        HeaderHours.Text = "HORAS";
+        HeaderDate.Text = "FECHA";
+    }
+
+    private void OnSortByHours(object sender, TappedEventArgs e)
+    {
+        _hoursSortDirection = _hoursSortDirection == SortDirection.Ascending
+            ? SortDirection.Descending
+            : SortDirection.Ascending;
+
+        var sorted = _hoursSortDirection == SortDirection.Ascending
+            ? _recentActivities.OrderBy(x => x.Hours).ToList()
+            : _recentActivities.OrderByDescending(x => x.Hours).ToList();
+
+        _recentActivities = sorted;
+        RecentActivitiesCollection.ItemsSource = null;
+        RecentActivitiesCollection.ItemsSource = _recentActivities;
+
+        HeaderWorker.Text = "TRABAJADOR";
+        HeaderActivity.Text = "ACTIVIDAD";
+        HeaderBatch.Text = "LOTE";
+        HeaderRate.Text = "TARIFA";
+        HeaderHours.Text = _hoursSortDirection == SortDirection.Ascending ? "HORAS \u2191" : "HORAS \u2193";
+        HeaderDate.Text = "FECHA";
+    }
+
+    private void OnSortByDate(object sender, TappedEventArgs e)
+    {
+        _dateSortDirection = _dateSortDirection == SortDirection.Ascending
+            ? SortDirection.Descending
+            : SortDirection.Ascending;
+
+        var sorted = _dateSortDirection == SortDirection.Ascending
+            ? _recentActivities.OrderBy(x => x.Date).ToList()
+            : _recentActivities.OrderByDescending(x => x.Date).ToList();
+
+        _recentActivities = sorted;
+        RecentActivitiesCollection.ItemsSource = null;
+        RecentActivitiesCollection.ItemsSource = _recentActivities;
+
+        HeaderWorker.Text = "TRABAJADOR";
+        HeaderActivity.Text = "ACTIVIDAD";
+        HeaderBatch.Text = "LOTE";
+        HeaderRate.Text = "TARIFA";
+        HeaderHours.Text = "HORAS";
+        HeaderDate.Text = _dateSortDirection == SortDirection.Ascending ? "FECHA \u2191" : "FECHA \u2193";
     }
 
     private async void OnViewAllTapped(object sender, TappedEventArgs e)

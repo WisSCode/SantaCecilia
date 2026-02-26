@@ -350,17 +350,6 @@ public partial class PayrollReceiptPage : ContentPage
             Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "logo_santa_cecilia.png"),
         ];
 
-        var assemblyDir = Path.GetDirectoryName(typeof(PayrollReceiptPage).Assembly.Location);
-        if (!string.IsNullOrEmpty(assemblyDir))
-        {
-            candidates =
-            [
-                ..candidates,
-                Path.Combine(assemblyDir, "logo_santa_cecilia.png"),
-                Path.Combine(assemblyDir, "logo_santa_cecilia.scale-100.png"),
-            ];
-        }
-
         foreach (var path in candidates)
         {
             if (File.Exists(path))
