@@ -113,14 +113,22 @@
                                            FontSize="10" 
                                            FontAttributes="Bold" 
                                            HorizontalTextAlignment="Start" 
-                                           TextColor="{StaticResource TextSecondary}" />
+                                           TextColor="{StaticResource TextSecondary}" >
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByName" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
                                     <Label x:Name="HeaderRate" 
                                            Grid.Column="1" 
                                            Text="TARIFA" 
                                            FontSize="10" 
                                            FontAttributes="Bold" 
                                            HorizontalTextAlignment="Start" 
-                                           TextColor="{StaticResource TextSecondary}" />
+                                           TextColor="{StaticResource TextSecondary}" >
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByRate" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
                                     <Label Grid.Column="2" 
                                            Text="ACCIONES" 
                                            FontSize="10" 
