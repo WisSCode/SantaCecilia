@@ -13,13 +13,13 @@ public class WorkerService
     // CREATE
     public async Task CreateAsync(string workerId, Workers worker)
     {
-        await _workers.Document(workerId).SetAsync(worker);
+        await FirestoreOperationHelper.ExecuteAsync(() => _workers.Document(workerId).SetAsync(worker));
     }
 
     // SELECT
     public async Task<Workers?> GetAsync(string workerId)
     {
-        var snapshot = await _workers.Document(workerId).GetSnapshotAsync();
+        var snapshot = await FirestoreOperationHelper.ExecuteAsync(() => _workers.Document(workerId).GetSnapshotAsync());
         return snapshot.Exists ? snapshot.ConvertTo<Workers>() : null;
     }
 
@@ -27,7 +27,7 @@ public class WorkerService
     public async Task<List<(string Id, Workers Worker)>> GetAllAsync()
     {
         var list = new List<(string, Workers)>();
-        var snap = await _workers.GetSnapshotAsync();
+        var snap = await FirestoreOperationHelper.ExecuteAsync(() => _workers.GetSnapshotAsync());
         foreach (var doc in snap.Documents)
         {
             if (doc.Exists)
@@ -41,6 +41,6 @@ public class WorkerService
     // UPDATE
     public async Task UpdateAsync(string workerId, Workers worker)
     {
-        await _workers.Document(workerId).SetAsync(worker, SetOptions.MergeAll);
+        await FirestoreOperationHelper.ExecuteAsync(() => _workers.Document(workerId).SetAsync(worker, SetOptions.MergeAll));
     }
 }

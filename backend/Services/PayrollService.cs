@@ -13,13 +13,13 @@ public class PayrollService
     // CREATE
     public async Task CreateAsync(string payrollId, Payrolls payroll)
     {
-        await _payrolls.Document(payrollId).SetAsync(payroll);
+        await FirestoreOperationHelper.ExecuteAsync(() => _payrolls.Document(payrollId).SetAsync(payroll));
     }
 
     // SELECT
     public async Task<Payrolls?> GetAsync(string payrollId)
     {
-        var snapshot = await _payrolls.Document(payrollId).GetSnapshotAsync();
+        var snapshot = await FirestoreOperationHelper.ExecuteAsync(() => _payrolls.Document(payrollId).GetSnapshotAsync());
         return snapshot.Exists ? snapshot.ConvertTo<Payrolls>() : null;
     }
 
@@ -27,7 +27,7 @@ public class PayrollService
     public async Task<List<(string Id, Payrolls Payroll)>> GetAllAsync()
     {
         var list = new List<(string, Payrolls)>();
-        var snap = await _payrolls.GetSnapshotAsync();
+        var snap = await FirestoreOperationHelper.ExecuteAsync(() => _payrolls.GetSnapshotAsync());
         foreach (var doc in snap.Documents)
         {
             if (doc.Exists)
@@ -41,12 +41,12 @@ public class PayrollService
     // UPDATE
     public async Task UpdateAsync(string payrollId, Payrolls payroll)
     {
-        await _payrolls.Document(payrollId).SetAsync(payroll, SetOptions.MergeAll);
+        await FirestoreOperationHelper.ExecuteAsync(() => _payrolls.Document(payrollId).SetAsync(payroll, SetOptions.MergeAll));
     }
 
     // DELETE
     public async Task DeleteAsync(string payrollId)
     {
-        await _payrolls.Document(payrollId).DeleteAsync();
+        await FirestoreOperationHelper.ExecuteAsync(() => _payrolls.Document(payrollId).DeleteAsync());
     }
 }

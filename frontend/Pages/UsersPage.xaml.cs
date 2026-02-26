@@ -5,6 +5,32 @@ namespace frontend.Pages;
 
 public partial class UsersPage : ContentPage
 {
+    // Soporte para Label+TapGestureRecognizer en acciones
+    private void OnEditTapped(object sender, TappedEventArgs e)
+    {
+        if (sender is Label lbl && lbl.BindingContext is UserItem user)
+        {
+            // Reutiliza la lógica de OnEditClicked
+            var parameters = new Dictionary<string, object>
+            {
+                { "userId", user.Id },
+                { "userEmail", user.Mail }
+            };
+            MainThread.BeginInvokeOnMainThread(async () =>
+                await Shell.Current.GoToAsync("/edituser", parameters));
+        }
+    }
+
+    private void OnDeleteTapped(object sender, TappedEventArgs e)
+    {
+        // Si tienes lógica de borrado, implementa aquí
+        // Por ahora muestra alerta de ejemplo
+        if (sender is Label lbl && lbl.BindingContext is UserItem user)
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+                await DisplayAlertAsync("Eliminar", $"Eliminar usuario: {user.Mail}", "OK"));
+        }
+    }
     private readonly ApiService _api;
     private List<UserItem> users = new();
     private string _sortColumn = "Mail";
@@ -106,6 +132,27 @@ public partial class UsersPage : ContentPage
             };
             await Shell.Current.GoToAsync("/edituser", parameters);
         }
+    }
+
+    private void OnSearchChanged(object sender, TextChangedEventArgs e)
+    {
+        var searchText = e.NewTextValue?.ToLower() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            ApplySort();
+        }
+        else
+        {
+            var filtered = users.Where(u => 
+                u.Mail.ToLower().Contains(searchText) || 
+                u.Role.ToLower().Contains(searchText)).ToList();
+            UsersList.ItemsSource = filtered;
+        }
+    }
+
+    private async void OnAddClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("/edituser");
     }
 }
 

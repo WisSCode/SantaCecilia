@@ -10,15 +10,27 @@
             <VerticalStackLayout Padding="{OnIdiom Phone=12, Desktop=20}" Spacing="{OnIdiom Phone=12, Desktop=16}">
 
                 <!-- Header -->
-                <VerticalStackLayout Spacing="4">
-                    <Label Text="Panel de Control"
-                          FontSize="{OnIdiom Phone=18, Desktop=20}"
-                           FontAttributes="Bold"
-                           TextColor="{StaticResource TextPrimary}" />
-                    <Label x:Name="DateLabel"
-                          FontSize="{OnIdiom Phone=10, Desktop=11}"
-                           TextColor="{StaticResource TextSecondary}" />
-                </VerticalStackLayout>
+                <Grid ColumnDefinitions="*,Auto"
+                    ColumnSpacing="12"
+                    VerticalOptions="Center"
+                    Padding="0">
+
+                    <!-- Text -->
+                    <VerticalStackLayout Spacing="2"
+                                        VerticalOptions="Center"
+                                        Grid.Column="0">
+
+                        <Label Text="Inicio"
+                            FontSize="{OnIdiom Phone=18, Desktop=20}"
+                            FontAttributes="Bold"
+                            TextColor="{StaticResource TextPrimary}" />
+
+                        <Label x:Name="DateLabel"
+                            FontSize="{OnIdiom Phone=10, Desktop=11}"
+                            TextColor="{StaticResource TextSecondary}"
+                            LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+                </Grid>
 
                 <!-- Alerts -->
                 <VerticalStackLayout Spacing="8">
@@ -42,35 +54,11 @@
                                    VerticalOptions="Center" />
                     </Border>
                 </VerticalStackLayout>
-                <!-- Header Esta Semana -->
-                <Border Stroke="Transparent"
-                        StrokeThickness="0"
-                        BackgroundColor="White"
-                        Padding="0">        
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="0" />
-                    </Border.StrokeShape>
-
-                    <Grid Padding="16,14" ColumnDefinitions="*">
-                        <VerticalStackLayout Spacing="2">
-                            <Label Text="Esta Semana"
-                   FontSize="15"
-                   FontAttributes="Bold"
-                   TextColor="{StaticResource TextPrimary}" />
-                            <Label Text="Resumen general"
-                   FontSize="11"
-                   TextColor="{StaticResource TextSecondary}" />
-                        </VerticalStackLayout>
-                    </Grid>
-                </Border>
-
-
 
                 <!-- 4 Stat Cards -->
-                <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,*,*,*'}"
-                      RowDefinitions="{OnIdiom Phone='Auto,Auto,Auto,Auto', Desktop='Auto'}"
-                      ColumnSpacing="12"
-                      RowSpacing="{OnIdiom Phone=10, Desktop=0}">
+                    <Grid ColumnDefinitions="{OnIdiom Phone='*,*,*,*', Desktop='*,*,*,*'}"
+                        RowDefinitions="Auto"
+                        ColumnSpacing="{OnIdiom Phone=8, Desktop=12}">
 
                     <!-- Trabajadores Activos -->
                     <Border Grid.Column="0"
@@ -93,10 +81,11 @@
                             </Grid>-->
                             <VerticalStackLayout Spacing="2">
                                 <Label Text="Trabajadores Activos"
-                                       FontSize="11"
+                                        FontSize="{OnIdiom Phone=10, Desktop=12}"
+                                        FontAttributes="Bold"
                                        TextColor="{StaticResource TextSecondary}" />
                                 <Label x:Name="WorkersCount" Text="0"
-                                       FontSize="24" FontAttributes="Bold"
+                                        FontSize="{OnIdiom Phone=18, Desktop=24}" FontAttributes="Bold"
                                        TextColor="{StaticResource TextPrimary}" />
                             </VerticalStackLayout>
                             
@@ -104,8 +93,7 @@
                     </Border>
 
                     <!-- Horas Trabajadas -->
-                        <Border Grid.Column="{OnIdiom Phone=0, Desktop=1}"
-                            Grid.Row="{OnIdiom Phone=1, Desktop=0}"
+                        <Border Grid.Column="1"
                             Stroke="#D6DAD7" StrokeThickness="1"
                             BackgroundColor="White" Padding="{OnIdiom Phone=12, Desktop=14}">
                         <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
@@ -124,10 +112,11 @@
                             </Grid>-->
                             <VerticalStackLayout Spacing="2">
                                 <Label Text="Horas Trabajadas"
-                                       FontSize="11"
+                                        FontSize="{OnIdiom Phone=10, Desktop=12}"
+                                        FontAttributes="Bold"
                                        TextColor="{StaticResource TextSecondary}" />
                                 <Label x:Name="HoursCount" Text="0"
-                                       FontSize="24" FontAttributes="Bold"
+                                        FontSize="{OnIdiom Phone=18, Desktop=24}" FontAttributes="Bold"
                                        TextColor="{StaticResource TextPrimary}" />
                             </VerticalStackLayout>
                             
@@ -135,18 +124,18 @@
                     </Border>
 
                     <!-- Nomina Semanal -->
-                        <Border Grid.Column="{OnIdiom Phone=0, Desktop=2}"
-                            Grid.Row="{OnIdiom Phone=2, Desktop=0}"
+                        <Border Grid.Column="2"
                             Stroke="#D6DAD7" StrokeThickness="1"
                             BackgroundColor="White" Padding="{OnIdiom Phone=12, Desktop=14}">
                         <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                         <Grid RowDefinitions="Auto,Auto" RowSpacing="6">
                             <VerticalStackLayout Spacing="2">
                                 <Label Text="Nómina Semanal"
-                                       FontSize="11"
+                                        FontSize="{OnIdiom Phone=10, Desktop=12}"
+                                        FontAttributes="Bold"
                                        TextColor="{StaticResource TextSecondary}" />
                                 <Label x:Name="PayrollAmount" Text="B/.0"
-                                       FontSize="24" FontAttributes="Bold"
+                                        FontSize="{OnIdiom Phone=18, Desktop=24}" FontAttributes="Bold"
                                        TextColor="{StaticResource TextPrimary}" />
                             </VerticalStackLayout>
                             
@@ -154,19 +143,19 @@
                     </Border>
 
                     <!-- Actividades -->
-                        <Border Grid.Column="{OnIdiom Phone=0, Desktop=3}"
-                            Grid.Row="{OnIdiom Phone=3, Desktop=0}"
+                        <Border Grid.Column="3"
                             Stroke="#D6DAD7" StrokeThickness="1"
                             BackgroundColor="White" Padding="{OnIdiom Phone=12, Desktop=14}">
                         <Border.StrokeShape><RoundRectangle CornerRadius="0" /></Border.StrokeShape>
                         <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="6">
                             
                             <VerticalStackLayout Spacing="2">
-                                <Label Text="Actividades"
-                                       FontSize="11"
+                                <Label Text="Actividades Realizadas"
+                                        FontSize="{OnIdiom Phone=10, Desktop=12}"
+                                        FontAttributes="Bold"
                                        TextColor="{StaticResource TextSecondary}" />
                                 <Label x:Name="ActivitiesCount" Text="0"
-                                       FontSize="24" FontAttributes="Bold"
+                                        FontSize="{OnIdiom Phone=18, Desktop=24}" FontAttributes="Bold"
                                        TextColor="{StaticResource TextPrimary}" />
                             </VerticalStackLayout>
                             
@@ -204,7 +193,8 @@
                             <VerticalStackLayout Spacing="0">
                                 <!-- Encabezados -->
                                 <Grid Padding="16,10"
-                                      ColumnDefinitions="{OnIdiom Phone='170,180,110,90,90,90', Desktop='1.8*,2.5*,1.3*,1.2*,1*,1.2*'}"
+                                      ColumnDefinitions="{OnIdiom Phone='150,180,90,90,90,90', Desktop='1.8*,2.5*,1.3*,1.2*,1*,1.2*'}"
+                                      ColumnSpacing="6"
                                       BackgroundColor="#FAFAF7">
                                     <Label x:Name="HeaderWorker" Text="TRABAJADOR ↓" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
                                         <Label.GestureRecognizers>
@@ -244,22 +234,12 @@
                                         <DataTemplate>
                                             <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1"
                                                     Padding="16,10" BackgroundColor="White">
-                                                <Grid ColumnDefinitions="{OnIdiom Phone='170,180,110,90,90,90', Desktop='1.8*,2.5*,1.3*,1.2*,1*,1.2*'}"
+                                                <Grid ColumnDefinitions="{OnIdiom Phone='150,180,90,90,90,90', Desktop='1.8*,2.5*,1.3*,1.2*,1*,1.2*'}"
                                                       ColumnSpacing="6">
 
                                                     <!-- TRABAJADOR -->
                                                     <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
-                                                        <Border BackgroundColor="{Binding InitialColor}"
-                                                                WidthRequest="28" HeightRequest="28"
-                                                                StrokeThickness="0"
-                                                                StrokeShape="RoundRectangle 14">
-                                                            <Label Text="{Binding Initial}"
-                                                                   FontSize="11" FontAttributes="Bold"
-                                                                   TextColor="White"
-                                                                   HorizontalOptions="Center"
-                                                                   VerticalOptions="Center" />
-                                                        </Border>
-                                                        <Label Text="{Binding WorkerName}"
+                                                    <Label Text="{Binding WorkerName}"
                                                                FontSize="11" FontAttributes="Bold"
                                                                TextColor="{StaticResource TextPrimary}"
                                                                VerticalOptions="Center"

@@ -5,6 +5,45 @@ namespace frontend.Pages;
 
 public partial class WorkTypesPage : ContentPage
 {
+    // Soporte para Label+TapGestureRecognizer en acciones
+    private void OnEditTapped(object sender, TappedEventArgs e)
+    {
+        if (sender is Label lbl && lbl.BindingContext is WorkTypeDto workType)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "workTypeId", workType.Id },
+                { "workTypeName", workType.Name },
+                { "workTypeRate", workType.DefaultRate.ToString("F4", CultureInfo.InvariantCulture) }
+            };
+            MainThread.BeginInvokeOnMainThread(async () =>
+                await Shell.Current.GoToAsync("/editworktype", parameters));
+        }
+    }
+
+    private void OnDeleteTapped(object sender, TappedEventArgs e)
+    {
+        if (sender is Label lbl && lbl.BindingContext is WorkTypeDto workType)
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                bool confirm = await DisplayAlertAsync("Confirmar eliminacion",
+                    $"¿Está seguro que desea eliminar el tipo de trabajo '{workType.Name}'?\n\nEsta acción no se puede deshacer.",
+                    "Eliminar", "Cancelar");
+                if (!confirm) return;
+                try
+                {
+                    await _api.DeleteWorkTypeAsync(workType.Id);
+                    await DisplayAlertAsync("Eliminado", $"El tipo de trabajo '{workType.Name}' fue eliminado exitosamente.", "OK");
+                    await LoadWorkTypesAsync();
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlertAsync("Error", $"No se pudo eliminar el tipo de trabajo: {ex.Message}", "OK");
+                }
+            });
+        }
+    }
     private readonly ApiService _api;
     private List<WorkTypeDto> workTypes = new();
     private string _sortColumn = "Name";

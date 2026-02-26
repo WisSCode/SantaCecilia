@@ -10,31 +10,51 @@
             <VerticalStackLayout Padding="{OnIdiom Phone=12, Desktop=20}" Spacing="{OnIdiom Phone=12, Desktop=16}">
 
                 <!-- Header -->
-                <VerticalStackLayout Spacing="4">
-                    <Label Text="Logs" Style="{StaticResource Heading2}" />
-                    <Label Text="Registro de eventos del sistema" Style="{StaticResource BodySecondary}" />
-                </VerticalStackLayout>
+                <Grid ColumnDefinitions="*,Auto"
+                    ColumnSpacing="12"
+                    VerticalOptions="Center"
+                    Padding="0">
+
+                    <!-- Text -->
+                    <VerticalStackLayout Spacing="2"
+                                        VerticalOptions="Center"
+                                        Grid.Column="0">
+
+                        <Label Text="Logs"
+                            FontSize="{OnIdiom Phone=18, Desktop=20}"
+                            FontAttributes="Bold"
+                            TextColor="{StaticResource TextPrimary}" />
+
+                        <Label Text="Registro de eventos del sistema"
+                            FontSize="{OnIdiom Phone=10, Desktop=11}"
+                            TextColor="{StaticResource TextSecondary}"
+                            LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+                </Grid>
 
                 <!-- Summary Stats -->
-                <Grid ColumnDefinitions="{OnIdiom Phone='*', Desktop='*,*'}"
-                      RowDefinitions="{OnIdiom Phone='Auto,Auto', Desktop='Auto'}"
-                      ColumnSpacing="12"
-                      RowSpacing="{OnIdiom Phone=10, Desktop=0}">
+                    <Grid ColumnDefinitions="{OnIdiom Phone='*,*', Desktop='*,*'}"
+                        RowDefinitions="Auto"
+                        ColumnSpacing="{OnIdiom Phone=8, Desktop=12}">
                     <Border Grid.Column="0" Style="{StaticResource CardFrame}">
                         <VerticalStackLayout Spacing="6">
-                            <Label x:Name="TotalLogsLabel" Text="0" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
-                            <Label Text="Total eventos" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
+                            <Label x:Name="TotalLogsLabel" Text="0" FontSize="{OnIdiom Phone=18, Desktop=24}" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Total eventos" FontSize="{OnIdiom Phone=10, Desktop=11}" TextColor="{StaticResource TextSecondary}" />
                         </VerticalStackLayout>
                     </Border>
-                    <Border Grid.Column="{OnIdiom Phone=0, Desktop=1}"
-                            Grid.Row="{OnIdiom Phone=1, Desktop=0}"
+                        <Border Grid.Column="1"
                             Style="{StaticResource CardFrame}">
                         <VerticalStackLayout Spacing="6">
-                            <Label x:Name="Last24hLabel" Text="0" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
-                            <Label Text="Ultimas 24h" Style="{StaticResource Caption}" TextColor="{StaticResource TextSecondary}" />
+                            <Label x:Name="Last24hLabel" Text="0" FontSize="{OnIdiom Phone=18, Desktop=24}" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Ultimas 24h" FontSize="{OnIdiom Phone=10, Desktop=11}" TextColor="{StaticResource TextSecondary}" />
                         </VerticalStackLayout>
                     </Border>
                 </Grid>
+
+                <!-- Search Bar -->
+                <Border Style="{StaticResource CardFrame}" Padding="10">
+                    <Entry x:Name="SearchEntry" Placeholder="Buscar evento..." TextChanged="OnSearchChanged" />
+                </Border>
 
                 <!-- Logs List -->
                 <Border Style="{StaticResource CardFrame}" Padding="0">
@@ -47,6 +67,7 @@
                             <VerticalStackLayout Spacing="0">
                                 <Grid Padding="10"
                                       ColumnDefinitions="{OnIdiom Phone='130,90,100,220,100', Desktop='1.4*,1*,1*,2.2*,1*'}"
+                                      ColumnSpacing="8"
                                       BackgroundColor="{StaticResource SurfaceSecondary}">
                                     <Label Text="FECHA" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
                                     <Label Grid.Column="1" Text="ACCION" FontSize="10" FontAttributes="Bold" HorizontalTextAlignment="Start" TextColor="{StaticResource TextSecondary}" />

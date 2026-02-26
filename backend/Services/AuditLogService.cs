@@ -14,14 +14,14 @@ public class AuditLogService
 
     public async Task CreateAsync(AuditLog log)
     {
-        await _logs.AddAsync(log);
+        await FirestoreOperationHelper.ExecuteAsync(() => _logs.AddAsync(log));
     }
 
     public async Task<List<(string Id, AuditLog Log)>> GetAllAsync(int limit = 200)
     {
         var list = new List<(string, AuditLog)>();
         var query = _logs.OrderByDescending("CreatedAt").Limit(limit);
-        var snap = await query.GetSnapshotAsync();
+        var snap = await FirestoreOperationHelper.ExecuteAsync(() => query.GetSnapshotAsync());
         foreach (var doc in snap.Documents)
         {
             if (doc.Exists)
