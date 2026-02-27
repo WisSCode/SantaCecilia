@@ -119,28 +119,30 @@ public partial class ReportsPage : ContentPage
     private List<ReportRow> BuildActivityReport(List<WorkedTimeDto> entries)
     {
         ReportTitleLabel.Text = "Actividades";
-        return entries
-            .GroupBy(wt => wt.WorkTypeId)
-            .Select(group =>
-            {
-                var workType = workTypeMap.GetValueOrDefault(group.Key);
-                var name = workType?.Name ?? group.Key;
-                var rate = (decimal)(workType?.DefaultRate ?? 0);
-                var totalHours = group.Sum(e => e.MinutesWorked / 60m);
-                var totalAmount = group.Sum(e => (decimal)e.MinutesWorked / 60m * rate);
 
-                return new ReportRow
-                {
-                    Col1 = name,
-                    Col2 = $"B/.{rate:F4}",
-                    Col3 = $"{totalHours:F1}h",
-                    Col3Sub = $"B/.{totalAmount:F2}",
-                    TotalHours = totalHours,
-                    TotalAmount = totalAmount
-                };
-            })
-            .OrderByDescending(r => r.TotalHours)
-            .ToList();
+        return entries
+    .GroupBy(wt => wt.WorkTypeId)
+    .Select(group =>
+    {
+        var workType = workTypeMap.GetValueOrDefault(group.Key);
+        var name = workType?.Name ?? group.Key;
+        var rate = (decimal)(workType?.DefaultRate ?? 0);
+
+        var totalHours = group.Sum(e => e.MinutesWorked / 60m);
+        var totalAmount = totalHours * rate;
+
+        return new ReportRow
+        {
+            Col1 = name,
+            Col2 = $"B/.{rate:F4}",
+            Col3 = $"{totalHours:F1}h",
+            Col4 = $"B/.{totalAmount:F2}",
+            TotalHours = totalHours,
+            TotalAmount = totalAmount,
+            HasCol4 = true
+        };
+    })
+    .ToList();
     }
 
     private List<ReportRow> BuildWorkerReport(List<WorkedTimeDto> entries)
@@ -164,9 +166,11 @@ public partial class ReportsPage : ContentPage
                     Col1 = name,
                     Col2 = $"{totalHours:F1}h",
                     Col3 = $"B/.{totalAmount:F2}",
-                    Col3Sub = string.Empty,
+                    
                     TotalHours = totalHours,
-                    TotalAmount = totalAmount
+                    TotalAmount = totalAmount,
+
+                    HasCol4 = false,
                 };
             })
             .OrderByDescending(r => r.TotalHours)
@@ -192,10 +196,12 @@ public partial class ReportsPage : ContentPage
                     Col1 = group.Key.ToString("dd MMM yyyy"),
                     Col2 = $"{totalHours:F1}h",
                     Col3 = $"B/.{totalAmount:F2}",
-                    Col3Sub = string.Empty,
+                    
                     TotalHours = totalHours,
                     TotalAmount = totalAmount,
-                    SortDate = group.Key
+                    SortDate = group.Key,
+
+                    HasCol4 = false,
                 };
             })
             .OrderByDescending(r => r.SortDate)
@@ -204,22 +210,35 @@ public partial class ReportsPage : ContentPage
 
     private void UpdateHeaders(ReportView view)
     {
+
+        
         switch (view)
         {
             case ReportView.Activity:
+                HeaderCol4.IsVisible = true;
+
                 HeaderCol1.Text = "ACTIVIDAD";
                 HeaderCol2.Text = "TARIFA";
-                HeaderCol3.Text = "TOTAL";
+                HeaderCol3.Text = "HORAS";
+                HeaderCol4.Text = "TOTAL";
                 break;
             case ReportView.Worker:
+                
+
+                HeaderCol4.IsVisible = false;
                 HeaderCol1.Text = "TRABAJADOR";
                 HeaderCol2.Text = "HORAS";
                 HeaderCol3.Text = "TOTAL";
+                HeaderCol4.Text = string.Empty;
                 break;
             case ReportView.Period:
+                
+
+                HeaderCol4.IsVisible = false;
                 HeaderCol1.Text = "FECHA";
                 HeaderCol2.Text = "HORAS";
                 HeaderCol3.Text = "TOTAL";
+                HeaderCol4.Text = string.Empty;
                 break;
         }
     }
@@ -499,6 +518,10 @@ public partial class ReportsPage : ContentPage
         public string Col2 { get; set; } = string.Empty;
         public string Col3 { get; set; } = string.Empty;
         public string Col3Sub { get; set; } = string.Empty;
+
+        public string Col4 { get; set; } = string.Empty;
+
+        public bool HasCol4 { get; set; }
         public bool HasCol3Sub => !string.IsNullOrWhiteSpace(Col3Sub);
         public decimal TotalHours { get; set; }
         public decimal TotalAmount { get; set; }
