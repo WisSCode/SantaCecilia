@@ -1,4 +1,5 @@
 using ClosedXML.Excel;
+using CommunityToolkit.Maui.Storage;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using frontend.Models;
 using frontend.Services;
@@ -8,14 +9,14 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Properties;
+using iTextBorder = iText.Layout.Borders.Border;
 using iTextCell = iText.Layout.Element.Cell;
 using iTextDocument = iText.Layout.Document;
+using iTextImage = iText.Layout.Element.Image;
 using iTextParagraph = iText.Layout.Element.Paragraph;
 using iTextTable = iText.Layout.Element.Table;
 using iTextTextAlignment = iText.Layout.Properties.TextAlignment;
-using iTextBorder = iText.Layout.Borders.Border;
 using iTextVerticalAlignment = iText.Layout.Properties.VerticalAlignment;
-using iTextImage = iText.Layout.Element.Image;
 
 namespace frontend.Pages;
 
@@ -311,9 +312,38 @@ public partial class ReportsPage : ContentPage
     {
         try
         {
+            if (reportItems == null || reportItems.Count == 0)
+            {
+                await DisplayAlertAsync("Sin datos", "No hay datos para exportar.", "OK");
+                return;
+            }
+
+            string folderPath;
+
+#if ANDROID || IOS || MACCATALYST
+            var result = await FolderPicker.Default.PickAsync();
+
+            if (!result.IsSuccessful)
+            {
+                await DisplayAlertAsync("Exportar", "No se seleccionó carpeta.", "OK");
+                return;
+            }
+
+            folderPath = result.Folder.Path;
+#else
+        var result = await FolderPicker.Default.PickAsync();
+
+        if (!result.IsSuccessful)
+        {
+            await DisplayAlertAsync("Exportar", "No se seleccionó carpeta.", "OK");
+            return;
+        }
+
+        folderPath = result.Folder.Path;
+#endif
+
             var fileName = $"Reporte-{currentView}-{DateTime.Now:yyyy-MM-dd-HHmmss}.xlsx";
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var filePath = Path.Combine(documentsPath, fileName);
+            var filePath = Path.Combine(folderPath, fileName);
 
             using (var workbook = new XLWorkbook())
             {
@@ -464,13 +494,13 @@ public partial class ReportsPage : ContentPage
                 worksheet.Columns().AdjustToContents();
                 workbook.SaveAs(filePath);
 
-                var openFile = await DisplayAlertAsync(
+                /*var openFile = await DisplayAlertAsync(
                     "Éxito",
                     $"Reporte guardado en:\n{filePath}\n\n¿Desea abrirlo?",
                     "Abrir",
-                    "Cerrar");
+                    "Cerrar");*/
 
-                if (openFile && File.Exists(filePath))
+                if (File.Exists(filePath))
                 {
 #if WINDOWS
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
@@ -498,9 +528,42 @@ public partial class ReportsPage : ContentPage
 
         try
         {
+            if (reportItems == null || reportItems.Count == 0)
+            {
+                await DisplayAlertAsync("Sin datos", "No hay datos para exportar.", "OK");
+                return;
+            }
+
+            string folderPath;
+
+#if ANDROID || IOS || MACCATALYST
+            var result = await FolderPicker.Default.PickAsync();
+
+            if (!result.IsSuccessful)
+            {
+                await DisplayAlertAsync("Exportar", "No se seleccionó carpeta.", "OK");
+                return;
+            }
+
+            folderPath = result.Folder.Path;
+#else
+        var result = await FolderPicker.Default.PickAsync();
+
+        if (!result.IsSuccessful)
+        {
+            await DisplayAlertAsync("Exportar", "No se seleccionó carpeta.", "OK");
+            return;
+        }
+
+        folderPath = result.Folder.Path;
+#endif
+
             var fileName = $"Reporte-{currentView}-{DateTime.Now:yyyy-MM-dd-HHmmss}.pdf";
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var filePath = Path.Combine(documentsPath, fileName);
+            var filePath = Path.Combine(folderPath, fileName);
+
+            
+            
+            
 
             using (var writer = new PdfWriter(filePath))
             using (var pdf = new PdfDocument(writer))
@@ -694,25 +757,25 @@ public partial class ReportsPage : ContentPage
                 document.Add(timestamp);*/
             }
 
-            var openFile = await DisplayAlertAsync(
+            /*var openFile = await DisplayAlertAsync(
                 "Éxito",
                 $"PDF guardado en:\n{filePath}\n\n¿Desea abrirlo?",
                 "Abrir",
-                "Cerrar");
+                "Cerrar");*/
 
-            if (openFile && File.Exists(filePath))
+            if (File.Exists(filePath))
             {
 #if WINDOWS
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-            {
-                FileName = filePath,
-                UseShellExecute = true
-            });
+    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+    {
+        FileName = filePath,
+        UseShellExecute = true
+    });
 #else
-                await Launcher.OpenAsync(new OpenFileRequest
-                {
-                    File = new ReadOnlyFile(filePath)
-                });
+                // En móviles solo mostramos la ruta
+                await DisplayAlertAsync("Archivo guardado",
+                    $"El archivo fue guardado correctamente en:\n{filePath}",
+                    "OK");
 #endif
             }
         }
