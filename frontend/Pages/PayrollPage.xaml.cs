@@ -4,8 +4,10 @@ using frontend.Helpers;
 using frontend.Models;
 using frontend.Services;
 using CommunityToolkit.Maui.Storage;
+using System.Text;
 
 namespace frontend.Pages;
+
 
 public partial class PayrollPage : ContentPage
 {
@@ -157,41 +159,23 @@ public partial class PayrollPage : ContentPage
         try
         {
             var entries = BuildActivityEntries(payroll);
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var safeWorkerName = string.Join("_", payroll.WorkerName.Split(Path.GetInvalidFileNameChars()));
             var fileName = $"Recibo_{safeWorkerName}_{payroll.WeekStart:yyyy-MM-dd}.pdf";
-            var filePath = Path.Combine(documentsPath, fileName);
 
-            if (File.Exists(filePath))
+            // Generamos PDF en memoria
+            using var stream = new MemoryStream();
+            PayrollReceiptPage.GenerateReceiptPdf(stream, payroll, entries);
+            stream.Position = 0;
+
+            var result = await FileSaver.Default.SaveAsync(fileName, stream);
+
+            if (result.IsSuccessful)
             {
-                try { File.Delete(filePath); }
-                catch { filePath = Path.Combine(documentsPath, $"Recibo_{safeWorkerName}_{payroll.WeekStart:yyyy-MM-dd}_{DateTime.Now:HHmmss}.pdf"); }
+                await DisplayAlertAsync("Éxito", $"Archivo guardado en:\n{result.FilePath}", "OK");
             }
-
-            PayrollReceiptPage.GenerateReceiptPdf(filePath, payroll, entries);
-
-            if (!File.Exists(filePath))
+            else
             {
-                await DisplayAlertAsync("Error", "No se pudo generar el archivo PDF", "OK");
-                return;
-            }
-
-            var openFile = await DisplayAlertAsync("\u00c9xito", $"Recibo guardado en:\n{filePath}\n\n\u00bfDesea abrirlo?", "Abrir", "Cerrar");
-
-            if (openFile)
-            {
-#if WINDOWS
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = filePath,
-                    UseShellExecute = true
-                });
-#else
-                await Launcher.OpenAsync(new OpenFileRequest
-                {
-                    File = new ReadOnlyFile(filePath)
-                });
-#endif
+                await DisplayAlertAsync("Error", "No se pudo guardar el archivo.", "OK");
             }
         }
         catch (Exception ex)
@@ -249,7 +233,10 @@ public partial class PayrollPage : ContentPage
                 var fileName = $"Recibo_{safeWorkerName}_{week:yyyy-MM-dd}.pdf";
                 var filePath = Path.Combine(folderPath, fileName);
 
-                PayrollReceiptPage.GenerateReceiptPdf(filePath, payroll, entries);
+                using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                {
+                    PayrollReceiptPage.GenerateReceiptPdf(fileStream, payroll, entries);
+                }
                 count++;
             }
 

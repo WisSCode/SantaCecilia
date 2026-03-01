@@ -77,7 +77,10 @@ public partial class PayrollReceiptPage : ContentPage
             }
 
             var filePath = BuildPdfFilePath();
-            GenerateReceiptPdf(filePath, payroll, activityEntries);
+            using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            {
+                GenerateReceiptPdf(fileStream, payroll, activityEntries);
+            }
 
             if (!File.Exists(filePath))
             {
@@ -112,7 +115,7 @@ public partial class PayrollReceiptPage : ContentPage
         }
     }
 
-    public static void GenerateReceiptPdf(string filePath, Payroll payroll, List<PayrollActivityEntry>? activityEntries)
+    public static void GenerateReceiptPdf(Stream stream, Payroll payroll, List<PayrollActivityEntry>? activityEntries)
     {
         PdfWriter? writer = null;
         PdfDocument? pdf = null;
@@ -120,7 +123,8 @@ public partial class PayrollReceiptPage : ContentPage
 
         try
         {
-            writer = new PdfWriter(filePath);
+            writer = new PdfWriter(stream);
+            writer.SetCloseStream(false);
             pdf = new PdfDocument(writer);
             pdf.SetDefaultPageSize(new iText.Kernel.Geom.PageSize(612f, 792f));
             document = new iTextDocument(pdf);
