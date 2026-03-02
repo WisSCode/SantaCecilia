@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:frontend.Models"
              x:Class="frontend.Pages.DashboardPage"
              Title=""
              Padding="0">
@@ -85,7 +86,7 @@
                                         FontAttributes="Bold"
                                        TextColor="{StaticResource TextSecondary}" />
                                 <Label x:Name="WorkersCount" Text="0"
-                                        FontSize="{OnIdiom Phone=18, Desktop=24}" FontAttributes="Bold"
+                                        FontSize="{OnIdiom Phone=14, Desktop=24}" FontAttributes="Bold"
                                        TextColor="{StaticResource TextPrimary}" />
                             </VerticalStackLayout>
                             
@@ -116,7 +117,7 @@
                                         FontAttributes="Bold"
                                        TextColor="{StaticResource TextSecondary}" />
                                 <Label x:Name="HoursCount" Text="0"
-                                        FontSize="{OnIdiom Phone=18, Desktop=24}" FontAttributes="Bold"
+                                        FontSize="{OnIdiom Phone=14, Desktop=24}" FontAttributes="Bold"
                                        TextColor="{StaticResource TextPrimary}" />
                             </VerticalStackLayout>
                             
@@ -135,7 +136,7 @@
                                         FontAttributes="Bold"
                                        TextColor="{StaticResource TextSecondary}" />
                                 <Label x:Name="PayrollAmount" Text="B/.0"
-                                        FontSize="{OnIdiom Phone=18, Desktop=24}" FontAttributes="Bold"
+                                        FontSize="{OnIdiom Phone=14, Desktop=24}" FontAttributes="Bold"
                                        TextColor="{StaticResource TextPrimary}" />
                             </VerticalStackLayout>
                             
@@ -155,7 +156,7 @@
                                         FontAttributes="Bold"
                                        TextColor="{StaticResource TextSecondary}" />
                                 <Label x:Name="ActivitiesCount" Text="0"
-                                        FontSize="{OnIdiom Phone=18, Desktop=24}" FontAttributes="Bold"
+                                        FontSize="{OnIdiom Phone=14, Desktop=24}" FontAttributes="Bold"
                                        TextColor="{StaticResource TextPrimary}" />
                             </VerticalStackLayout>
                             
@@ -231,8 +232,8 @@
                                 <!-- Filas -->
                                 <CollectionView x:Name="RecentActivitiesCollection" SelectionMode="None">
                                     <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1"
+                                        <DataTemplate x:DataType="models:TimeEntry">
+                                                <Border Stroke="#EEEBE5" StrokeThickness="1"
                                                     Padding="16,10" BackgroundColor="White">
                                                 <Grid ColumnDefinitions="{OnIdiom Phone='150,180,90,90,90,90', Desktop='1.8*,2.5*,1.3*,1.2*,1*,1.2*'}"
                                                       ColumnSpacing="6">

@@ -80,6 +80,7 @@ public partial class WorkersHomePage : ContentPage
 
             double totalMinutes = thisWeekEntries.Sum(wt => wt.MinutesWorked);
             double totalHours = totalMinutes / 60.0;
+            var hasWorkedThisWeek = totalMinutes > 0;
 
             double gross = 0;
             foreach (var entry in thisWeekEntries)
@@ -91,14 +92,15 @@ public partial class WorkersHomePage : ContentPage
 
             double ssDed = Math.Round(gross * SocialSecurityRate, 2);
             double seDed = Math.Round(gross * EducationInsuranceRate, 2);
-            double totalDeductions = ssDed + seDed + UnionFee;
+            double appliedUnionFee = hasWorkedThisWeek ? UnionFee : 0;
+            double totalDeductions = ssDed + seDed + appliedUnionFee;
             double net = Math.Round(gross - totalDeductions, 2);
 
             WeeklyHoursLabel.Text = $"{totalHours:F1}h";
             GrossAmountLabel.Text = $"B/.{gross:F2}";
             SsDeductionLabel.Text = $"-B/.{ssDed:F2}";
             SeDeductionLabel.Text = $"-B/.{seDed:F2}";
-            UnionDeductionLabel.Text = $"-B/.{UnionFee:F2}";
+            UnionDeductionLabel.Text = $"-B/.{appliedUnionFee:F2}";
             NetPayLabel.Text = $"B/.{net:F2}";
             TotalNetLabel.Text = $"B/.{net:F2}";
 

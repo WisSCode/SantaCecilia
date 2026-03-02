@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:services="clr-namespace:frontend.Services"
              x:Class="frontend.Pages.WorkTypesPage"
              Title=""
              Padding="0">
@@ -90,7 +91,7 @@
 
                         <!-- Buscador -->
                         <Border Stroke="#EEEBE5"
-                                StrokeThickness="0,0,0,1"
+                            StrokeThickness="1"
                                 Padding="12,8"
                                 BackgroundColor="White">
                             <Entry x:Name="SearchEntry"
@@ -113,14 +114,22 @@
                                            FontSize="10" 
                                            FontAttributes="Bold" 
                                            HorizontalTextAlignment="Start" 
-                                           TextColor="{StaticResource TextSecondary}" />
+                                           TextColor="{StaticResource TextSecondary}" >
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByName" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
                                     <Label x:Name="HeaderRate" 
                                            Grid.Column="1" 
                                            Text="TARIFA" 
                                            FontSize="10" 
                                            FontAttributes="Bold" 
                                            HorizontalTextAlignment="Start" 
-                                           TextColor="{StaticResource TextSecondary}" />
+                                           TextColor="{StaticResource TextSecondary}" >
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSortByRate" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
                                     <Label Grid.Column="2" 
                                            Text="ACCIONES" 
                                            FontSize="10" 
@@ -132,8 +141,8 @@
                                 <!-- Items -->
                                 <CollectionView x:Name="WorkTypesList" SelectionMode="None">
                                     <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1" Padding="16,10" BackgroundColor="White">
+                                        <DataTemplate x:DataType="services:WorkTypeDto">
+                                            <Border Stroke="#EEEBE5" StrokeThickness="1" Padding="16,10" BackgroundColor="White">
                                                 <Grid ColumnDefinitions="{OnIdiom Phone='180,100,80', Desktop='3*,2*,2*'}" ColumnSpacing="6">
                                                     <!-- NOMBRE -->
                                                     <Label Text="{Binding Name}" 

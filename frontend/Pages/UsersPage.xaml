@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:frontend.Pages"
              x:Class="frontend.Pages.UsersPage"
              Title=""
              Padding="0">
@@ -90,7 +91,7 @@
 
                         <!-- Buscador -->
                         <Border Stroke="#EEEBE5"
-                                StrokeThickness="0,0,0,1"
+                            StrokeThickness="1"
                                 Padding="12,8"
                                 BackgroundColor="White">
                             <Entry x:Name="SearchEntry"
@@ -129,8 +130,8 @@
                                 <!-- Filas -->
                                 <CollectionView x:Name="UsersList" SelectionMode="None">
                                     <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1" Padding="16,10" BackgroundColor="White">
+                                        <DataTemplate x:DataType="pages:UserItem">
+                                            <Border Stroke="#EEEBE5" StrokeThickness="1" Padding="16,10" BackgroundColor="White">
                                                 <Grid ColumnDefinitions="{OnIdiom Phone='180,80,80,80', Desktop='3*,2*,2*,Auto'}" ColumnSpacing="6">
                                                     <Label Text="{Binding Mail}" FontAttributes="Bold" FontSize="11" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
                                                     <Label Grid.Column="1" Text="{Binding Role}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
@@ -142,6 +143,16 @@
                                                         <Label Text="{Binding StatusText}" FontSize="10" TextColor="White" FontAttributes="Bold" />
                                                     </Border>
                                                     <HorizontalStackLayout Grid.Column="3" Spacing="10" HorizontalOptions="End" VerticalOptions="Center">
+                                                        <Label Text="Validar"
+                                                               FontSize="11"
+                                                               TextColor="#4A7C59"
+                                                               IsVisible="{Binding NeedsValidation}">
+                                                            <Label.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                    Tapped="OnValidateTapped"
+                                                                    CommandParameter="{Binding .}" />
+                                                            </Label.GestureRecognizers>
+                                                        </Label>
                                                         <Label Text="Editar"
                                                                FontSize="11"
                                                                TextColor="#2E7D5B">

@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:frontend.Models"
              x:Class="frontend.Pages.TimeTrackingPage"
              Title=""
              Padding="0">
@@ -134,7 +135,7 @@
                         </Grid>
 
                                <!-- Búsqueda -->
-                        <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1" Padding="12,8"
+                        <Border Stroke="#EEEBE5" StrokeThickness="1" Padding="12,8"
                                 BackgroundColor="White">
                             <Entry x:Name="SearchEntry"
                                    Placeholder="Buscar trabajador o actividad..."
@@ -179,8 +180,8 @@
                                 <!-- Filas -->
                                 <CollectionView x:Name="EntriesView" SelectionMode="None">
                                     <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Stroke="#EEEBE5" StrokeThickness="0,0,0,1"
+                                        <DataTemplate x:DataType="models:TimeEntry">
+                                                <Border Stroke="#EEEBE5" StrokeThickness="1"
                                                     Padding="16,10" BackgroundColor="White">
                                                 <Grid ColumnDefinitions="{OnIdiom Phone='70,150,180,90,90,90,70', Desktop='1.1*,1.8*,2.5*,1.5*,1.2*,1.2*,0.8*'}"
                                                       ColumnSpacing="6">

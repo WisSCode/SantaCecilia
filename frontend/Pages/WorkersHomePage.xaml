@@ -3,6 +3,8 @@
     x:Class="frontend.Pages.WorkersHomePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:frontend.Pages"
+    Shell.NavBarIsVisible="{OnIdiom Phone=False, Tablet=True, Desktop=True}"
     BackgroundColor="{StaticResource BoneWhite}">
 
     <ScrollView>
@@ -244,7 +246,7 @@
                                     </VerticalStackLayout>
                                 </CollectionView.EmptyView>
                                 <CollectionView.ItemTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="pages:ActivityRow">
                                         <VerticalStackLayout Spacing="0">
                                             <Border Stroke="Transparent" StrokeThickness="0"
                                                     Padding="16,12" BackgroundColor="White"

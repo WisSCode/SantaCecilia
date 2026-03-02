@@ -5,13 +5,16 @@
     xmlns:pages="clr-namespace:frontend.Pages"
     x:Class="frontend.AppShell"
     Title="Santa Cecilia"
+    Shell.BackgroundColor="#9EC9B4"
+    Shell.ForegroundColor="White"
+    Shell.TitleColor="White"
     FlyoutBehavior="{OnIdiom Phone=Flyout, Tablet=Locked, Desktop=Locked}"
     FlyoutBackgroundColor="White"
     FlyoutWidth="240"
     Shell.NavBarIsVisible="{OnIdiom Phone=True, Tablet=True, Desktop=False}">
 
     <Shell.ItemTemplate>
-        <DataTemplate>
+        <DataTemplate x:DataType="BaseShellItem">
             <Grid x:Name="ItemRoot" Padding="14,10">
                 <Label x:Name="ItemTitle" Text="{Binding Title}" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
                 <VisualStateManager.VisualStateGroups>
