@@ -3,17 +3,34 @@
 public static class AppSettings
 {
     // URL del backend
-    public static string BackendUrl =>
+    public static string BackendUrl
+    {
+        get
+        {
     #if ANDROID
-        "http://10.0.2.2:5191";
-    #elif DEBUG
-        "http://localhost:5191";
+            var androidOverride = Environment.GetEnvironmentVariable("SC_BACKEND_URL_ANDROID");
+            if (!string.IsNullOrWhiteSpace(androidOverride))
+                return androidOverride;
+
+            return DeviceInfo.DeviceType == DeviceType.Virtual
+                ? "http://10.0.2.2:5191"
+                : "http://192.168.30.131:5191";
+    #elif WINDOWS
+            var windowsOverride = Environment.GetEnvironmentVariable("SC_BACKEND_URL_WINDOWS");
+            return !string.IsNullOrWhiteSpace(windowsOverride)
+                ? windowsOverride
+                : "http://localhost:5191";
     #else
-        "https://tu-api-produccion.com"; // Reemplazar con la URL cuando se use en produccion
+            var backendOverride = Environment.GetEnvironmentVariable("SC_BACKEND_URL");
+            return !string.IsNullOrWhiteSpace(backendOverride)
+                ? backendOverride
+                : "http://localhost:5191";
     #endif
+        }
+    }
 
     // Firebase Web API Key
-    public static string FirebaseApiKey => "TU_FIREBASE_API_KEY"; 
+    public static string FirebaseApiKey => "AIzaSyBYPpwPUmbS89365RLBXSj6jlZkmB_arcg";
     
     // Claves para SecureStorage
     public static class StorageKeys

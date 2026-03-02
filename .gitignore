@@ -11,3 +11,4 @@ backend/firebase-key.json
 SantaCecilia.slnLaunch.user
 frontend/frontend.csproj.user
 frontend/frontend.csproj.Backup.tmp
+publish/
