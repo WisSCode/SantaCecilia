@@ -73,10 +73,10 @@ public partial class PayrollPage : ContentPage
                     TotalMinutes = p.TotalMinutes,
                     TotalHours = p.TotalMinutes / 60m,
                     GrossAmount = (decimal)p.GrossAmount,
-                    Status = p.Status switch
+                    Status = (p.Status?.Trim().ToLowerInvariant()) switch
                     {
-                        "Paid" => PayrollStatus.Paid,
-                        "Cancelled" => PayrollStatus.Cancelled,
+                        "paid" => PayrollStatus.Paid,
+                        "cancelled" => PayrollStatus.Cancelled,
                         _ => PayrollStatus.Pending
                     },
                     PaidAt = p.PaidAt,

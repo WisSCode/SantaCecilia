@@ -116,10 +116,9 @@ public class PayrollsController : ControllerBase
                 p.Payroll.WeekEnd.ToDateTime().Date == weekEnd)
             .ToList();
 
-        foreach (var payroll in existingForWeek)
-        {
-            await _service.DeleteAsync(payroll.Id);
-        }
+        var existingByWorker = existingForWeek
+            .GroupBy(p => p.Payroll.WorkerId)
+            .ToDictionary(g => g.Key, g => g.First());
 
         var workTypes = await _workTypeService.GetAllAsync();
         var workTypeRateMap = workTypes.ToDictionary(wt => wt.Id, wt => wt.WorkType.DefaultRate);
@@ -130,8 +129,10 @@ public class PayrollsController : ControllerBase
             .ToList();
 
         var payrollCount = 0;
+        var processedWorkerIds = new HashSet<string>();
         foreach (var group in weekEntries.GroupBy(wt => wt.WorkedTime.WorkerId))
         {
+            processedWorkerIds.Add(group.Key);
             var totalMinutes = group.Sum(wt => wt.WorkedTime.MinutesWorked);
             var gross = group.Sum(wt =>
             {
@@ -140,6 +141,11 @@ public class PayrollsController : ControllerBase
                 return (minutes / 60.0) * rate;
             });
 
+            existingByWorker.TryGetValue(group.Key, out var existingPayrollEntry);
+            var previous = existingPayrollEntry.Payroll;
+            var preservePaid = previous != null &&
+                string.Equals(previous.Status?.Trim(), "Paid", StringComparison.OrdinalIgnoreCase);
+
             var payroll = new Payrolls
             {
                 WorkerId = group.Key,
@@ -147,13 +153,18 @@ public class PayrollsController : ControllerBase
                 WeekEnd = Timestamp.FromDateTime(weekEnd.ToUniversalTime()),
                 TotalMinutes = totalMinutes,
                 GrossAmount = gross,
-                Status = "Pending",
-                PaidAt = null
+                Status = preservePaid ? "Paid" : "Pending",
+                PaidAt = preservePaid ? previous?.PaidAt : null
             };
 
             var payrollId = $"{group.Key}_{weekStart:yyyyMMdd}";
             await _service.CreateAsync(payrollId, payroll);
             payrollCount++;
+        }
+
+        foreach (var stale in existingForWeek.Where(p => !processedWorkerIds.Contains(p.Payroll.WorkerId)))
+        {
+            await _service.DeleteAsync(stale.Id);
         }
 
         await LogAsync("process", "payroll", weekStart.ToString("yyyy-MM-dd"), $"Procesada nómina semanal. Registros: {payrollCount}");
