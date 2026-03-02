@@ -3,6 +3,7 @@ using System.Text;
 using frontend.Helpers;
 using frontend.Models;
 using frontend.Services;
+using CommunityToolkit.Maui.Storage;
 
 namespace frontend.Pages;
 
@@ -156,15 +157,27 @@ public partial class PayrollPage : ContentPage
         try
         {
             var entries = BuildActivityEntries(payroll);
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string saveFolder;
+#if ANDROID
+            var folderResult = await FolderPicker.Default.PickAsync();
+            if (!folderResult.IsSuccessful || folderResult.Folder is null)
+            {
+                await DisplayAlertAsync("Descargar", "No se seleccionó carpeta.", "OK");
+                return;
+            }
+            saveFolder = folderResult.Folder.Path;
+#else
+            saveFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+#endif
+
             var safeWorkerName = string.Join("_", payroll.WorkerName.Split(Path.GetInvalidFileNameChars()));
             var fileName = $"Recibo_{safeWorkerName}_{payroll.WeekStart:yyyy-MM-dd}.pdf";
-            var filePath = Path.Combine(documentsPath, fileName);
+            var filePath = Path.Combine(saveFolder, fileName);
 
             if (File.Exists(filePath))
             {
                 try { File.Delete(filePath); }
-                catch { filePath = Path.Combine(documentsPath, $"Recibo_{safeWorkerName}_{payroll.WeekStart:yyyy-MM-dd}_{DateTime.Now:HHmmss}.pdf"); }
+                catch { filePath = Path.Combine(saveFolder, $"Recibo_{safeWorkerName}_{payroll.WeekStart:yyyy-MM-dd}_{DateTime.Now:HHmmss}.pdf"); }
             }
 
             PayrollReceiptPage.GenerateReceiptPdf(filePath, payroll, entries);
@@ -209,44 +222,67 @@ public partial class PayrollPage : ContentPage
 
         try
         {
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            // var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string folderPath;
+#if ANDROID
+            var result = await FolderPicker.Default.PickAsync();
+
+            if (!result.IsSuccessful)
+            {
+                await DisplayAlertAsync("Exportar", "No se seleccionó carpeta.", "OK");
+                return;
+            }
+
             var weekStart = payrolls[0].WeekStart;
             var folderName = $"Nomina_{weekStart:yyyy-MM-dd}";
-            var folderPath = Path.Combine(documentsPath, folderName);
+            
+            folderPath = Path.Combine(result.Folder.Path, folderName);
 
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
+#else
+            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var weekStart = payrolls[0].WeekStart;
+            var folderName = $"Nómina_{weekStart:yyyy-MM-dd}";
+            folderPath = Path.Combine(documentsPath, folderName);
+
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+#endif
 
             var count = 0;
+            var week = payrolls[0].WeekStart;
+
             foreach (var payroll in payrolls)
             {
                 var entries = BuildActivityEntries(payroll);
                 var safeWorkerName = string.Join("_", payroll.WorkerName.Split(Path.GetInvalidFileNameChars()));
-                var fileName = $"Recibo_{safeWorkerName}_{weekStart:yyyy-MM-dd}.pdf";
+                var fileName = $"Recibo_{safeWorkerName}_{week:yyyy-MM-dd}.pdf";
                 var filePath = Path.Combine(folderPath, fileName);
 
-                if (File.Exists(filePath))
-                {
-                    try { File.Delete(filePath); }
-                    catch { filePath = Path.Combine(folderPath, $"Recibo_{safeWorkerName}_{weekStart:yyyy-MM-dd}_{DateTime.Now:HHmmss}.pdf"); }
-                }
+                // if (File.Exists(filePath))
+                // {
+                //     try { File.Delete(filePath); }
+                //     catch { filePath = Path.Combine(folderPath, $"Recibo_{safeWorkerName}_{weekStart:yyyy-MM-dd}_{DateTime.Now:HHmmss}.pdf"); }
+                // }
 
                 PayrollReceiptPage.GenerateReceiptPdf(filePath, payroll, entries);
                 count++;
             }
 
-            var openFolder = await DisplayAlertAsync("Éxito", $"Se exportaron {count} boletas en:\n{folderPath}\n\n¿Desea abrir la carpeta?", "Abrir", "Cerrar");
+//             var openFolder = await DisplayAlertAsync("Éxito", $"Se exportaron {count} boletas en:\n{folderPath}\n\n¿Desea abrir la carpeta?", "Abrir", "Cerrar");
 
-            if (openFolder)
-            {
-#if WINDOWS
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = folderPath,
-                    UseShellExecute = true
-                });
-#endif
-            }
+//             if (openFolder)
+//             {
+// #if WINDOWS
+//                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+//                 {
+//                     FileName = folderPath,
+//                     UseShellExecute = true
+//                 });
+// #endif
+//             }
+                await DisplayAlertAsync("Éxito", $"Se exportaron {count} boletas en:\n{folderPath}", "OK");
         }
         catch (Exception ex)
         {

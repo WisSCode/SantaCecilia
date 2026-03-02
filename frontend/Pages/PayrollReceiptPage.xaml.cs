@@ -19,28 +19,61 @@ namespace frontend.Pages;
 
 public partial class PayrollReceiptPage : ContentPage
 {
-    private Payroll? payroll;
-    private List<PayrollActivityEntry>? activityEntries;
+    private void OnCloseClicked(object sender, EventArgs e)
+    {
+        Navigation.PopModalAsync();
+    }
+    private readonly Payroll payroll;
+    private readonly List<PayrollActivityEntry>? activityEntries;
+    private readonly string? html;
 
-    public PayrollReceiptPage(string html)
+    public PayrollReceiptPage(string html, Payroll payroll, List<PayrollActivityEntry>? activityEntries)
     {
         InitializeComponent();
-        var source = new HtmlWebViewSource { Html = html };
-        ReceiptWebView.Source = source;
+        this.html = html;
+        this.payroll = payroll;
+        this.activityEntries = activityEntries;
+        // Si necesitas mostrar el HTML en el WebView:
+        if (!string.IsNullOrEmpty(html))
+            ReceiptWebView.Source = new HtmlWebViewSource { Html = html };
     }
-
-    public PayrollReceiptPage(string html, Payroll payrollData, List<PayrollActivityEntry> entries)
+    // Método auxiliar para Android: genera el PDF en un Stream
+    public static void GenerateReceiptPdfToStream(Stream outputStream, Payroll payroll, List<PayrollActivityEntry>? activityEntries)
     {
-        InitializeComponent();
-        payroll = payrollData;
-        activityEntries = entries;
-        var source = new HtmlWebViewSource { Html = html };
-        ReceiptWebView.Source = source;
-    }
+        PdfWriter? writer = null;
+        PdfDocument? pdf = null;
+        iTextDocument? document = null;
+        try
+        {
+            writer = new PdfWriter(outputStream);
+            pdf = new PdfDocument(writer);
+            pdf.SetDefaultPageSize(new iText.Kernel.Geom.PageSize(612f, 792f));
+            document = new iTextDocument(pdf);
+            document.SetMargins(36, 36, 36, 36);
 
-    private async void OnCloseClicked(object sender, EventArgs e)
-    {
-        await Navigation.PopModalAsync();
+            var borderColor = new DeviceRgb(31, 44, 39);
+            var headerBgColor = new DeviceRgb(244, 242, 237);
+            // ... Copia aquí el contenido de GenerateReceiptPdf, pero usando outputStream ...
+            // Puedes reutilizar la lógica de GenerateReceiptPdf, solo cambia el writer
+
+            // --- INICIO LÓGICA COPIADA ---
+            // ...existing code from GenerateReceiptPdf...
+            // --- FIN LÓGICA COPIADA ---
+
+            document.Close();
+            pdf.Close();
+            writer.Close();
+        }
+        catch
+        {
+            document?.Close();
+            pdf?.Close();
+            writer?.Close();
+            throw;
+        }
+
+    // ...existing code...
+    // (removed stray statement outside method)
     }
 
     private string BuildPdfFilePath()
@@ -341,21 +374,42 @@ public partial class PayrollReceiptPage : ContentPage
             .SetPaddingLeft(3).SetPaddingRight(3).SetPaddingTop(5).SetPaddingBottom(5);
     }
 
+    // Extrae el logo embebido y lo guarda como archivo temporal para iText (Android/iOS)
+    public static string? GetLogoFilePath()
+    {
+        var assembly = typeof(PayrollReceiptPage).Assembly;
+        // Ajusta el namespace si es diferente
+        var resourceName = "frontend.Resources.Images.logo_santa_cecilia.png";
+
+        using var stream = assembly.GetManifestResourceStream(resourceName);
+        if (stream != null)
+        {
+            var tempPath = Path.Combine(FileSystem.CacheDirectory, "logo_santa_cecilia.png");
+            using var fs = new FileStream(tempPath, FileMode.Create, FileAccess.Write);
+            stream.CopyTo(fs);
+            return tempPath;
+        }
+        return null;
+    }
+
+    // Busca primero el recurso embebido, luego rutas físicas (Windows/dev)
     public static string? FindLogoPath()
     {
+        var tempLogo = GetLogoFilePath();
+        if (!string.IsNullOrEmpty(tempLogo) && File.Exists(tempLogo))
+            return tempLogo;
+        // Fallback para Windows/dev
         string[] candidates =
-        [
+        {
             Path.Combine(AppContext.BaseDirectory, "logo_santa_cecilia.png"),
             Path.Combine(AppContext.BaseDirectory, "logo_santa_cecilia.scale-100.png"),
             Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "logo_santa_cecilia.png"),
-        ];
-
+        };
         foreach (var path in candidates)
         {
             if (File.Exists(path))
                 return path;
         }
-
         return null;
     }
 }
