@@ -19,28 +19,22 @@ namespace frontend.Pages;
 
 public partial class PayrollReceiptPage : ContentPage
 {
-    private Payroll? payroll;
-    private List<PayrollActivityEntry>? activityEntries;
+    private void OnCloseClicked(object sender, EventArgs e)
+    {
+        Navigation.PopModalAsync();
+    }
+    private readonly Payroll payroll;
+    private readonly List<PayrollActivityEntry>? activityEntries;
+    private readonly string? html;
 
-    public PayrollReceiptPage(string html)
+    public PayrollReceiptPage(string html, Payroll payroll, List<PayrollActivityEntry>? activityEntries)
     {
         InitializeComponent();
-        var source = new HtmlWebViewSource { Html = html };
-        ReceiptWebView.Source = source;
-    }
-
-    public PayrollReceiptPage(string html, Payroll payrollData, List<PayrollActivityEntry> entries)
-    {
-        InitializeComponent();
-        payroll = payrollData;
-        activityEntries = entries;
-        var source = new HtmlWebViewSource { Html = html };
-        ReceiptWebView.Source = source;
-    }
-
-    private async void OnCloseClicked(object sender, EventArgs e)
-    {
-        await Navigation.PopModalAsync();
+        this.html = html;
+        this.payroll = payroll;
+        this.activityEntries = activityEntries;
+        if (!string.IsNullOrEmpty(html))
+            ReceiptWebView.Source = new HtmlWebViewSource { Html = html };
     }
 
     private string BuildPdfFilePath()
@@ -341,21 +335,65 @@ public partial class PayrollReceiptPage : ContentPage
             .SetPaddingLeft(3).SetPaddingRight(3).SetPaddingTop(5).SetPaddingBottom(5);
     }
 
+    // Extrae el logo y lo guarda como archivo temporal para iText (Android/iOS/Windows)
+    public static string? GetLogoFilePath()
+    {
+        var tempPath = Path.Combine(FileSystem.CacheDirectory, "logo_santa_cecilia.png");
+
+        // Si ya está cacheado, retornarlo directamente
+        if (File.Exists(tempPath))
+            return tempPath;
+
+        // Intentar recurso embebido
+        var assembly = typeof(PayrollReceiptPage).Assembly;
+        var resourceName = "frontend.Resources.Images.logo_santa_cecilia.png";
+
+        using var stream = assembly.GetManifestResourceStream(resourceName);
+        if (stream != null)
+        {
+            using var fs = new FileStream(tempPath, FileMode.Create, FileAccess.Write);
+            stream.CopyTo(fs);
+            return tempPath;
+        }
+
+        // Fallback: cargar desde MauiAsset (Resources/Raw) — funciona en Android
+        try
+        {
+            using var rawStream = FileSystem.OpenAppPackageFileAsync("logo_santa_cecilia.png")
+                .GetAwaiter().GetResult();
+            if (rawStream != null)
+            {
+                using var fs = new FileStream(tempPath, FileMode.Create, FileAccess.Write);
+                rawStream.CopyTo(fs);
+                return tempPath;
+            }
+        }
+        catch
+        {
+            // No disponible como MauiAsset
+        }
+
+        return null;
+    }
+
+    // Busca primero el recurso embebido, luego rutas físicas (Windows/dev)
     public static string? FindLogoPath()
     {
+        var tempLogo = GetLogoFilePath();
+        if (!string.IsNullOrEmpty(tempLogo) && File.Exists(tempLogo))
+            return tempLogo;
+        // Fallback para Windows/dev
         string[] candidates =
-        [
+        {
             Path.Combine(AppContext.BaseDirectory, "logo_santa_cecilia.png"),
             Path.Combine(AppContext.BaseDirectory, "logo_santa_cecilia.scale-100.png"),
             Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "logo_santa_cecilia.png"),
-        ];
-
+        };
         foreach (var path in candidates)
         {
             if (File.Exists(path))
                 return path;
         }
-
         return null;
     }
 }

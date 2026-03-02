@@ -1,12 +1,19 @@
 using frontend.Services;
+using frontend.Models;
 using ClosedXML.Excel;
+using CommunityToolkit.Maui.Storage;
+using iText.IO.Image;
+using iText.Kernel.Colors;
 using iText.Kernel.Pdf;
 using iText.Layout;
+using iText.Layout.Borders;
 using iTextDocument = iText.Layout.Document;
 using iTextCell = iText.Layout.Element.Cell;
 using iTextTable = iText.Layout.Element.Table;
 using iTextParagraph = iText.Layout.Element.Paragraph;
+using iTextImage = iText.Layout.Element.Image;
 using iTextTextAlignment = iText.Layout.Properties.TextAlignment;
+using iTextVerticalAlignment = iText.Layout.Properties.VerticalAlignment;
 using iText.Layout.Properties;
 
 namespace frontend.Pages;
@@ -17,9 +24,7 @@ public partial class ReportsPage : ContentPage
     private List<ReportRow> reportItems = new();
     private List<WorkedTimeDto> workedTimes = new();
     private Dictionary<string, WorkTypeDto> workTypeMap = new();
-    private Dictionary<string, WorkerDto> workerMap = new();
     private bool dataLoaded;
-    private ReportView currentView = ReportView.Activity;
 
     public ReportsPage(ApiService api)
     {
@@ -30,8 +35,6 @@ public partial class ReportsPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        if (ReportViewPicker.SelectedIndex < 0)
-            ReportViewPicker.SelectedIndex = 0;
 
         var weekStart = GetWeekStart(DateTime.Now);
         StartDatePicker.Date = weekStart.Date;
@@ -52,11 +55,9 @@ public partial class ReportsPage : ContentPage
         try
         {
             var workTypes = await _api.GetWorkTypesAsync();
-            var workers = await _api.GetWorkersAsync();
             workedTimes = await _api.GetWorkedTimesAsync();
 
             workTypeMap = workTypes.ToDictionary(wt => wt.Id, wt => wt);
-            workerMap = workers.ToDictionary(w => w.Id, w => w);
         }
         catch (Exception ex)
         {
@@ -77,19 +78,13 @@ public partial class ReportsPage : ContentPage
             }
 
             UpdatePeriodLabel();
-            UpdateHeaders(currentView);
+            UpdateHeaders();
 
             var entries = workedTimes
                 .Where(wt => wt.Date.Date >= rangeStart && wt.Date.Date <= rangeEnd)
                 .ToList();
 
-            reportItems = currentView switch
-            {
-                ReportView.Activity => BuildActivityReport(entries),
-                ReportView.Worker => BuildWorkerReport(entries),
-                ReportView.Period => BuildPeriodReport(entries),
-                _ => new List<ReportRow>()
-            };
+            reportItems = BuildActivityReport(entries);
 
             // Force refresh CollectionView
             ReportList.ItemsSource = null;
@@ -134,36 +129,7 @@ public partial class ReportsPage : ContentPage
                     Col1 = name,
                     Col2 = $"B/.{rate:F4}",
                     Col3 = $"{totalHours:F1}h",
-                    Col3Sub = $"B/.{totalAmount:F2}",
-                    TotalHours = totalHours,
-                    TotalAmount = totalAmount
-                };
-            })
-            .OrderByDescending(r => r.TotalHours)
-            .ToList();
-    }
-
-    private List<ReportRow> BuildWorkerReport(List<WorkedTimeDto> entries)
-    {
-        ReportTitleLabel.Text = "Trabajadores";
-        return entries
-            .GroupBy(wt => wt.WorkerId)
-            .Select(group =>
-            {
-                var worker = workerMap.GetValueOrDefault(group.Key);
-                var name = worker == null ? group.Key : $"{worker.Name} {worker.LastName}";
-                var totalHours = group.Sum(e => e.MinutesWorked / 60m);
-                var totalAmount = group.Sum(e =>
-                {
-                    var rate = (decimal)(workTypeMap.GetValueOrDefault(e.WorkTypeId)?.DefaultRate ?? 0);
-                    return (decimal)e.MinutesWorked / 60m * rate;
-                });
-
-                return new ReportRow
-                {
-                    Col1 = name,
-                    Col2 = $"{totalHours:F1}h",
-                    Col3 = $"B/.{totalAmount:F2}",
+                    Col4 = $"B/.{totalAmount:F2}",
                     Col3Sub = string.Empty,
                     TotalHours = totalHours,
                     TotalAmount = totalAmount
@@ -173,55 +139,13 @@ public partial class ReportsPage : ContentPage
             .ToList();
     }
 
-    private List<ReportRow> BuildPeriodReport(List<WorkedTimeDto> entries)
+    private void UpdateHeaders()
     {
-        ReportTitleLabel.Text = "Resumen por periodo";
-        return entries
-            .GroupBy(wt => wt.Date.Date)
-            .Select(group =>
-            {
-                var totalHours = group.Sum(e => e.MinutesWorked / 60m);
-                var totalAmount = group.Sum(e =>
-                {
-                    var rate = (decimal)(workTypeMap.GetValueOrDefault(e.WorkTypeId)?.DefaultRate ?? 0);
-                    return (decimal)e.MinutesWorked / 60m * rate;
-                });
-
-                return new ReportRow
-                {
-                    Col1 = group.Key.ToString("dd MMM yyyy"),
-                    Col2 = $"{totalHours:F1}h",
-                    Col3 = $"B/.{totalAmount:F2}",
-                    Col3Sub = string.Empty,
-                    TotalHours = totalHours,
-                    TotalAmount = totalAmount,
-                    SortDate = group.Key
-                };
-            })
-            .OrderByDescending(r => r.SortDate)
-            .ToList();
-    }
-
-    private void UpdateHeaders(ReportView view)
-    {
-        switch (view)
-        {
-            case ReportView.Activity:
-                HeaderCol1.Text = "ACTIVIDAD";
-                HeaderCol2.Text = "TARIFA";
-                HeaderCol3.Text = "TOTAL";
-                break;
-            case ReportView.Worker:
-                HeaderCol1.Text = "TRABAJADOR";
-                HeaderCol2.Text = "HORAS";
-                HeaderCol3.Text = "TOTAL";
-                break;
-            case ReportView.Period:
-                HeaderCol1.Text = "FECHA";
-                HeaderCol2.Text = "HORAS";
-                HeaderCol3.Text = "TOTAL";
-                break;
-        }
+        HeaderCol1.Text = "ACTIVIDAD";
+        HeaderCol2.Text = "TARIFA";
+        HeaderCol3.Text = "HORAS";
+        HeaderCol4.Text = "MONTO";
+        ReportSubtitleLabel.Text = "Totales agrupados por actividad";
     }
 
     private void UpdatePeriodLabel()
@@ -235,18 +159,6 @@ public partial class ReportsPage : ContentPage
     private DateTime GetWeekStart(DateTime date)
     {
         return date.Date.AddDays(-(int)date.DayOfWeek);
-    }
-
-    private async void OnReportViewChanged(object sender, EventArgs e)
-    {
-        currentView = ReportViewPicker.SelectedIndex switch
-        {
-            1 => ReportView.Worker,
-            2 => ReportView.Period,
-            _ => ReportView.Activity
-        };
-
-        await BuildReportAsync();
     }
 
     private async void OnDateRangeChanged(object sender, DateChangedEventArgs e)
@@ -284,46 +196,77 @@ public partial class ReportsPage : ContentPage
     {
         try
         {
-            var fileName = $"Reporte-{currentView}-{DateTime.Now:yyyy-MM-dd-HHmmss}.xlsx";
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var filePath = Path.Combine(documentsPath, fileName);
+            var exportFolder = await GetExportFolderPathAsync();
+            if (string.IsNullOrWhiteSpace(exportFolder))
+                return;
+
+            var fileName = $"Reporte-Actividad-{DateTime.Now:yyyy-MM-dd-HHmmss}.xlsx";
+            var filePath = Path.Combine(exportFolder, fileName);
 
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("Reporte");
+                var logoPath = PayrollReceiptPage.FindLogoPath();
 
-                // Encabezado
+                // Encabezado corporativo
                 int row = 1;
-                worksheet.Cell(row, 1).Value = "REPORTE SANTA CECILIA";
-                worksheet.Cell(row, 1).Style.Font.Bold = true;
-                worksheet.Cell(row, 1).Style.Font.FontSize = 14;
-                worksheet.Range(row, 1, row, 3).Merge();
-
-                row += 2;
-                worksheet.Cell(row, 1).Value = $"Período: {(StartDatePicker.Date ?? DateTime.Today):dd/MM/yyyy} - {(EndDatePicker.Date ?? DateTime.Today):dd/MM/yyyy}";
-                worksheet.Cell(row, 1).Style.Font.FontSize = 11;
-
-                row += 1;
-                var viewName = currentView switch
+                if (!string.IsNullOrEmpty(logoPath) && File.Exists(logoPath))
                 {
-                    ReportView.Activity => "Por Actividad",
-                    ReportView.Worker => "Por Trabajador",
-                    ReportView.Period => "Por Período",
-                    _ => "Reporte"
-                };
-                worksheet.Cell(row, 1).Value = $"Vista: {viewName}";
+                    try
+                    {
+                        worksheet.AddPicture(logoPath)
+                            .MoveTo(worksheet.Cell(row, 1))
+                            .Scale(0.22);
+                    }
+                    catch
+                    {
+                    }
+                }
 
-                row += 2;
+                worksheet.Cell(row, 2).Value = "FINCA BANANERA SANTA CECILIA";
+                worksheet.Cell(row + 1, 2).Value = "Sistema de Gestión de Nómina";
+                worksheet.Cell(row + 2, 2).Value = "REPORTE ADMINISTRATIVO";
+                worksheet.Cell(row + 3, 2).Value = $"Fecha de emisión: {DateTime.Now:dd/MM/yyyy HH:mm}";
+                worksheet.Cell(row + 4, 2).Value = $"Período: {(StartDatePicker.Date ?? DateTime.Today):dd/MM/yyyy} - {(EndDatePicker.Date ?? DateTime.Today):dd/MM/yyyy}";
+
+                worksheet.Range(row, 2, row, 4).Merge();
+                worksheet.Range(row + 1, 2, row + 1, 4).Merge();
+                worksheet.Range(row + 2, 2, row + 2, 4).Merge();
+                worksheet.Range(row + 3, 2, row + 3, 4).Merge();
+                worksheet.Range(row + 4, 2, row + 4, 4).Merge();
+
+                worksheet.Cell(row, 2).Style.Font.Bold = true;
+                worksheet.Cell(row, 1).Style.Font.Bold = true;
+                worksheet.Cell(row, 2).Style.Font.FontSize = 14;
+                worksheet.Cell(row + 1, 2).Style.Font.FontSize = 10;
+                worksheet.Cell(row + 2, 2).Style.Font.FontSize = 12;
+                worksheet.Cell(row + 2, 2).Style.Font.Bold = true;
+                worksheet.Cell(row + 3, 2).Style.Font.FontSize = 10;
+                worksheet.Cell(row + 4, 2).Style.Font.FontSize = 10;
+
+                row += 8;
+
+                worksheet.Cell(row, 1).Value = "DETALLE DEL REPORTE";
+                worksheet.Range(row, 1, row, 4).Merge();
+                worksheet.Cell(row, 1).Style.Font.Bold = true;
+                worksheet.Cell(row, 1).Style.Font.FontSize = 11;
+                worksheet.Cell(row, 1).Style.Fill.BackgroundColor = XLColor.FromHtml("#E8F5EE");
+                worksheet.Cell(row, 1).Style.Font.FontColor = XLColor.FromHtml("#2E3A34");
+                row++;
 
                 // Encabezados de columna
                 worksheet.Cell(row, 1).Value = HeaderCol1.Text;
                 worksheet.Cell(row, 2).Value = HeaderCol2.Text;
                 worksheet.Cell(row, 3).Value = HeaderCol3.Text;
+                worksheet.Cell(row, 4).Value = HeaderCol4.Text;
 
-                var headerRange = worksheet.Range(row, 1, row, 3);
+                var headerRange = worksheet.Range(row, 1, row, 4);
                 headerRange.Style.Font.Bold = true;
-                headerRange.Style.Fill.BackgroundColor = XLColor.FromHtml("#F5F5F5");
+                headerRange.Style.Fill.BackgroundColor = XLColor.FromHtml("#9EC9B4");
+                headerRange.Style.Font.FontColor = XLColor.White;
                 headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
 
                 row++;
 
@@ -333,15 +276,14 @@ public partial class ReportsPage : ContentPage
                     worksheet.Cell(row, 1).Value = item.Col1;
                     worksheet.Cell(row, 2).Value = item.Col2;
                     worksheet.Cell(row, 3).Value = item.Col3;
+                    worksheet.Cell(row, 4).Value = item.Col4;
+
+                    var dataRowRange = worksheet.Range(row, 1, row, 4);
+                    dataRowRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    dataRowRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
 
                     if (item.HasCol3Sub)
-                    {
-                        row++;
-                        worksheet.Cell(row, 1).Value = "";
-                        worksheet.Cell(row, 2).Value = "";
-                        worksheet.Cell(row, 3).Value = item.Col3Sub;
-                        worksheet.Cell(row, 3).Style.Font.FontSize = 9;
-                    }
+                        worksheet.Cell(row, 4).Style.Font.Bold = true;
 
                     row++;
                 }
@@ -351,10 +293,16 @@ public partial class ReportsPage : ContentPage
                 // Totales
                 worksheet.Cell(row, 1).Value = "TOTALES";
                 worksheet.Cell(row, 1).Style.Font.Bold = true;
-                worksheet.Cell(row, 2).Value = TotalHoursLabel.Text;
-                worksheet.Cell(row, 2).Style.Font.Bold = true;
-                worksheet.Cell(row, 3).Value = TotalAmountLabel.Text;
+                worksheet.Cell(row, 2).Value = "";
+                worksheet.Cell(row, 3).Value = TotalHoursLabel.Text;
                 worksheet.Cell(row, 3).Style.Font.Bold = true;
+                worksheet.Cell(row, 4).Value = TotalAmountLabel.Text;
+                worksheet.Cell(row, 4).Style.Font.Bold = true;
+
+                var totalsRange = worksheet.Range(row, 1, row, 4);
+                totalsRange.Style.Fill.BackgroundColor = XLColor.FromHtml("#F6F5F0");
+                totalsRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                totalsRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
 
                 worksheet.Columns().AdjustToContents();
                 workbook.SaveAs(filePath);
@@ -388,78 +336,100 @@ public partial class ReportsPage : ContentPage
     {
         try
         {
-            var fileName = $"Reporte-{currentView}-{DateTime.Now:yyyy-MM-dd-HHmmss}.pdf";
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var filePath = Path.Combine(documentsPath, fileName);
+            var exportFolder = await GetExportFolderPathAsync();
+            if (string.IsNullOrWhiteSpace(exportFolder))
+                return;
+
+            var fileName = $"Reporte-Actividad-{DateTime.Now:yyyy-MM-dd-HHmmss}.pdf";
+            var filePath = Path.Combine(exportFolder, fileName);
 
             using (var writer = new PdfWriter(filePath))
             using (var pdf = new PdfDocument(writer))
             using (var document = new iTextDocument(pdf))
             {
-                document.SetMargins(20, 20, 20, 20);
+                document.SetMargins(30, 30, 30, 30);
 
-                // Encabezado
-                var title = new iTextParagraph("REPORTE SANTA CECILIA")
-                    .SetFontSize(16)
-                    .SetBold()
-                    .SetTextAlignment(iTextTextAlignment.CENTER);
-                document.Add(title);
+                var borderColor = new DeviceRgb(31, 44, 39);
+                var headerBgColor = new DeviceRgb(244, 242, 237);
+                var greenHeader = new DeviceRgb(158, 201, 180);
+                var thinBorder = new SolidBorder(borderColor, 0.5f);
 
-                var period = new iTextParagraph($"Período: {(StartDatePicker.Date ?? DateTime.Today):dd/MM/yyyy} - {(EndDatePicker.Date ?? DateTime.Today):dd/MM/yyyy}")
-                    .SetFontSize(10);
-                document.Add(period);
+                var headerTable = new iTextTable(UnitValue.CreatePointArray([36, 250, 140]))
+                    .UseAllAvailableWidth()
+                    .SetBorder(iText.Layout.Borders.Border.NO_BORDER);
 
-                var viewName = currentView switch
+                var logoPath = PayrollReceiptPage.FindLogoPath();
+                var logoCell = new iTextCell()
+                    .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+                    .SetVerticalAlignment(iTextVerticalAlignment.MIDDLE);
+
+                if (!string.IsNullOrEmpty(logoPath) && File.Exists(logoPath))
                 {
-                    ReportView.Activity => "Por Actividad",
-                    ReportView.Worker => "Por Trabajador",
-                    ReportView.Period => "Por Período",
-                    _ => "Reporte"
-                };
-                var view = new iTextParagraph($"Vista: {viewName}")
-                    .SetFontSize(10);
-                document.Add(view);
+                    var logoData = ImageDataFactory.Create(logoPath);
+                    logoCell.Add(new iTextImage(logoData).ScaleToFit(30, 30));
+                }
+                else
+                {
+                    logoCell.Add(new iTextParagraph("SC").SetBold().SetFontSize(10));
+                }
 
-                document.Add(new iTextParagraph("\n"));
+                headerTable.AddCell(logoCell);
+                headerTable.AddCell(new iTextCell()
+                    .Add(new iTextParagraph("FINCA BANANERA SANTA CECILIA").SetBold().SetFontSize(10))
+                    .Add(new iTextParagraph("Sistema de Gestión de Nómina").SetFontSize(7))
+                    .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+                    .SetVerticalAlignment(iTextVerticalAlignment.MIDDLE)
+                    .SetPaddingLeft(8));
+                headerTable.AddCell(new iTextCell()
+                    .Add(new iTextParagraph($"Fecha de emisión: {DateTime.Now:dd/MM/yyyy HH:mm}").SetFontSize(7))
+                    .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+                    .SetTextAlignment(iTextTextAlignment.RIGHT));
+                document.Add(headerTable);
 
-                // Tabla
-                var table = new iTextTable(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth();
+                document.Add(new iTextParagraph("").SetBorderBottom(thinBorder).SetMarginTop(6).SetMarginBottom(6));
+                document.Add(new iTextParagraph("REPORTE ADMINISTRATIVO")
+                    .SetBold().SetFontSize(11).SetTextAlignment(iTextTextAlignment.CENTER));
+                document.Add(new iTextParagraph($"Período: {(StartDatePicker.Date ?? DateTime.Today):dd/MM/yyyy} - {(EndDatePicker.Date ?? DateTime.Today):dd/MM/yyyy}")
+                    .SetFontSize(8).SetTextAlignment(iTextTextAlignment.CENTER));
+                document.Add(new iTextParagraph("").SetBorderBottom(thinBorder).SetMarginTop(4).SetMarginBottom(8));
 
-                // Encabezados
-                table.AddHeaderCell(new iTextCell().Add(new iTextParagraph(HeaderCol1.Text).SetBold().SetFontSize(9)));
-                table.AddHeaderCell(new iTextCell().Add(new iTextParagraph(HeaderCol2.Text).SetBold().SetFontSize(9)));
-                table.AddHeaderCell(new iTextCell().Add(new iTextParagraph(HeaderCol3.Text).SetBold().SetFontSize(9)));
+                document.Add(new iTextParagraph("DETALLE DEL REPORTE")
+                    .SetBold().SetFontSize(9)
+                    .SetBackgroundColor(headerBgColor)
+                    .SetPadding(5));
 
-                // Datos
+                var table = new iTextTable(UnitValue.CreatePercentArray([36f, 20f, 20f, 24f])).UseAllAvailableWidth();
+
+                string[] headers = [HeaderCol1.Text, HeaderCol2.Text, HeaderCol3.Text, HeaderCol4.Text];
+                foreach (var header in headers)
+                {
+                    table.AddHeaderCell(new iTextCell()
+                        .Add(new iTextParagraph(header).SetBold().SetFontSize(8))
+                        .SetBackgroundColor(greenHeader)
+                        .SetFontColor(ColorConstants.WHITE)
+                        .SetBorder(thinBorder)
+                        .SetPadding(4));
+                }
+
                 foreach (var item in reportItems)
                 {
-                    table.AddCell(new iTextCell().Add(new iTextParagraph(item.Col1).SetFontSize(9)));
-                    table.AddCell(new iTextCell().Add(new iTextParagraph(item.Col2).SetFontSize(9)));
-                    table.AddCell(new iTextCell().Add(new iTextParagraph(item.Col3).SetFontSize(9)));
-
-                    if (item.HasCol3Sub)
-                    {
-                        table.AddCell(new iTextCell().Add(new iTextParagraph("")));
-                        table.AddCell(new iTextCell().Add(new iTextParagraph("")));
-                        table.AddCell(new iTextCell().Add(new iTextParagraph(item.Col3Sub).SetFontSize(8)));
-                    }
+                    table.AddCell(new iTextCell().Add(new iTextParagraph(item.Col1).SetFontSize(8)).SetBorder(thinBorder).SetPadding(4));
+                    table.AddCell(new iTextCell().Add(new iTextParagraph(item.Col2).SetFontSize(8)).SetBorder(thinBorder).SetPadding(4));
+                    table.AddCell(new iTextCell().Add(new iTextParagraph(item.Col3).SetFontSize(8)).SetBorder(thinBorder).SetPadding(4));
+                    table.AddCell(new iTextCell().Add(new iTextParagraph(item.Col4).SetFontSize(8)).SetBorder(thinBorder).SetPadding(4));
                 }
 
                 document.Add(table);
 
-                document.Add(new iTextParagraph("\n"));
-
-                // Totales
-                var totalsTable = new iTextTable(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth();
-                totalsTable.AddCell(new iTextCell().Add(new iTextParagraph("TOTALES").SetBold()));
-                totalsTable.AddCell(new iTextCell().Add(new iTextParagraph(TotalHoursLabel.Text).SetBold()));
-                totalsTable.AddCell(new iTextCell().Add(new iTextParagraph(TotalAmountLabel.Text).SetBold()));
+                var totalsTable = new iTextTable(UnitValue.CreatePercentArray([36f, 20f, 20f, 24f]))
+                    .UseAllAvailableWidth()
+                    .SetMarginTop(6);
+                totalsTable.AddCell(new iTextCell().Add(new iTextParagraph("TOTALES").SetBold().SetFontSize(8)).SetBorder(thinBorder).SetPadding(4));
+                totalsTable.AddCell(new iTextCell().Add(new iTextParagraph("").SetFontSize(8)).SetBorder(thinBorder).SetPadding(4));
+                totalsTable.AddCell(new iTextCell().Add(new iTextParagraph(TotalHoursLabel.Text).SetBold().SetFontSize(8)).SetBorder(thinBorder).SetPadding(4));
+                totalsTable.AddCell(new iTextCell().Add(new iTextParagraph(TotalAmountLabel.Text).SetBold().SetFontSize(8)).SetBorder(thinBorder).SetPadding(4));
                 document.Add(totalsTable);
 
-                var timestamp = new iTextParagraph($"\nGenerado: {DateTime.Now:dd/MM/yyyy HH:mm:ss}")
-                    .SetFontSize(8)
-                    .SetTextAlignment(iTextTextAlignment.RIGHT);
-                document.Add(timestamp);
             }
 
             var openFile = await DisplayAlertAsync("Éxito", $"PDF guardado en:\n{filePath}\n\n¿Desea abrirlo?", "Abrir", "Cerrar");
@@ -486,38 +456,20 @@ public partial class ReportsPage : ContentPage
         }
     }
 
-    private enum ReportView
+    private async Task<string?> GetExportFolderPathAsync()
     {
-        Activity,
-        Worker,
-        Period
-    }
-
-    private sealed class ReportRow
-    {
-        public string Col1 { get; set; } = string.Empty;
-        public string Col2 { get; set; } = string.Empty;
-        public string Col3 { get; set; } = string.Empty;
-        public string Col3Sub { get; set; } = string.Empty;
-        public bool HasCol3Sub => !string.IsNullOrWhiteSpace(Col3Sub);
-        public decimal TotalHours { get; set; }
-        public decimal TotalAmount { get; set; }
-        public DateTime SortDate { get; set; } = DateTime.MinValue;
-    }
-
-    private class ReportItem
-    {
-        public ReportItem(string activityName, decimal hours, decimal rate)
+#if ANDROID
+        var result = await FolderPicker.Default.PickAsync();
+        if (!result.IsSuccessful || result.Folder is null)
         {
-            ActivityName = activityName;
-            Hours = hours;
-            Rate = rate;
-            Amount = hours * rate;
+            await DisplayAlertAsync("Exportar", "No se seleccionó carpeta.", "OK");
+            return null;
         }
 
-        public string ActivityName { get; }
-        public decimal Hours { get; }
-        public decimal Rate { get; }
-        public decimal Amount { get; }
+        return result.Folder.Path;
+#else
+        return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+#endif
     }
+
 }

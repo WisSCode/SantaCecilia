@@ -12,3 +12,4 @@ SantaCecilia.slnLaunch.user
 frontend/frontend.csproj.user
 frontend/frontend.csproj.Backup.tmp
 /frontend/Configuration/AppSettings.cs
+publish/

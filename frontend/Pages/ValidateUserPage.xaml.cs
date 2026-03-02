@@ -11,6 +11,7 @@ public partial class ValidateUserPage : ContentPage
     private string _userId = string.Empty;
     private string _userEmail = string.Empty;
     private List<WorkerDisplayItem> workerItems = [];
+    private List<WorkerDisplayItem> filteredWorkerItems = [];
     private WorkerDisplayItem? selectedWorker;
 
     public string UserId
@@ -36,6 +37,9 @@ public partial class ValidateUserPage : ContentPage
         base.OnAppearing();
         EmailLabel.Text = _userEmail;
         SubtitleLabel.Text = $"Asigne un trabajador a {_userEmail}";
+        selectedWorker = null;
+        SelectedWorkerLabel.Text = "Ningún trabajador seleccionado";
+        ValidateButton.IsEnabled = false;
         await LoadWorkersAsync();
     }
 
@@ -66,9 +70,12 @@ public partial class ValidateUserPage : ContentPage
                 Active = w.Active,
                 OriginalUserId = w.UserId,
                 IsSelected = false
-            }).ToList();
+            })
+            .OrderBy(w => w.Name)
+            .ThenBy(w => w.LastName)
+            .ToList();
 
-            WorkersListView.ItemsSource = workerItems;
+            ApplyWorkerFilter(string.Empty);
         }
         catch (Exception ex)
         {
@@ -76,17 +83,42 @@ public partial class ValidateUserPage : ContentPage
         }
     }
 
+    private void OnSearchChanged(object sender, TextChangedEventArgs e)
+    {
+        ApplyWorkerFilter(e.NewTextValue ?? string.Empty);
+    }
+
+    private void ApplyWorkerFilter(string searchText)
+    {
+        var query = searchText.Trim();
+
+        filteredWorkerItems = string.IsNullOrWhiteSpace(query)
+            ? workerItems.ToList()
+            : workerItems.Where(w =>
+                w.FullName.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                w.Identification.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+        WorkersListView.ItemsSource = filteredWorkerItems;
+
+        NoWorkersLabel.IsVisible = filteredWorkerItems.Count == 0;
+        WorkersListView.IsVisible = filteredWorkerItems.Count > 0;
+        WorkersCountLabel.Text = filteredWorkerItems.Count == 1
+            ? "1 trabajador disponible"
+            : $"{filteredWorkerItems.Count} trabajadores disponibles";
+    }
+
     private void OnWorkerSelected(object sender, SelectionChangedEventArgs e)
     {
         if (e.CurrentSelection.FirstOrDefault() is WorkerDisplayItem item)
         {
-            selectedWorker = item;
+            selectedWorker = workerItems.FirstOrDefault(w => w.Id == item.Id) ?? item;
 
             foreach (var w in workerItems)
-                w.IsSelected = w.Id == item.Id;
+                w.IsSelected = w.Id == selectedWorker.Id;
 
-            WorkersListView.ItemsSource = null;
-            WorkersListView.ItemsSource = workerItems;
+            ApplyWorkerFilter(SearchEntry.Text ?? string.Empty);
+            SelectedWorkerLabel.Text = $"Seleccionado: {selectedWorker.FullName}";
 
             ValidateButton.IsEnabled = true;
         }

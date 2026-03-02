@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:frontend.Models"
              x:Class="frontend.Pages.WorkersPage"
              Title=""
              Padding="0">
@@ -143,7 +144,7 @@
 
                         <!-- Buscador -->
                         <Border Stroke="#EEEBE5"
-                                StrokeThickness="1"
+                            StrokeThickness="1"
                                 Padding="12,8"
                                 BackgroundColor="White">
                             <Entry x:Name="SearchEntry"
@@ -192,8 +193,8 @@
                                 <!-- Filas -->
                                 <CollectionView x:Name="WorkersList" SelectionMode="None">
                                     <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Stroke="#EEEBE5" StrokeThickness="1"
+                                        <DataTemplate x:DataType="models:Worker">
+                                                <Border Stroke="#EEEBE5" StrokeThickness="1"
                                                     Padding="16,10" BackgroundColor="White">
                                                 <Grid ColumnDefinitions="{OnIdiom Phone='70,90,90,90,90,90', Desktop='0.8*,1.2*,1.4*,1.4*,0.9*,1*'}"
                                                       ColumnSpacing="6">

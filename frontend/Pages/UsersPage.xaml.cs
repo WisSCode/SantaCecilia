@@ -5,6 +5,20 @@ namespace frontend.Pages;
 
 public partial class UsersPage : ContentPage
 {
+    private void OnValidateTapped(object sender, TappedEventArgs e)
+    {
+        if (sender is Label lbl && lbl.BindingContext is UserItem user)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "userId", user.Id },
+                { "userEmail", user.Mail }
+            };
+            MainThread.BeginInvokeOnMainThread(async () =>
+                await Shell.Current.GoToAsync("/validateuser", parameters));
+        }
+    }
+
     // Soporte para Label+TapGestureRecognizer en acciones
     private void OnEditTapped(object sender, TappedEventArgs e)
     {
@@ -152,7 +166,38 @@ public partial class UsersPage : ContentPage
 
     private async void OnAddClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("/edituser");
+        var pendingUsers = users
+            .Where(u => u.NeedsValidation)
+            .OrderBy(u => u.Mail)
+            .ToList();
+
+        if (pendingUsers.Count == 0)
+        {
+            await DisplayAlertAsync("Agregar", "No hay correos pendientes por validar.", "OK");
+            return;
+        }
+
+        var options = pendingUsers.Select(u => u.Mail).ToArray();
+        var selectedEmail = await DisplayActionSheetAsync(
+            "Selecciona el correo a validar",
+            "Cancelar",
+            null,
+            options);
+
+        if (string.IsNullOrWhiteSpace(selectedEmail) || selectedEmail == "Cancelar")
+            return;
+
+        var selectedUser = pendingUsers.FirstOrDefault(u => u.Mail == selectedEmail);
+        if (selectedUser is null)
+            return;
+
+        var parameters = new Dictionary<string, object>
+        {
+            { "userId", selectedUser.Id },
+            { "userEmail", selectedUser.Mail }
+        };
+
+        await Shell.Current.GoToAsync("/validateuser", parameters);
     }
 }
 
