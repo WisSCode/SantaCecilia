@@ -24,6 +24,10 @@ public partial class LoginPage : ContentPage
         if (_autoLoginAttempted || !AppSettings.DevAutoLogin.Enabled)
             return;
 
+        if (string.IsNullOrWhiteSpace(AppSettings.DevAutoLogin.Email) ||
+            string.IsNullOrWhiteSpace(AppSettings.DevAutoLogin.Password))
+            return;
+
         _autoLoginAttempted = true;
 
         _viewModel.Email = AppSettings.DevAutoLogin.Email;
@@ -48,10 +52,16 @@ public partial class LoginPage : ContentPage
 
     private async void OnLoginClicked(object sender, EventArgs e)
     {
+        if (_viewModel.IsBusy)
+            return;
+
         var result = await _viewModel.ExecuteLoginAsync();
 
         if (result == null)
         {
+            if (_viewModel.IsBusy)
+                return;
+
             var errorMsg = string.IsNullOrEmpty(_viewModel.ErrorMessage) 
                 ? "Error de autenticación. Verifica tus credenciales." 
                 : _viewModel.ErrorMessage;
