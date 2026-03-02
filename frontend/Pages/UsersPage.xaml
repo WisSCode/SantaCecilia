@@ -106,7 +106,7 @@
                             <VerticalStackLayout Spacing="0">
                                 <!-- Cabecera -->
                                 <Grid Padding="16,10"
-                                      ColumnDefinitions="{OnIdiom Phone='180,80,80,80', Desktop='3*,2*,2*,Auto'}"
+                                      ColumnDefinitions="{OnIdiom Phone='180,80,80,140', Desktop='3*,2*,2*,Auto'}"
                                       ColumnSpacing="6"
                                       BackgroundColor="#FAFAF7">
                                     <Label x:Name="HeaderEmail" Text="EMAIL ↑" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}">
@@ -132,7 +132,7 @@
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate x:DataType="pages:UserItem">
                                             <Border Stroke="#EEEBE5" StrokeThickness="1" Padding="16,10" BackgroundColor="White">
-                                                <Grid ColumnDefinitions="{OnIdiom Phone='180,80,80,80', Desktop='3*,2*,2*,Auto'}" ColumnSpacing="6">
+                                                <Grid ColumnDefinitions="{OnIdiom Phone='180,80,80,140', Desktop='3*,2*,2*,Auto'}" ColumnSpacing="6">
                                                     <Label Text="{Binding Mail}" FontAttributes="Bold" FontSize="11" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
                                                     <Label Grid.Column="1" Text="{Binding Role}" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
                                                     <Border Grid.Column="2" 
@@ -142,9 +142,9 @@
                                                             VerticalOptions="Center">
                                                         <Label Text="{Binding StatusText}" FontSize="10" TextColor="White" FontAttributes="Bold" />
                                                     </Border>
-                                                    <HorizontalStackLayout Grid.Column="3" Spacing="10" HorizontalOptions="End" VerticalOptions="Center">
+                                                    <HorizontalStackLayout Grid.Column="3" Spacing="6" HorizontalOptions="End" VerticalOptions="Center">
                                                         <Label Text="Validar"
-                                                               FontSize="11"
+                                                               FontSize="10"
                                                                TextColor="#4A7C59"
                                                                IsVisible="{Binding NeedsValidation}">
                                                             <Label.GestureRecognizers>
@@ -154,7 +154,7 @@
                                                             </Label.GestureRecognizers>
                                                         </Label>
                                                         <Label Text="Editar"
-                                                               FontSize="11"
+                                                            FontSize="10"
                                                                TextColor="#2E7D5B">
                                                             <Label.GestureRecognizers>
                                                                 <TapGestureRecognizer
@@ -163,7 +163,7 @@
                                                             </Label.GestureRecognizers>
                                                         </Label>
                                                         <Label Text="Eliminar"
-                                                               FontSize="11"
+                                                            FontSize="10"
                                                                TextColor="#E07A5F">
                                                             <Label.GestureRecognizers>
                                                                 <TapGestureRecognizer
