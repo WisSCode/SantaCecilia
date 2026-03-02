@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:frontend.Models"
              x:Class="frontend.Pages.ReportsPage"
              Title=""
              Padding="0">
@@ -43,21 +44,6 @@
                             HorizontalOptions="End"
                             VerticalOptions="Center" />
                 </Grid>
-
-                <!-- Picker -->
-                <Border Style="{StaticResource CardFrame}" Padding="10">
-                    <Picker x:Name="ReportViewPicker"
-                            Title="Vista"
-                            TextColor="{StaticResource TextPrimary}"
-                            TitleColor="{StaticResource TextTertiary}"
-                            SelectedIndexChanged="OnReportViewChanged">
-                        <Picker.Items>
-                            <x:String>Por actividad</x:String>
-                            <x:String>Por trabajador</x:String>
-                            <x:String>Por periodo</x:String>
-                        </Picker.Items>
-                    </Picker>
-                </Border>
 
                     <Grid ColumnDefinitions="{OnIdiom Phone='*,*', Desktop='*,*'}"
                         RowDefinitions="Auto"
@@ -119,7 +105,8 @@
                                     FontSize="15"
                                     FontAttributes="Bold"
                                     TextColor="White" />
-                                <Label Text="Totales agrupados por actividad"
+                                <Label x:Name="ReportSubtitleLabel"
+                                    Text="Totales agrupados por actividad"
                                     FontSize="11"
                                     TextColor="#E8F5EE" />
                             </VerticalStackLayout>
@@ -132,7 +119,7 @@
 
                                 <!-- Header columnas -->
                                 <Grid Padding="16,10"
-                                    ColumnDefinitions="{OnIdiom Phone='150,100,100', Desktop='3*,2*,2*'}"
+                                    ColumnDefinitions="{OnIdiom Phone='150,90,90,100', Desktop='3*,1.6*,1.6*,1.8*'}"
                                     ColumnSpacing="6"
                                     BackgroundColor="#FAFAF7">
 
@@ -151,7 +138,14 @@
 
                                     <Label x:Name="HeaderCol3"
                                         Grid.Column="2"
-                                        Text="TOTAL"
+                                        Text="HORAS"
+                                        FontSize="10"
+                                        FontAttributes="Bold"
+                                        TextColor="{StaticResource TextSecondary}" />
+
+                                    <Label x:Name="HeaderCol4"
+                                        Grid.Column="3"
+                                        Text="MONTO"
                                         FontSize="10"
                                         FontAttributes="Bold"
                                         TextColor="{StaticResource TextSecondary}" />
@@ -179,13 +173,13 @@
                                     </CollectionView.EmptyView>
 
                                     <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Stroke="#EEEBE5"
-                                                    StrokeThickness="0,0,0,1"
+                                        <DataTemplate x:DataType="models:ReportRow">
+                                                <Border Stroke="#EEEBE5"
+                                                    StrokeThickness="1"
                                                     Padding="16,10"
                                                     BackgroundColor="White">
 
-                                                <Grid ColumnDefinitions="{OnIdiom Phone='150,100,100', Desktop='3*,2*,2*'}"
+                                                <Grid ColumnDefinitions="{OnIdiom Phone='150,90,90,100', Desktop='3*,1.6*,1.6*,1.8*'}"
                                                     ColumnSpacing="6">
 
                                                     <!-- ACTIVIDAD -->
@@ -203,11 +197,19 @@
                                                         TextColor="{StaticResource TextSecondary}"
                                                         VerticalOptions="Center" />
 
-                                                    <!-- TOTAL -->
-                                                    <VerticalStackLayout Grid.Column="2"
+                                                    <!-- HORAS -->
+                                                    <Label Grid.Column="2"
+                                                        Text="{Binding Col3}"
+                                                        FontAttributes="Bold"
+                                                        FontSize="11"
+                                                        TextColor="{StaticResource TextPrimary}"
+                                                        VerticalOptions="Center" />
+
+                                                    <!-- MONTO -->
+                                                    <VerticalStackLayout Grid.Column="3"
                                                                         Spacing="2"
                                                                         VerticalOptions="Center">
-                                                        <Label Text="{Binding Col3}"
+                                                        <Label Text="{Binding Col4}"
                                                             FontAttributes="Bold"
                                                             FontSize="11"
                                                             TextColor="{StaticResource TextPrimary}" />
