@@ -8,8 +8,9 @@ obj/
 platforms/*/bin/
 platforms/*/obj/
 backend/firebase-key.json 
-SantaCecilia.slnLaunch.user
-frontend/frontend.csproj.user
-frontend/frontend.csproj.Backup.tmp
-/frontend/Configuration/AppSettings.cs
+*.slnLaunch.user
+*.csproj.user
+*.csproj.Backup.tmp
+backend/appsettings-local.json
+frontend/appsettings-local.json
 publish/
