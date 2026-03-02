@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Text;
 using frontend.Helpers;
 using frontend.Models;
@@ -222,7 +221,6 @@ public partial class PayrollPage : ContentPage
 
         try
         {
-            // var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string folderPath;
 #if ANDROID
             var result = await FolderPicker.Default.PickAsync();
@@ -260,28 +258,10 @@ public partial class PayrollPage : ContentPage
                 var fileName = $"Recibo_{safeWorkerName}_{week:yyyy-MM-dd}.pdf";
                 var filePath = Path.Combine(folderPath, fileName);
 
-                // if (File.Exists(filePath))
-                // {
-                //     try { File.Delete(filePath); }
-                //     catch { filePath = Path.Combine(folderPath, $"Recibo_{safeWorkerName}_{weekStart:yyyy-MM-dd}_{DateTime.Now:HHmmss}.pdf"); }
-                // }
-
                 PayrollReceiptPage.GenerateReceiptPdf(filePath, payroll, entries);
                 count++;
             }
 
-//             var openFolder = await DisplayAlertAsync("Éxito", $"Se exportaron {count} boletas en:\n{folderPath}\n\n¿Desea abrir la carpeta?", "Abrir", "Cerrar");
-
-//             if (openFolder)
-//             {
-// #if WINDOWS
-//                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-//                 {
-//                     FileName = folderPath,
-//                     UseShellExecute = true
-//                 });
-// #endif
-//             }
                 await DisplayAlertAsync("Éxito", $"Se exportaron {count} boletas en:\n{folderPath}", "OK");
         }
         catch (Exception ex)

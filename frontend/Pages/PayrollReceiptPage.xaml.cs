@@ -33,47 +33,8 @@ public partial class PayrollReceiptPage : ContentPage
         this.html = html;
         this.payroll = payroll;
         this.activityEntries = activityEntries;
-        // Si necesitas mostrar el HTML en el WebView:
         if (!string.IsNullOrEmpty(html))
             ReceiptWebView.Source = new HtmlWebViewSource { Html = html };
-    }
-    // Método auxiliar para Android: genera el PDF en un Stream
-    public static void GenerateReceiptPdfToStream(Stream outputStream, Payroll payroll, List<PayrollActivityEntry>? activityEntries)
-    {
-        PdfWriter? writer = null;
-        PdfDocument? pdf = null;
-        iTextDocument? document = null;
-        try
-        {
-            writer = new PdfWriter(outputStream);
-            pdf = new PdfDocument(writer);
-            pdf.SetDefaultPageSize(new iText.Kernel.Geom.PageSize(612f, 792f));
-            document = new iTextDocument(pdf);
-            document.SetMargins(36, 36, 36, 36);
-
-            var borderColor = new DeviceRgb(31, 44, 39);
-            var headerBgColor = new DeviceRgb(244, 242, 237);
-            // ... Copia aquí el contenido de GenerateReceiptPdf, pero usando outputStream ...
-            // Puedes reutilizar la lógica de GenerateReceiptPdf, solo cambia el writer
-
-            // --- INICIO LÓGICA COPIADA ---
-            // ...existing code from GenerateReceiptPdf...
-            // --- FIN LÓGICA COPIADA ---
-
-            document.Close();
-            pdf.Close();
-            writer.Close();
-        }
-        catch
-        {
-            document?.Close();
-            pdf?.Close();
-            writer?.Close();
-            throw;
-        }
-
-    // ...existing code...
-    // (removed stray statement outside method)
     }
 
     private string BuildPdfFilePath()
@@ -374,21 +335,44 @@ public partial class PayrollReceiptPage : ContentPage
             .SetPaddingLeft(3).SetPaddingRight(3).SetPaddingTop(5).SetPaddingBottom(5);
     }
 
-    // Extrae el logo embebido y lo guarda como archivo temporal para iText (Android/iOS)
+    // Extrae el logo y lo guarda como archivo temporal para iText (Android/iOS/Windows)
     public static string? GetLogoFilePath()
     {
+        var tempPath = Path.Combine(FileSystem.CacheDirectory, "logo_santa_cecilia.png");
+
+        // Si ya está cacheado, retornarlo directamente
+        if (File.Exists(tempPath))
+            return tempPath;
+
+        // Intentar recurso embebido
         var assembly = typeof(PayrollReceiptPage).Assembly;
-        // Ajusta el namespace si es diferente
         var resourceName = "frontend.Resources.Images.logo_santa_cecilia.png";
 
         using var stream = assembly.GetManifestResourceStream(resourceName);
         if (stream != null)
         {
-            var tempPath = Path.Combine(FileSystem.CacheDirectory, "logo_santa_cecilia.png");
             using var fs = new FileStream(tempPath, FileMode.Create, FileAccess.Write);
             stream.CopyTo(fs);
             return tempPath;
         }
+
+        // Fallback: cargar desde MauiAsset (Resources/Raw) — funciona en Android
+        try
+        {
+            using var rawStream = FileSystem.OpenAppPackageFileAsync("logo_santa_cecilia.png")
+                .GetAwaiter().GetResult();
+            if (rawStream != null)
+            {
+                using var fs = new FileStream(tempPath, FileMode.Create, FileAccess.Write);
+                rawStream.CopyTo(fs);
+                return tempPath;
+            }
+        }
+        catch
+        {
+            // No disponible como MauiAsset
+        }
+
         return null;
     }
 
